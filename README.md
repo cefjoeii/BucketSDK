@@ -25,7 +25,21 @@ Using the BucketSDK, you will be able to use either Swift or Objective-C to acce
 
 ### Swift Usage
 ```swift
-// Check your app's status of being in release or debug.  This will make it easier for you as the developer to always make sure you are hitting the Sandbox API rather than the Production API.
+// Check your app's status of being in release or debug.  This will make it easier for you as the developer to always make sure you are hitting the Sandbox API rather than the Production API.  We suggest doing this in the App Delegate launch options.
+#if RELEASE
+Bucket.shared.environment = .Production
+#endif
+
+// Okay now that you set the environment, you should be able to log in with a Retailer:
+Bucket.Retailer.logInWith(password: "password", username: "username") { (success, error) in
+if success {
+// Yay - we successfully logged in!
+} else if let error = error {
+print(error.localizedDescription)
+}
+}
+
+// Okay now that we are logged in, we should be able to go & create a transaction:
 ```
 
 ## Author
