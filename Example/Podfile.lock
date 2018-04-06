@@ -1,16 +1,24 @@
 PODS:
-  - BucketSDK (0.1.0)
+  - BucketSDK (1.0.0):
+    - KeychainSwift
+  - KeychainSwift (11.0.0)
 
 DEPENDENCIES:
   - BucketSDK (from `../`)
+  - KeychainSwift
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - KeychainSwift
 
 EXTERNAL SOURCES:
   BucketSDK:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BucketSDK: 67303323fc391bcfafa3609e6816a4dd9922d2a6
+  BucketSDK: 59979da7e9a81befa97d0f2b032b64f57b48f8ec
+  KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
 
-PODFILE CHECKSUM: 2f6e8ab214944827650249cbe4a7cea7295fc6b8
+PODFILE CHECKSUM: 9b46a0455a15e36e389afe33adb3ab5f0ceef34d
 
 COCOAPODS: 1.5.0

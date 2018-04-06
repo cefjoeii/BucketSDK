@@ -274,10 +274,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-BucketSDK_Example/Pods-BucketSDK_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BucketSDK/BucketSDK.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BucketSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -1,5 +1,7 @@
 use_frameworks!
 
+pod 'KeychainSwift'
+
 target 'BucketSDK_Example' do
   pod 'BucketSDK', :path => '../'
 

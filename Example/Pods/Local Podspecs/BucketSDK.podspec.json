@@ -1,9 +1,9 @@
 {
   "name": "BucketSDK",
-  "version": "0.1.0",
-  "summary": "A short description of BucketSDK.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Ryan/BucketSDK",
+  "version": "1.0.0",
+  "summary": "This is the SDK for Bucket Technologies.  This is usd for integrations for various different POS Systems.",
+  "description": "This is the Bucket SDK.  This is where you will be able to create your transactions easier, login with the retailer account easier, & save Bucket Credentials.",
+  "homepage": "https://github.com/ryancoyne0/BucketSDK",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,11 +12,18 @@
     "Ryan": "ryan@buckettechnologies.com"
   },
   "source": {
-    "git": "https://github.com/Ryan/BucketSDK.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/ryancoyne0/BucketSDK.git",
+    "tag": "1.0.0"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "BucketSDK/Classes/**/*"
+  "source_files": "*.{swift}",
+  "swift_version": "4.1",
+  "frameworks": "Foundation",
+  "dependencies": {
+    "KeychainSwift": [
+
+    ]
+  }
 }

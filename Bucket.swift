@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import KeychainSwift
 
 @objc public class Bucket: NSObject {
     /// This is the singleton for the Bucket object.
