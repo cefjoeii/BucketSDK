@@ -27,16 +27,17 @@ Using the BucketSDK, you will be able to use either Swift or Objective-C to acce
 ```swift
 // Check your app's status of being in release or debug.  This will make it easier for you as the developer to always make sure you are hitting the Sandbox API rather than the Production API.  We suggest doing this in the App Delegate launch options.
 #if RELEASE
-Bucket.shared.environment = .Production
+   Bucket.shared.environment = .Production
 #endif
 
 // Okay now that you set the environment, you should be able to log in with a Retailer:
 Bucket.Retailer.logInWith(password: "password", username: "username") { (success, error) in
-if success {
-// Yay - we successfully logged in!
-} else if let error = error {
-print(error.localizedDescription)
-}
+    if success {
+        // Yay - we successfully logged in!
+        
+    } else if let error = error {
+        print(error.localizedDescription)
+    }
 }
 
 // Another function you will use will be to calculate how much we are bucketing based on the dollar bills and change given.  Notice that we deal with the currency as an integer:
@@ -45,13 +46,45 @@ let bucketAmount = Bucket.shared.bucketAmount(for: 7899)
 // Now that we have our bucket amount, we can go and create a transaction with that amount, and send it through the Bucket API:
 let transaction = Bucket.Transaction(amount: bucketAmount, clientTransactionId: "CKFYGGHPUIGH")
 transaction.create { (success, error) in
-if success {
-// Yay we created the transaction!
+    if success {
+        // Yay we created the transaction!
 
-} else if let error = error {
-print(error.localizedDescription)
+    } else if let error = error {
+        print(error.localizedDescription)
+    }
 }
-}
+```
+
+### Obj-C Usage
+```Objective-C
+// Check your app's status of being in release or debug.  This will make it easier for you as the developer to always make sure you are hitting the Sandbox API rather than the Production API.  We suggest doing this in the App Delegate launch options.
+#if RELEASE
+    [Bucket.shared setEnvironment: DeploymentEnvironmentProduction];
+#endif
+
+// Okay now that you set the environment, you should be able to log in with a Retailer:
+[Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
+    if (success) {
+        // Yay - it was a success!!
+        
+    } else if (error != NULL) {
+        NSLog(@"%@", error.localizedDescription);
+    }
+}];
+
+// Another function you will use will be to calculate how much we are bucketing based on the dollar bills and change given.  Notice that we deal with the currency as an integer:
+long bucketAmount = [[Bucket shared] bucketAmountFor:7999];
+
+// Now that we have our bucket amount, we can go and create a transaction with that amount, and send it through the Bucket API:
+Transaction *t = [[Transaction alloc] initWithAmount:bucketAmount clientTransactionId:@"ZDFRPHGYKOUG"];
+[t create:^(BOOL success, NSError * _Nullable error) {
+    if (success) {
+        // You successfully created the transaction!
+
+    } else if (error != NULL) {
+        NSLog(@"%@", error.localizedDescription);
+    }
+}];
 ```
 
 ## Author

@@ -23,17 +23,17 @@
         [Bucket.shared setEnvironment: DeploymentEnvironmentProduction];
     #endif
     
-    // Do any additional setup after loading the view.
-    [[Bucket shared] fetchBillDenominationsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+    [Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
         if (success) {
-            // You successfully fetched the bill denominations!
             
         } else if (error != NULL) {
             NSLog(@"%@", error.localizedDescription);
         }
     }];
     
-    Transaction *t = [[Transaction alloc] initWithAmount:45 clientTransactionId:@"ZDFRPHGYKOUG"];
+    long bucketAmount = [[Bucket shared] bucketAmountFor:7999];
+
+    Transaction *t = [[Transaction alloc] initWithAmount:bucketAmount clientTransactionId:@"ZDFRPHGYKOUG"];
     [t create:^(BOOL success, NSError * _Nullable error) {
         if (success) {
             // You successfully created the transaction!
