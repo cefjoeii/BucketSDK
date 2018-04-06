@@ -20,6 +20,14 @@ it, simply add the following line to your Podfile:
 pod 'BucketSDK'
 ```
 
+## Usage
+Using the BucketSDK, you will be able to use either Swift or Objective-C to access some of the functions that you will need.
+
+### Swift Usage
+```swift
+// Check your app's status of being in release or debug.  This will make it easier for you as the developer to always make sure you are hitting the Sandbox API rather than the Production API.
+```
+
 ## Author
 
 Ryan, ryan@buckettechnologies.com

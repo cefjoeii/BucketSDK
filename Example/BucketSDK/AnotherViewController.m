@@ -17,9 +17,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     // Set your environment (this points your requests to either the Sandbox API or the Production API.
-    [Bucket.shared setEnvironment: DeploymentEnvironmentDevelopment];
+    #if RELEASE
+        [Bucket.shared setEnvironment: DeploymentEnvironmentProduction];
+    #endif
     
     // Do any additional setup after loading the view.
     [[Bucket shared] fetchBillDenominationsWithCompletion:^(BOOL success, NSError * _Nullable error) {
