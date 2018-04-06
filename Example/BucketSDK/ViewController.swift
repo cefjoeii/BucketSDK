@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BucketSDK
 
 class ViewController: UIViewController {
 
