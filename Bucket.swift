@@ -6,6 +6,7 @@
 //
 
 @objc public class Bucket: NSObject {
+    /// This is the singleton for the Bucket object.
     @objc public static let shared = Bucket()
     private override init() { super.init() }
     
@@ -13,7 +14,7 @@
     private var dateFormatter : DateFormatter = DateFormatter(format: "yyyyMMdd")
     /// This is the denominations of the dollar bills in the register for this retailer:
     private var denominations : [Int] {
-        return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200]
+        return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200, 100]
     }
     
     /// This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
