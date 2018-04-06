@@ -17,9 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.description      = 'This is the Bucket SDK.  This is where you will be able to create your transactions easier, login with the retailer account easier, & save Bucket Credentials. '
 
   s.homepage         = 'https://github.com/ryancoyne0/BucketSDK'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -29,8 +27,7 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
-
-  s.source_files = 'BucketSDK/Classes/**/*'
+  s.source_files = '*.{swift}'
   
   # s.resource_bundles = {
   #   'BucketSDK' => ['BucketSDK/Assets/*.png']
