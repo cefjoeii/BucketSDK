@@ -94,7 +94,7 @@
     }
     
     @objc public class Credentials : NSObject {
-        @objc public static var clientId : String? {
+        @objc public private(set) static var clientId : String? {
             get {
                 return nil
             }
@@ -102,7 +102,7 @@
                 // Implement the setter:
             }
         }
-        @objc public static var clientSecret : String? {
+        @objc public private(set) static var clientSecret : String? {
             get {
                 return nil
             }

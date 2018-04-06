@@ -20,12 +20,14 @@
     
     // Set your environment (this points your requests to either the Sandbox API or the Production API.
     [Bucket.shared setEnvironment: DeploymentEnvironmentDevelopment];
+    
     // Do any additional setup after loading the view.
     [[Bucket shared] fetchBillDenominationsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (success) {
+            // You successfully fetched the bill denominations!
             
         } else if (error != NULL) {
-            
+            NSLog(@"%@", error.localizedDescription);
         }
     }];
     
@@ -45,15 +47,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
