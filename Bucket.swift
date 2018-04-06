@@ -5,15 +5,6 @@
 //  Created by Ryan Coyne on 4/6/18.
 //
 
-import UIKit
-
-//
-//  Bucket.swift
-//  BucketSDK
-//
-//  Created by Ryan Coyne on 4/6/18.
-//
-
 @objc public class Bucket: NSObject {
     @objc public static let shared = Bucket()
     private override init() { super.init() }
