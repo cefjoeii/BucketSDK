@@ -31,6 +31,11 @@
     /// This function fetches the bill denominations for the retailer and caches them for the Bucket class.
     @objc public func fetchBillDenominations(completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
         
+        // This returns the base URL depending on the set environment:
+        var url = URL.base
+        // Append for the correct endpoint here:
+        url.appendPathComponent("")
+        
         let request = URLRequest(url: URL(string: "https://example.com")!)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if response.isSuccess {
@@ -89,6 +94,15 @@
         }
         
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
+            var url = URL.base
+            url.appendPathComponent("transaction")
+            if let clientId = Bucket.Credentials.clientId, let secret = Bucket.Credentials.clientSecret {
+                url.appendPathComponent(clientId)
+                url.addQueryParams(["code": secret])
+            } else {
+                // Call back & let the user know we dont have a client id to create this transaction:
+                completion(false, NSError(domain: "none", code: 0, userInfo: [NSLocalizedDescriptionKey: "You need to have a client id to create a transaction."]))
+            }
             
         }
     }
@@ -115,7 +129,7 @@
 }
 
 //MARK: - Bucket Extensions
-public extension Optional where Wrapped == Any {
+public extension Optional {
     public var isNil : Bool { return self == nil }
 }
 @objc public extension DateFormatter {
@@ -135,6 +149,40 @@ public extension UserDefaults {
     }
 }
 
+extension URL {
+    static var base : URL {
+        switch Bucket.shared.environment {
+        case .Production:
+            return URL(string: "https://bucketthechange.com/api")!
+        case .Development:
+            return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+        }
+    }
+    
+    /// Add query parameters to your URL object using a dictionary.
+    public mutating func addQueryParams(_ queryParams : [String:Any]) {
+        
+        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
+        
+        // Start putting together the paths:
+        for param in queryParams {
+            // If the query items is nil, we need to initialize so we can actually add the items:
+            if components?.queryItems.isNil  == true {
+                components?.queryItems = []
+            }
+            let queryItem = URLQueryItem(name: param.key, value: String(describing: param.value))
+            components?.queryItems?.append(queryItem)
+            
+        }
+        
+        if let url = components?.url  {
+            self = url
+        }
+        
+    }
+    
+}
+
 public extension Data {
     var asJSON : [String:Any]? {
         if let theTry = try? JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String:Any] {
@@ -147,7 +195,7 @@ public extension Data {
 
 public extension Optional where Wrapped == URLResponse {
     var isSuccess : Bool {
-        if self == nil { return false }
+        if self.isNil { return false }
         switch self!.code {
         case 200...299:
             return true
