@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+   s.frameworks = 'Foundation'
    s.dependency 'KeychainSwift', '~> 11.0'
+   
 end

@@ -5,6 +5,8 @@
 //  Created by Ryan Coyne on 4/6/18.
 //
 
+import Foundation
+
 @objc public class Bucket: NSObject {
     /// This is the singleton for the Bucket object.
     @objc public static let shared = Bucket()
