@@ -16,7 +16,8 @@
         return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200]
     }
     
-    @objc public var environment : DeploymentEnvironment = .Production
+    /// This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
+    @objc public var environment : DeploymentEnvironment = .Development
     
     /// This function returns the bucket amount based on the dollar & change amount.
     @objc public func bucketAmount(for changeDueBack: Int) -> Int {
@@ -42,7 +43,7 @@
             } else {
                 completion(response.isSuccess, error)
             }
-            }.resume()
+        }.resume()
     }
     
     @objc public class Retailer : NSObject {
@@ -60,9 +61,9 @@
         @objc public dynamic var customerCode : String?
         /// This is the URL for the qr code, in order for the user to redeem their bucket change.
         @objc dynamic var qrCodeContent : URL?
-        
-        
+        /// This is defined by the retailer.  This is used if the retailer has multiple locations for their retailer account.
         @objc public dynamic var locationId : String?
+        /// This is the hardware id of the POS terminal or device.
         @objc public dynamic var terminalId : String?
         
         /// This returns the amount for the transaction in an integer form.  1000 would be $10.00
@@ -87,7 +88,7 @@
             return json
         }
         
-        public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
+        @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
             
         }
     }
