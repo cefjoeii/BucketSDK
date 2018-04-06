@@ -1,0 +1,6 @@
+framework module BucketSDK {
+  umbrella header "BucketSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}

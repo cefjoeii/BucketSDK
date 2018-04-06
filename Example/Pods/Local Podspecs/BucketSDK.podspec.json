@@ -1,0 +1,22 @@
+{
+  "name": "BucketSDK",
+  "version": "0.1.0",
+  "summary": "A short description of BucketSDK.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Ryan/BucketSDK",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Ryan": "ryan@buckettechnologies.com"
+  },
+  "source": {
+    "git": "https://github.com/Ryan/BucketSDK.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "BucketSDK/Classes/**/*"
+}
