@@ -28,6 +28,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
   s.source_files = '*.{swift}'
+  s.swift_version = '4.1'
   
   # s.resource_bundles = {
   #   'BucketSDK' => ['BucketSDK/Assets/*.png']
