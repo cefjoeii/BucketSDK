@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Ryan' => 'ryan@buckettechnologies.com' }
   s.source           = { :git => 'https://github.com/ryancoyne0/BucketSDK.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-  s.swift-version = '4.0'
+
   s.ios.deployment_target = '8.0'
   s.source_files = '*.{swift}'
   
