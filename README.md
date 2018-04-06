@@ -39,7 +39,19 @@ print(error.localizedDescription)
 }
 }
 
-// Okay now that we are logged in, we should be able to go & create a transaction:
+// Another function you will use will be to calculate how much we are bucketing based on the dollar bills and change given.  Notice that we deal with the currency as an integer:
+let bucketAmount = Bucket.shared.bucketAmount(for: 7899)
+
+// Now that we have our bucket amount, we can go and create a transaction with that amount, and send it through the Bucket API:
+let transaction = Bucket.Transaction(amount: bucketAmount, clientTransactionId: "CKFYGGHPUIGH")
+transaction.create { (success, error) in
+if success {
+// Yay we created the transaction!
+
+} else if let error = error {
+print(error.localizedDescription)
+}
+}
 ```
 
 ## Author
