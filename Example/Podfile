@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'BucketSDK_Example' do
+  pod 'BucketSDK', :path => '../'
+
+  target 'BucketSDK_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
