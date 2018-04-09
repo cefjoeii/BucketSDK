@@ -122,7 +122,7 @@ import KeychainSwift
     }
     
     @objc public class Credentials : NSObject {
-        @objc public private(set) static var clientId : String? {
+        @objc public  /*private(set)*/ static var clientId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
             }
@@ -135,7 +135,7 @@ import KeychainSwift
                 }
             }
         }
-        @objc public private(set) static var clientSecret : String? {
+        @objc public /*private(set)*/ static var clientSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
             }

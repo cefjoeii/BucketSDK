@@ -23,13 +23,13 @@
         [Bucket.shared setEnvironment: DeploymentEnvironmentProduction];
     #endif
     
-    [Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
-        if (success) {
-            
-        } else if (error != NULL) {
-            NSLog(@"%@", error.localizedDescription);
-        }
-    }];
+//    [Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
+//        if (success) {
+//            
+//        } else if (error != NULL) {
+//            NSLog(@"%@", error.localizedDescription);
+//        }
+//    }];
     
     long bucketAmount = [[Bucket shared] bucketAmountFor:7999];
 

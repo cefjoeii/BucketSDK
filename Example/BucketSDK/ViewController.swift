@@ -19,13 +19,13 @@ class ViewController: UIViewController {
             Bucket.shared.environment = .Production
         #endif
         
-        Bucket.Retailer.logInWith(password: "password", username: "username") { (success, error) in
-            if success {
-                // Yay - we successfully logged in!
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-        }
+//        Bucket.Retailer.logInWith(password: "password", username: "username") { (success, error) in
+//            if success {
+//                // Yay - we successfully logged in!
+//            } else if let error = error {
+//                print(error.localizedDescription)
+//            }
+//        }
         
         // Create the bucket amount from the total amount of change (in integer format):
         let bucketAmount = Bucket.shared.bucketAmount(for: 7899)
@@ -39,7 +39,7 @@ class ViewController: UIViewController {
                 print(error.localizedDescription)
             }
         }
-        
+    
     }
 
     override func didReceiveMemoryWarning() {
