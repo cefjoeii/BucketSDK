@@ -108,15 +108,25 @@ import KeychainSwift
             return json
         }
         
+        func updateWith(_ json : [String:Any]?) {
+            if json.isNil { return }
+            self.customerCode = json!["customerCode"].stringValue
+            self.bucketTransactionId = json!["bucketTransactionId"].stringValue
+            self.qrCodeContent = json!["qrCodeContent"].urlValue
+        }
+        
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
-            var url = URL.Transaction.base
-            url.appendPathComponent("transaction")
-            if let clientId = Bucket.Credentials.clientId, let secret = Bucket.Credentials.clientSecret {
-                url.appendPathComponent(clientId)
-                url.addQueryParams(["code": secret])
+            
+            // Make sure we can create the transaction request:
+            if var request = URL.transaction() {
+                // Set the post body json:
+                request.setJSONBody(self.toJSON)
                 // Send the request:
-                URLSession.shared.dataTask(with: url) { (data, response, error) in
+                URLSession.shared.dataTask(with: request) { (data, response, error) in
                     if response.isSuccess {
+                        // First we need to update the transaction object with the json data:
+                        self.updateWith(data?.asJSON)
+
                         // Return the completion as successful:
                         completion(response.isSuccess, error)
                     } else if let bucketError = data?.bucketError {
@@ -124,16 +134,14 @@ import KeychainSwift
                     }  else {
                         completion(response.isSuccess, error)
                     }
-                    
                 }.resume()
-            } else {
-                // Call back & let the user know we dont have a client id to create this transaction:
-                completion(false, BucketError.invalidCredentials)
+
             }
         }
     }
     
     @objc public class Credentials : NSObject {
+        /// This is the client id of the retailer.  This is used to authorize requests with Bucket.
         @objc public  private(set) static var clientId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
@@ -147,6 +155,7 @@ import KeychainSwift
                 }
             }
         }
+        /// This is the client secret of the retailer.  This is used to authorize requests with Bucket.
         @objc public private(set) static var clientSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
@@ -166,7 +175,36 @@ import KeychainSwift
 
 //MARK: - Bucket Extensions
 public extension Optional {
+    /// This checks the value of the object, returning true or false if the value is nil or not.
     public var isNil : Bool { return self == nil }
+    
+    public var stringValue : String? {
+        if self.isNil { return nil }
+        switch self {
+        case is String, is String?:
+            return self as? String
+        default:
+            return nil
+        }
+    }
+    public var urlValue : URL? {
+        if self.isNil { return nil }
+        switch self {
+        case is String, is String?:
+            return URL(string: self as! String)
+        default:
+            return nil
+        }
+    }
+    public var intValue : Int? {
+        if self.isNil { return nil }
+        switch self {
+        case is Int, is Int?:
+            return self as? Int
+        default:
+            return nil
+        }
+    }
 }
 @objc public extension DateFormatter {
     public convenience init(format: String) {
@@ -186,6 +224,14 @@ public extension UserDefaults {
 }
 
 extension URL {
+    static var base : URL {
+        switch Bucket.shared.environment {
+        case .Production:
+            return URL(string: "https://bucketthechange.com/api")!
+        case .Development:
+            return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+        }
+    }
     struct Retail {
         static var base : URL {
             switch Bucket.shared.environment {
@@ -207,6 +253,24 @@ extension URL {
         }
     }
     
+    static fileprivate func transaction() -> URLRequest? {
+        if Bucket.Credentials.clientId.isNil || Bucket.Credentials.clientSecret.isNil { return nil }
+        let clientId = Bucket.Credentials.clientId!
+        let clientSecret = Bucket.Credentials.clientSecret!
+        var urlStr = base.absoluteString
+        urlStr.append("/transaction/\(clientId)?code=\(clientSecret)")
+        
+        if let urlObj = URL(string: urlStr) {
+            var request = URLRequest(url: urlObj)
+            request.setMethod(.post)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
+            return request
+        } else {
+            return nil
+        }
+    }
+    
     /// Add query parameters to your URL object using a dictionary.
     public mutating func addQueryParams(_ queryParams : [String:Any]) {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
@@ -219,7 +283,7 @@ extension URL {
             let queryItem = URLQueryItem(name: param.key, value: String(describing: param.value))
             components?.queryItems?.append(queryItem)
         }
-        
+    
         if let url = components?.url  {
             self = url
         }
@@ -287,3 +351,22 @@ public extension Optional where Wrapped == URLResponse {
         return (self as! HTTPURLResponse).statusCode
     }
 }
+
+extension Dictionary {
+    var data : Data? {
+        return try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+    }
+}
+
+enum HTTPMethod: String {
+    case post = "POST", put = "PUT", delete = "DELETE", get = "GET"
+}
+extension URLRequest {
+    mutating func setMethod(_ method: HTTPMethod) {
+        self.httpMethod = method.rawValue
+    }
+    mutating func setJSONBody(_ json : [String:Any]) {
+        self.httpBody = json.data
+    }
+}
+
