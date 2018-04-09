@@ -84,6 +84,7 @@ import KeychainSwift
         /// This is associated with the day that the store has created the transaction.
         @objc public dynamic var intervalId : String!
         
+        /// You will need to initialize a transaction with an amount, and a transaction/order/sale id.
         @objc public init(amount : Int, clientTransactionId : String) {
             self.amount = amount
             self.clientTransactionId = clientTransactionId
@@ -116,7 +117,6 @@ import KeychainSwift
         }
         
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
-            
             // Make sure we can create the transaction request:
             if var request = URL.transaction() {
                 // Set the post body json:
@@ -134,7 +134,6 @@ import KeychainSwift
                         completion(response.isSuccess, error)
                     }
                 }.resume()
-
             }
         }
     }
