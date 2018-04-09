@@ -25,7 +25,7 @@
     
 //    [Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
 //        if (success) {
-//            
+//
 //        } else if (error != NULL) {
 //            NSLog(@"%@", error.localizedDescription);
 //        }
@@ -37,7 +37,7 @@
     [t create:^(BOOL success, NSError * _Nullable error) {
         if (success) {
             // You successfully created the transaction!
-            
+            NSLog(t.customerCode, t.bucketTransactionId);
         } else if (error != NULL) {
             NSLog(@"%@", error.localizedDescription);
         }

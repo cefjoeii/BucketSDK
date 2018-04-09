@@ -71,7 +71,7 @@ import KeychainSwift
         @objc public dynamic var bucketTransactionId : String?
         @objc public dynamic var customerCode : String?
         /// This is the URL for the qr code, in order for the user to redeem their bucket change.
-        @objc dynamic var qrCodeContent : URL?
+        @objc public dynamic var qrCodeContent : URL?
         /// This is defined by the retailer.  This is used if the retailer has multiple locations for their retailer account.
         @objc public dynamic var locationId : String?
         /// This is the hardware id of the POS terminal or device.
@@ -126,7 +126,6 @@ import KeychainSwift
                     if response.isSuccess {
                         // First we need to update the transaction object with the json data:
                         self.updateWith(data?.asJSON)
-
                         // Return the completion as successful:
                         completion(response.isSuccess, error)
                     } else if let bucketError = data?.bucketError {
@@ -355,6 +354,15 @@ public extension Optional where Wrapped == URLResponse {
 extension Dictionary {
     var data : Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+    }
+    var prettyPrint : String? {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            // Now lets cast this back into a string:
+            return String(data: data, encoding: .utf8)
+        } catch {
+            return nil
+        }
     }
 }
 
