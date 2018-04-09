@@ -113,16 +113,24 @@ import KeychainSwift
             if let clientId = Bucket.Credentials.clientId, let secret = Bucket.Credentials.clientSecret {
                 url.appendPathComponent(clientId)
                 url.addQueryParams(["code": secret])
+                // Send the request:
+                URLSession.shared.dataTask(with: url) { (data, response, error) in
+                    if response.isSuccess {
+                        // Return the completion as successful:
+                        completion(response.isSuccess, error)
+                    } else if let bucketError = data?.bucketError {
+                        completion(response.isSuccess, bucketError)
+                    }  else if !error.isNil { completion(response.isSuccess, error!) }
+                }.resume()
             } else {
                 // Call back & let the user know we dont have a client id to create this transaction:
-                completion(false, NSError(domain: "none", code: 0, userInfo: [NSLocalizedDescriptionKey: "You need to have a client id to create a transaction."]))
+                completion(false, BucketError.invalidCredentials)
             }
-            
         }
     }
     
     @objc public class Credentials : NSObject {
-        @objc public  /*private(set)*/ static var clientId : String? {
+        @objc public  private(set) static var clientId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
             }
@@ -135,7 +143,7 @@ import KeychainSwift
                 }
             }
         }
-        @objc public /*private(set)*/ static var clientSecret : String? {
+        @objc public private(set) static var clientSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
             }
@@ -214,10 +222,34 @@ extension URL {
     }
 }
 
+class BucketError: Error {}
+
+public extension Error {
+    static var invalidCredentials : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Please check Retailer Id and Secret Code."]) }
+    static var verificationError : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Account requires verification or verification has lapsed. Please contact Bucket support."]) }
+    static var zeroTransaction : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Non-zero amount required."]) }
+    static var noIntervalId : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "This interval id has been previously closed."]) }
+}
+
 public extension Data {
     var asJSON : [String:Any]? {
         if let theTry = try? JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String:Any] {
             return theTry
+        } else {
+            return nil
+        }
+    }
+    var bucketError : Error? {
+        if let json = self.asJSON {
+            if !json["errorCode"].isNil {
+                if let message = json["message"] as? String {
+                    return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: message])
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
         } else {
             return nil
         }
