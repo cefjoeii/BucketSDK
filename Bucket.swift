@@ -14,11 +14,12 @@ import KeychainSwift
     private override init() { super.init() }
     
     /// This is our date formatter for sending the interval ids.
-    private var dateFormatter : DateFormatter = DateFormatter(format: "yyyyMMdd")
+    fileprivate var dateFormatter : DateFormatter = DateFormatter(format: "yyyyMMdd")
     /// This is the denominations of the dollar bills in the register for this retailer:
     private var denominations : [Int] {
         return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200, 100]
     }
+    private var keychain : KeychainSwift = KeychainSwift()
     
     /// This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
     @objc public var environment : DeploymentEnvironment = .Development
@@ -36,7 +37,7 @@ import KeychainSwift
     @objc public func fetchBillDenominations(completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
         
         // This returns the base URL depending on the set environment:
-        var url = URL.base
+        var url = URL.Retail.base
         // Append for the correct endpoint here:
         url.appendPathComponent("")
         
@@ -80,25 +81,34 @@ import KeychainSwift
         /// This returns the client transaction id, that being the id for the order or sale.
         @objc public dynamic var clientTransactionId : String
         /// This is associated with the day that the store has created the transaction.
-        @objc public dynamic var intervalId : String
+        @objc public dynamic var intervalId : String!
         
         @objc public init(amount : Int, clientTransactionId : String) {
             self.amount = amount
             self.clientTransactionId = clientTransactionId
-            self.intervalId = Bucket.shared.dateFormatter.string(from: Date())
+            // Now lets set the terminalId - otherwise known as the unique identifier for the hardware.
+            if let uuid = UIDevice.current.identifierForVendor { self.terminalId = uuid.uuidString }
+            
         }
         
         private var toJSON : [String:Any] {
             var json : [String:Any] = .init()
+            
+            // Take care of all the values that we would always send:
+            self.intervalId = Date.now.toYYYYMMDD
             json["amount"] = self.amount
             json["clientTransactionId"] = self.clientTransactionId
             json["intervalId"] = self.intervalId
+            
+            if (!self.locationId.isNil) { json["locationId"] = self.locationId! }
+            if (!self.customerCode.isNil) { json["customerCode"] = self.customerCode! }
+            if (!self.terminalId.isNil) { json["terminalId"] = self.terminalId! }
             
             return json
         }
         
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
-            var url = URL.base
+            var url = URL.Transaction.base
             url.appendPathComponent("transaction")
             if let clientId = Bucket.Credentials.clientId, let secret = Bucket.Credentials.clientSecret {
                 url.appendPathComponent(clientId)
@@ -114,18 +124,28 @@ import KeychainSwift
     @objc public class Credentials : NSObject {
         @objc public private(set) static var clientId : String? {
             get {
-                return nil
+                return Bucket.shared.keychain.get("BUCKETID")
             }
             set {
                 // Implement the setter:
+                if newValue.isNil {
+                    Bucket.shared.keychain.delete("BUCKETID")
+                } else {
+                    Bucket.shared.keychain.set(newValue!, forKey: "BUCKETID")
+                }
             }
         }
         @objc public private(set) static var clientSecret : String? {
             get {
-                return nil
+                return Bucket.shared.keychain.get("BUCKETSECRET")
             }
             set {
                 // Implement the setter:
+                if newValue.isNil {
+                    Bucket.shared.keychain.delete("BUCKETSECRET")
+                } else {
+                    Bucket.shared.keychain.set(newValue!, forKey: "BUCKETSECRET")
+                }
             }
         }
     }
@@ -154,12 +174,24 @@ public extension UserDefaults {
 }
 
 extension URL {
-    static var base : URL {
-        switch Bucket.shared.environment {
-        case .Production:
-            return URL(string: "https://bucketthechange.com/api")!
-        case .Development:
-            return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+    struct Retail {
+        static var base : URL {
+            switch Bucket.shared.environment {
+            case .Production:
+                return URL(string: "https://bucketthechange.com/api")!
+            case .Development:
+                return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+            }
+        }
+    }
+    struct Transaction {
+        static var base : URL {
+            switch Bucket.shared.environment {
+            case .Production:
+                return URL(string: "https://bucketthechange.com/api")!
+            case .Development:
+                return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+            }
         }
     }
     
@@ -189,6 +221,15 @@ public extension Data {
         } else {
             return nil
         }
+    }
+}
+
+public extension Date {
+    static var now : Date {
+        return Date()
+    }
+    fileprivate var toYYYYMMDD : String {
+        return Bucket.shared.dateFormatter.string(from: self)
     }
 }
 
