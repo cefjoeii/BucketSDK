@@ -38,11 +38,10 @@ import KeychainSwift
         
         // This returns the base URL depending on the set environment:
         var url = URL.Retail.base
-        // Append for the correct endpoint here:
+        //TODO:  Append for the correct endpoint here:
         url.appendPathComponent("")
         
-        let request = URLRequest(url: URL(string: "https://example.com")!)
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
             if response.isSuccess {
                 // We successfully logged in, we should go & check for the denominations & returned:
                 if let json = data?.asJSON {
