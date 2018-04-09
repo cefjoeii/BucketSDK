@@ -50,6 +50,8 @@ import KeychainSwift
                 }
                 // Return the completion:
                 completion(response.isSuccess, error)
+            } else if let bucketError = data?.bucketError {
+                completion(response.isSuccess, bucketError)
             } else {
                 completion(response.isSuccess, error)
             }
@@ -120,7 +122,10 @@ import KeychainSwift
                         completion(response.isSuccess, error)
                     } else if let bucketError = data?.bucketError {
                         completion(response.isSuccess, bucketError)
-                    }  else if !error.isNil { completion(response.isSuccess, error!) }
+                    }  else {
+                        completion(response.isSuccess, error)
+                    }
+                    
                 }.resume()
             } else {
                 // Call back & let the user know we dont have a client id to create this transaction:
@@ -229,6 +234,7 @@ public extension Error {
     static var verificationError : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Account requires verification or verification has lapsed. Please contact Bucket support."]) }
     static var zeroTransaction : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Non-zero amount required."]) }
     static var noIntervalId : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "This interval id has been previously closed."]) }
+    static var unknown : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Unknown issue.  Please try again later."]) }
 }
 
 public extension Data {
