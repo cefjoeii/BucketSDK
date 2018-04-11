@@ -117,24 +117,33 @@ import KeychainSwift
         }
         
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
-            // Make sure we can create the transaction request:
-            if var request = URL.transaction() {
-                // Set the post body json:
-                request.setJSONBody(self.toJSON)
-                // Send the request:
-                URLSession.shared.dataTask(with: request) { (data, response, error) in
-                    if response.isSuccess {
-                        // First we need to update the transaction object with the json data:
-                        self.updateWith(data?.asJSON)
-                        // Return the completion as successful:
-                        completion(response.isSuccess, error)
-                    } else if let bucketError = data?.bucketError {
-                        completion(response.isSuccess, bucketError)
-                    }  else {
-                        completion(response.isSuccess, error)
-                    }
-                }.resume()
-            }
+            
+            let clientId = Bucket.Credentials.clientId; let clientSecret = Bucket.Credentials.clientSecret
+            
+            if clientId.isNil || clientSecret.isNil { completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "You must have a client id & client secret."])) }
+            
+            var theURL = URL.Transaction.base
+            theURL.appendPathComponent("transaction")
+            theURL.appendPathComponent(clientId!)
+            theURL.addQueryParams(["code":clientSecret!])
+            
+            var request = URLRequest(url: theURL)
+            request.setMethod(.post)
+            request.setJSONBody(self.toJSON)
+            request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+            
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if response.isSuccess {
+                    // First we need to update the transaction object with the json data:
+                    self.updateWith(data?.asJSON)
+                    // Return the completion as successful:
+                    completion(response.isSuccess, error)
+                } else if let bucketError = data?.bucketError {
+                    completion(response.isSuccess, bucketError)
+                }  else {
+                    completion(response.isSuccess, error)
+                }
+            }.resume()
         }
     }
     
@@ -222,14 +231,6 @@ public extension UserDefaults {
 }
 
 extension URL {
-    static var base : URL {
-        switch Bucket.shared.environment {
-        case .Production:
-            return URL(string: "https://bucketthechange.com/api")!
-        case .Development:
-            return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
-        }
-    }
     struct Retail {
         static var base : URL {
             switch Bucket.shared.environment {
@@ -250,25 +251,6 @@ extension URL {
             }
         }
     }
-    
-    static fileprivate func transaction() -> URLRequest? {
-        if Bucket.Credentials.clientId.isNil || Bucket.Credentials.clientSecret.isNil { return nil }
-        let clientId = Bucket.Credentials.clientId!
-        let clientSecret = Bucket.Credentials.clientSecret!
-        var urlStr = base.absoluteString
-        urlStr.append("/transaction/\(clientId)?code=\(clientSecret)")
-        
-        if let urlObj = URL(string: urlStr) {
-            var request = URLRequest(url: urlObj)
-            request.setMethod(.post)
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
-            return request
-        } else {
-            return nil
-        }
-    }
-    
     /// Add query parameters to your URL object using a dictionary.
     public mutating func addQueryParams(_ queryParams : [String:Any]) {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
