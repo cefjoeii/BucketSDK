@@ -16,13 +16,18 @@ import KeychainSwift
     /// This is our date formatter for sending the interval ids.
     fileprivate var dateFormatter : DateFormatter = DateFormatter(format: "yyyyMMdd")
     /// This is the denominations of the dollar bills in the register for this retailer:
-    private var denominations : [Int] {
-        return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200, 100]
+    @objc public dynamic var denominations : [Int] {
+        get {
+            return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200, 100]
+        }
+        set {
+            UserDefaults.standard.denominations = newValue
+        }
     }
     private var keychain : KeychainSwift = KeychainSwift()
     
     /// This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
-    @objc public var environment : DeploymentEnvironment = .Development
+    @objc public dynamic var environment : DeploymentEnvironment = .Development
     
     /// This function returns the bucket amount based on the dollar & change amount.
     @objc public func bucketAmount(for changeDueBack: Int) -> Int {
@@ -149,7 +154,7 @@ import KeychainSwift
     
     @objc public class Credentials : NSObject {
         /// This is the client id of the retailer.  This is used to authorize requests with Bucket.
-        @objc public  private(set) static var clientId : String? {
+        @objc public  /*private(set)*/ static var clientId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
             }
@@ -163,7 +168,7 @@ import KeychainSwift
             }
         }
         /// This is the client secret of the retailer.  This is used to authorize requests with Bucket.
-        @objc public private(set) static var clientSecret : String? {
+        @objc public  /*private(set)*/ static var clientSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
             }
