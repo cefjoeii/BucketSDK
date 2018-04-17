@@ -65,23 +65,24 @@ import KeychainSwift
                 if let json = data?.asJSON {
                     // We have an array of the currencies based on the currency code, lets grab the correct currency code:
                     if let currencies = json["currencies"] as? [[String:Any]] {
-                        currencies.forEach({ (dictionary) in
-                            let currencyCode = dictionary["currencyCode"].stringValue
-                            if dictionary["useNaturalChangeFunction"] as? Bool == true {
-                                if currencyCode == CurrencyCode {
-                                    self.useNaturalChangeFunction = true
-                                    // Okay go ahead & process:
-                                    let denominations = dictionary["commonDenominations"] as? [Int]
-                                    UserDefaults.standard.denominations = denominations
-                                    return
+                        
+                        for currency in currencies {
+                            // Get the currency code:
+                            let currencyCode = currency["currencyCode"].stringValue
+                            // If it is not the correct one, lets continue looping:
+                            if currencyCode != CurrencyCode { continue }
+                            
+                            // Finish processing if it is the correct code:
+                            if currency["useNaturalChangeFunction"] as? Bool == true {
+                                self.useNaturalChangeFunction = true
+                                if let denoms = currency["commonDenominations"] as? [Int] {
+                                    self.denominations = denoms
                                 }
-
                             } else {
-                                if CurrencyCode == currencyCode {
-                                    self.useNaturalChangeFunction = false
-                                }
+                                self.useNaturalChangeFunction = false
                             }
-                        })
+                            
+                        }
                     }
                 }
                 // Return the completion:
