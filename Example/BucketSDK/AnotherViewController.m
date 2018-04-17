@@ -31,7 +31,16 @@
 //        }
 //    }];
     
-    long bucketAmount = [[Bucket shared] bucketAmountFor:7999];
+    [[Bucket shared] fetchBillDenominations:@"SGD" completion:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            long bucketAmount = [[Bucket shared] bucketAmountFor:863];
+            NSLog(@"Success!!!: %li", bucketAmount);
+        } else if (error != NULL) {
+            
+        }
+    }];
+
+    
 //
 //    Transaction *t = [[Transaction alloc] initWithAmount:bucketAmount clientTransactionId:@"ZDFRPHGYKOUG"];
 //    [t create:^(BOOL success, NSError * _Nullable error) {
@@ -44,13 +53,6 @@
 //    }];
     
     // This is how we fetch the bil denominations:
-//    [[Bucket shared] fetchBillDenominations:@"SGD" completion:^(BOOL success, NSError * _Nullable error) {
-//        if (success) {
-//            NSLog(@"Success!!!");
-//        } else if (error != NULL) {
-//
-//        }
-//    }];
 
 }
 
