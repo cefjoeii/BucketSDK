@@ -29,28 +29,60 @@ import KeychainSwift
     /// This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
     @objc public dynamic var environment : DeploymentEnvironment = .Development
     
+    private var useNaturalChangeFunction : Bool {
+        get {
+            return UserDefaults.standard.object(forKey: "usesNaturalChangeFunction") as? Bool ?? false
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "usesNaturalChangeFunction")
+        }
+    }
+    
     /// This function returns the bucket amount based on the dollar & change amount.
     @objc public func bucketAmount(for changeDueBack: Int) -> Int {
         var bucketAmount = changeDueBack
-        for denom in self.denominations {
-            bucketAmount = bucketAmount % denom
+        if self.useNaturalChangeFunction {
+            for denom in self.denominations {
+                bucketAmount = bucketAmount % denom
+            }
+        } else {
+            while bucketAmount > 100 {
+                bucketAmount = bucketAmount % 100
+            }
         }
         return bucketAmount
     }
     
     /// This function fetches the bill denominations for the retailer and caches them for the Bucket class.
-    @objc public func fetchBillDenominations(completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
+    @objc public func fetchBillDenominations(_ CurrencyCode : String, completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
         
-        // This returns the base URL depending on the set environment:
-        var url = URL.Retail.base
-        //TODO:  Append for the correct endpoint here:
-        url.appendPathComponent("")
-        
+        // This is just the URL for the bill denominations.  This does not change between dev & production.
+        let url = URL.Retail.billDenominations
+        // We default to USD:
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if response.isSuccess {
                 // We successfully logged in, we should go & check for the denominations & returned:
                 if let json = data?.asJSON {
-                    UserDefaults.standard.denominations = json["denominations"] as? [Int]
+                    // We have an array of the currencies based on the currency code, lets grab the correct currency code:
+                    if let currencies = json["currencies"] as? [[String:Any]] {
+                        currencies.forEach({ (dictionary) in
+                            let currencyCode = dictionary["currencyCode"].stringValue
+                            if dictionary["useNaturalChangeFunction"] as? Bool == true {
+                                if currencyCode == CurrencyCode {
+                                    self.useNaturalChangeFunction = true
+                                    // Okay go ahead & process:
+                                    let denominations = dictionary["commonDenominations"] as? [Int]
+                                    UserDefaults.standard.denominations = denominations
+                                    return
+                                }
+
+                            } else {
+                                if CurrencyCode == currencyCode {
+                                    self.useNaturalChangeFunction = false
+                                }
+                            }
+                        })
+                    }
                 }
                 // Return the completion:
                 completion(response.isSuccess, error)
@@ -244,6 +276,9 @@ extension URL {
             case .Development:
                 return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
             }
+        }
+        static var billDenominations : URL {
+            return URL(string: "https://bucketresources.blob.core.windows.net/static/Currencies.json")!
         }
     }
     struct Transaction {
