@@ -41,6 +41,15 @@ Bucket.Retailer.logInWith(password: "password", username: "username") { (success
     }
 }
 
+// Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), you will need to set your bill denomination:
+Bucket.shared.fetchBillDenominations("USD") { (success, error) in
+    if success {
+
+    } else if !error.isNil {
+
+    }
+}
+
 // Another function you will use will be to calculate how much we are bucketing based on the dollar bills and change given.  Notice that we deal with the currency as an integer:
 let bucketAmount = Bucket.shared.bucketAmount(for: 7899)
 
@@ -70,6 +79,16 @@ transaction.create { (success, error) in
         
     } else if (error != NULL) {
         NSLog(@"%@", error.localizedDescription);
+    }
+}];
+
+// Before using the function bucketAmountFor, you will need to set your bill denominations:
+[[Bucket shared] fetchBillDenominations:@"USD" completion:^(BOOL success, NSError * _Nullable error) {
+    if (success) {
+        long bucketAmount = [[Bucket shared] bucketAmountFor:863];
+        NSLog(@"Success!!!: %li", bucketAmount);
+    } else if (error != NULL) {
+    
     }
 }];
 
