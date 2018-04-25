@@ -64,6 +64,19 @@ transaction.create { (success, error) in
         print(error.localizedDescription)
     }
 }
+
+// You will need to close the interval for the start-to-end of day.
+// Close an interval:
+Bucket.shared.close(interval: "20180422")
+// OR use the callback:
+Bucket.shared.close(interval: "20180422") { (success, error) in
+    if success {
+        // Success!!
+    }
+    else if !error.isNil {
+        print(error!.localizedDescription)
+    }
+}
 ```
 
 ### Obj-C Usage
@@ -104,6 +117,18 @@ Transaction *t = [[Transaction alloc] initWithAmount:bucketAmount clientTransact
 
     } else if (error != NULL) {
         NSLog(@"%@", error.localizedDescription);
+    }
+}];
+
+// You will need to close the interval for the start-to-end of day.
+// No completion:
+[Bucket.shared closeWithInterval:@"20180423" : NULL];
+// With completion:
+[Bucket.shared closeWithInterval:@"20180423" :^(BOOL success, NSError * _Nullable error) {
+    if (success) {
+        // Success!!!!
+    } else if (error != NULL) {
+        NSLog(@"%@",error.localizedDescription);
     }
 }];
 ```

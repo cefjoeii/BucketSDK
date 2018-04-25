@@ -40,6 +40,17 @@ class ViewController: UIViewController {
             }
         }
         
+        // Close an interval:
+        Bucket.shared.close(interval: "20180422")
+        // OR use the callback:
+        Bucket.shared.close(interval: "20180422") { (success, error) in
+            if success {
+                // Success!!
+            }
+            else if !error.isNil {
+                print(error!.localizedDescription)
+            }
+        }
         
     }
 

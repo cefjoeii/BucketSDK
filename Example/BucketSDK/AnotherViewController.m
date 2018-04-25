@@ -31,6 +31,16 @@
 //        }
 //    }];
     
+    // No completion:
+    [Bucket.shared closeWithInterval:@"20180423" : NULL];
+    // With completion:
+    [Bucket.shared closeWithInterval:@"20180423" :^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            // Success!!!!
+        } else if (error != NULL) {
+            NSLog(@"%@",error.localizedDescription);
+        }
+    }];
     
     [[Bucket shared] fetchBillDenominations: BillDenominationUsd completion:^(BOOL success, NSError * _Nullable error) {
         if (success) {
