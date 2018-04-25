@@ -31,7 +31,8 @@
 //        }
 //    }];
     
-    [[Bucket shared] fetchBillDenominations:@"SGD" completion:^(BOOL success, NSError * _Nullable error) {
+    
+    [[Bucket shared] fetchBillDenominations: BillDenominationUsd completion:^(BOOL success, NSError * _Nullable error) {
         if (success) {
             long bucketAmount = [[Bucket shared] bucketAmountFor:863];
             NSLog(@"Success!!!: %li", bucketAmount);

@@ -8,3 +8,16 @@
 @objc public enum DeploymentEnvironment : Int {
     case Production, Development
 }
+
+@objc public enum BillDenomination : Int  {
+    case usd, sgd
+    
+    var stringValue : String {
+        switch self {
+        case .usd:
+            return "USD"
+        case .sgd:
+            return "SGD"
+        }
+    }
+}

@@ -54,7 +54,7 @@ import KeychainSwift
     }
     
     /// This function fetches the bill denominations for the retailer and caches them for the Bucket class.
-    @objc public func fetchBillDenominations(_ CurrencyCode : String, completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
+    @objc public func fetchBillDenominations(_ CurrencyCode : BillDenomination, completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
         
         // This is just the URL for the bill denominations.  This does not change between dev & production.
         let url = URL.Retail.billDenominations
@@ -70,7 +70,7 @@ import KeychainSwift
                             // Get the currency code:
                             let currencyCode = currency["currencyCode"].stringValue
                             // If it is not the correct one, lets continue looping:
-                            if currencyCode != CurrencyCode { continue }
+                            if currencyCode != CurrencyCode.stringValue { continue }
                             
                             // Finish processing if it is the correct code:
                             if currency["useNaturalChangeFunction"] as? Bool == true {
