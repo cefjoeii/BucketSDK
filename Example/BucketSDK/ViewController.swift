@@ -30,10 +30,6 @@ class ViewController: UIViewController {
         // Create the bucket amount from the total amount of change (in integer format):
         let bucketAmount = Bucket.shared.bucketAmount(for: 7899)
         
-        Bucket.shared.fetchBillDenominations(.sgd) { (<#Bool#>, <#Error?#>) in
-            <#code#>
-        }
-        
         let transaction = Bucket.Transaction(amount: bucketAmount, clientTransactionId: "CKFYGGHPUIGH")
         transaction.create { (success, error) in
             if success {
@@ -52,4 +48,3 @@ class ViewController: UIViewController {
     }
 
 }
-
