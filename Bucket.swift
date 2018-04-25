@@ -53,6 +53,33 @@ import KeychainSwift
         return bucketAmount
     }
     
+    // This function will close the specified interval.  This initiates an ACH bank transfer from the retailer to Bucket.
+    @objc public func close(interval: String, _ completion: ((_ success: Bool, _ error: Error?)->Void)?=nil) {
+        
+        guard let clientSecret = Bucket.Credentials.clientSecret, let clientId = Bucket.Credentials.clientId else {
+            completion?(false, BucketError.invalidCredentials)
+            return
+        }
+        
+        // Okay - they have their client id & client secret.  Lets make the request:
+        var theURL = URL.close.interval
+        theURL.appendPathComponent("transaction")
+        theURL.appendPathComponent(clientId)
+        
+        var request = URLRequest(url: theURL)
+        request.setMethod(.get)
+        request.addValue(clientSecret, forHTTPHeaderField: "x-functions-key")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let bucketError = data?.bucketError {
+                completion?(response.isSuccess, bucketError)
+            } else {
+                completion?(response.isSuccess, error)
+            }
+            }.resume()
+        
+    }
+    
     /// This function fetches the bill denominations for the retailer and caches them for the Bucket class.
     @objc public func fetchBillDenominations(_ CurrencyCode : BillDenomination, completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
         
@@ -81,7 +108,6 @@ import KeychainSwift
                             } else {
                                 self.useNaturalChangeFunction = false
                             }
-                            
                         }
                     }
                 }
@@ -155,18 +181,19 @@ import KeychainSwift
         
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
             
-            let clientId = Bucket.Credentials.clientId; let clientSecret = Bucket.Credentials.clientSecret
-            
-            if clientId.isNil || clientSecret.isNil { completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "You must have a client id & client secret."])) }
+            guard let clientSecret = Bucket.Credentials.clientSecret, let clientId = Bucket.Credentials.clientId else {
+                completion(false, BucketError.invalidCredentials)
+                return
+            }
             
             var theURL = URL.Transaction.base
             theURL.appendPathComponent("transaction")
-            theURL.appendPathComponent(clientId!)
-            theURL.addQueryParams(["code":clientSecret!])
+            theURL.appendPathComponent(clientId)
             
             var request = URLRequest(url: theURL)
             request.setMethod(.post)
             request.setJSONBody(self.toJSON)
+            request.addValue(clientSecret, forHTTPHeaderField: "x-functions-key")
             request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
             
             URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -291,6 +318,16 @@ extension URL {
             }
         }
     }
+    struct close {
+        static var interval : URL {
+            switch Bucket.shared.environment {
+            case .Production:
+                return URL(string: "https://bucketthechange.com/api")!
+            case .Development:
+                return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+            }
+        }
+    }
     /// Add query parameters to your URL object using a dictionary.
     public mutating func addQueryParams(_ queryParams : [String:Any]) {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
@@ -310,7 +347,7 @@ extension URL {
     }
 }
 
-class BucketError: Error {}
+class BucketError: Error { private init() {} }
 
 public extension Error {
     static var invalidCredentials : Error { return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Please check Retailer Id and Secret Code."]) }
