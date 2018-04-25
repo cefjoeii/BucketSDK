@@ -98,8 +98,7 @@ import KeychainSwift
     @objc public class Retailer : NSObject {
         /// This function will log in the retailer with their username & password.  This should go & fetch the clientId & clientSecret for that retailer account.
         @objc public static func logInWith(password: String, username: String, _ completion: @escaping (_ success: Bool, _ error: Error?)->Void) {
-            
-            
+            completion(false, NSError(domain: "none", code: 400, userInfo: [NSLocalizedDescriptionKey:"Retailer login is not supported just yet."]))
         }
     }
     
