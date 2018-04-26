@@ -1,6 +1,6 @@
 # BucketSDK
 
-[![CI Status](http://img.shields.io/travis/Ryan/BucketSDK.svg?style=flat)](https://travis-ci.org/Ryan/BucketSDK)
+[![CI Status](http://img.shields.io/travis/buckettech/BucketSDK.svg?style=flat)](https://travis-ci.org/Ryan/BucketSDK)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/BucketSDK.svg?style=flat)](http://cocoapods.org/pods/BucketSDK)
 [![License](https://img.shields.io/cocoapods/l/BucketSDK.svg?style=flat)](http://cocoapods.org/pods/BucketSDK)
