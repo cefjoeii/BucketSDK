@@ -31,37 +31,35 @@
 //        }
 //    }];
     
-    // No completion:
-    [Bucket.shared closeWithInterval:@"20180423" : NULL];
-    // With completion:
-    [Bucket.shared closeWithInterval:@"20180423" :^(BOOL success, NSError * _Nullable error) {
-        if (success) {
-            // Success!!!!
-        } else if (error != NULL) {
-            NSLog(@"%@",error.localizedDescription);
-        }
-    }];
-    
-    [[Bucket shared] fetchBillDenominations: BillDenominationUsd completion:^(BOOL success, NSError * _Nullable error) {
-        if (success) {
-            long bucketAmount = [[Bucket shared] bucketAmountFor:863];
-            NSLog(@"Success!!!: %li", bucketAmount);
-        } else if (error != NULL) {
-            
-        }
-    }];
-
-    
-//
-//    Transaction *t = [[Transaction alloc] initWithAmount:bucketAmount clientTransactionId:@"ZDFRPHGYKOUG"];
-//    [t create:^(BOOL success, NSError * _Nullable error) {
+//    // No completion:
+//    [Bucket.shared closeWithInterval:@"20180423" : NULL];
+//    // With completion:
+//    [Bucket.shared closeWithInterval:@"20180423" :^(BOOL success, NSError * _Nullable error) {
 //        if (success) {
-//            // You successfully created the transaction!
-//            NSLog(t.customerCode, t.bucketTransactionId);
+//            // Success!!!!
 //        } else if (error != NULL) {
-//            NSLog(@"%@", error.localizedDescription);
+//            NSLog(@"%@",error.localizedDescription);
 //        }
 //    }];
+    
+//    [[Bucket shared] fetchBillDenominations: BillDenominationUsd completion:^(BOOL success, NSError * _Nullable error) {
+//        if (success) {
+//            long bucketAmount = [[Bucket shared] bucketAmountFor:863];
+//            NSLog(@"Success!!!: %li", bucketAmount);
+//        } else if (error != NULL) {
+//
+//        }
+//    }];
+
+    Transaction *t = [[Transaction alloc] initWithAmount:78 clientTransactionId:@"ZDFRPHGYKOUG"];
+    [t create:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            // You successfully created the transaction!
+            NSLog(t.customerCode, t.bucketTransactionId);
+        } else if (error != NULL) {
+            NSLog(@"%@", error.localizedDescription);
+        }
+    }];
     
     // This is how we fetch the bil denominations:
 
