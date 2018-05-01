@@ -23,6 +23,7 @@
         [Bucket.shared setEnvironment: DeploymentEnvironmentProduction];
     #endif
     
+    [Credentials setRetailerId:@""];
 //    [Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
 //        if (success) {
 //

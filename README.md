@@ -32,6 +32,10 @@ Using the BucketSDK, you will be able to use either Swift or Objective-C to acce
    Bucket.shared.environment = .Production
 #endif
 
+// You may need to set your retailer id & retailer secret:
+Bucket.Credentials.retailerId = "RetailerId"
+Bucket.Credentials.retailerSecret = "RetailerSecret"
+
 // Okay now that you set the environment, you should be able to log in with a Retailer:
 Bucket.Retailer.logInWith(password: "password", username: "username") { (success, error) in
     if success {
@@ -85,6 +89,10 @@ Bucket.shared.close(interval: "20180422") { (success, error) in
 #if RELEASE
     [Bucket.shared setEnvironment: DeploymentEnvironmentProduction];
 #endif
+
+// You may need to set your retailer id & retailer secret:
+[Credentials setRetailerId:@"RetailerId"];
+[Credentials setRetailerSecret:@"RetailerSecret"];
 
 // Okay now that you set the environment, you should be able to log in with a Retailer:
 [Retailer logInWithPassword:@"password" username:@"username" :^(BOOL success, NSError * _Nullable error) {
