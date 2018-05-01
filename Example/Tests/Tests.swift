@@ -29,8 +29,8 @@ class Tests: XCTestCase {
     func testCreateTransaction() {
         
         // Make sure the client id & client secret is set:  these are 
-        Bucket.Credentials.clientId = "6644211a-c02a-4413-b307-04a11b16e6a4"
-        Bucket.Credentials.clientSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
+        Bucket.Credentials.retailerId = "6644211a-c02a-4413-b307-04a11b16e6a4"
+        Bucket.Credentials.retailerSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
         
         let transaction = Bucket.Transaction(amount: 78, clientTransactionId: "ClientTransactionId")
         transaction.create { (success, error) in

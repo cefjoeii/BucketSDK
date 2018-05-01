@@ -56,7 +56,7 @@ import KeychainSwift
     // This function will close the specified interval.  This initiates an ACH bank transfer from the retailer to Bucket.
     @objc public func close(interval: String, _ completion: ((_ success: Bool, _ error: Error?)->Void)?=nil) {
         
-        guard let clientSecret = Bucket.Credentials.clientSecret, let clientId = Bucket.Credentials.clientId else {
+        guard let clientSecret = Bucket.Credentials.retailerSecret, let clientId = Bucket.Credentials.retailerId else {
             completion?(false, BucketError.invalidCredentials)
             return
         }
@@ -181,7 +181,7 @@ import KeychainSwift
         
         @objc public func create(_ completion: @escaping (_ success : Bool, _ error: Error?)->Void) {
             
-            guard let clientSecret = Bucket.Credentials.clientSecret, let clientId = Bucket.Credentials.clientId else {
+            guard let clientSecret = Bucket.Credentials.retailerSecret, let clientId = Bucket.Credentials.retailerId else {
                 completion(false, BucketError.invalidCredentials)
                 return
             }
@@ -213,7 +213,7 @@ import KeychainSwift
     
     @objc public class Credentials : NSObject {
         /// This is the client id of the retailer.  This is used to authorize requests with Bucket.
-        @objc public  /*private(set)*/ static var clientId : String? {
+        @objc public  /*private(set)*/ static var retailerId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
             }
@@ -227,7 +227,7 @@ import KeychainSwift
             }
         }
         /// This is the client secret of the retailer.  This is used to authorize requests with Bucket.
-        @objc public  /*private(set)*/ static var clientSecret : String? {
+        @objc public  /*private(set)*/ static var retailerSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
             }

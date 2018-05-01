@@ -135,7 +135,7 @@ Transaction *t = [[Transaction alloc] initWithAmount:bucketAmount clientTransact
 
 ## Author
 
-Ryan, ryan@buckettechnologies.com
+Ryan Coyne, ryan@buckettechnologies.com
 
 ## License
 
