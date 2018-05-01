@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'BucketSDK'
   s.version          = '1.0'
-  s.summary          = 'This is the SDK for Bucket Technologies.  This is usd for integrations for various different POS Systems.'
+  s.summary          = 'This is the SDK for Bucket Technologies.  This is used for integrations for various different POS Systems.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?

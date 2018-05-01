@@ -11,10 +11,15 @@ import KeychainSwift
 @objc public class Bucket: NSObject {
     /// This is the singleton for the Bucket object.
     @objc public static let shared = Bucket()
-    private override init() { super.init() }
+    private override init() {
+        super.init()
+        /// Make sure our interval ids are using the UTC datestamp:
+        self.dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+    }
     
     /// This is our date formatter for sending the interval ids.
     fileprivate var dateFormatter : DateFormatter = DateFormatter(format: "yyyyMMdd")
+    
     /// This is the denominations of the dollar bills in the register for this retailer:
     @objc public dynamic var denominations : [Int] {
         get {
