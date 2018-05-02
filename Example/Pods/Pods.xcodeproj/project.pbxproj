@@ -61,21 +61,21 @@
 /* Begin PBXFileReference section */
 		059A76C7B8CF09C0E6DA460EB1634702 /* DeploymentEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeploymentEnvironment.swift; sourceTree = "<group>"; };
 		0E6A6FB03574D8421D0976AAD39BE15F /* Pods-BucketSDK_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BucketSDK_Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		133B1DC81C4A9B1E45D0566B15AA8B48 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		133B1DC81C4A9B1E45D0566B15AA8B48 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		1A9D50D1E484DCE682CED8205C33AEE5 /* Pods-BucketSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BucketSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		21172E797A9071B417FC717BC55A405F /* Pods-BucketSDK_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Example-resources.sh"; sourceTree = "<group>"; };
-		291A2995AB1D385F5EAF9987C6922D3A /* KeychainSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = KeychainSwift.framework; path = KeychainSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		291A2995AB1D385F5EAF9987C6922D3A /* KeychainSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C755907E364A1AA0140A31D482D5F31 /* Pods-BucketSDK_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BucketSDK_Tests-dummy.m"; sourceTree = "<group>"; };
 		37D35B9D820C0C1B983E5255DCC7827D /* KeychainSwift.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainSwift.swift; path = Sources/KeychainSwift.swift; sourceTree = "<group>"; };
 		3B2F6ED12ED6DAAA287C7E7149F29162 /* Pods-BucketSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BucketSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		3CB2C03192DCCC0066E524379A753F4A /* BucketSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = BucketSDK.framework; path = BucketSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CB2C03192DCCC0066E524379A753F4A /* BucketSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BucketSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44638758937534573E5122B79F314F2D /* KeychainSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = KeychainSwift.xcconfig; sourceTree = "<group>"; };
 		4979BD7F3F0A68199F4519DCA1B45216 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5192EF385E1C70D7C7FA81CABE4D5E47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5F37E635293FFE75609D4AEEE2227F34 /* Pods-BucketSDK_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BucketSDK_Tests.modulemap"; sourceTree = "<group>"; };
 		657BB0F4B896E48B3DAFF14515A4F464 /* Pods-BucketSDK_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BucketSDK_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		687EFF8C4C6FE8BC768B0BEB8B19AB63 /* Pods-BucketSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BucketSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		6C1CFC3195D0838926EFF0ACC1A96E8A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		6C1CFC3195D0838926EFF0ACC1A96E8A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6CDF39681404A738FA64B7DDB99982C3 /* Pods-BucketSDK_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BucketSDK_Example-umbrella.h"; sourceTree = "<group>"; };
 		6CED68406DCA044E85CB7D97044845AA /* BucketSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BucketSDK-prefix.pch"; sourceTree = "<group>"; };
 		6F6E64BB1F993A9FE358D0305D0AAC99 /* Pods-BucketSDK_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Tests-frameworks.sh"; sourceTree = "<group>"; };
@@ -84,16 +84,16 @@
 		7DF102B7964AD385FC166B99196DB814 /* KeychainSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KeychainSwift-umbrella.h"; sourceTree = "<group>"; };
 		7DF7F37C3EC4BA6BB8F970D740361975 /* Pods-BucketSDK_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BucketSDK_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7F746AC8B8C005635A40E69DA08EC026 /* KeychainSwiftAccessOptions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainSwiftAccessOptions.swift; path = Sources/KeychainSwiftAccessOptions.swift; sourceTree = "<group>"; };
-		81C4EAB51B379EBBA217D3A1B7206C7F /* Pods_BucketSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BucketSDK_Tests.framework; path = "Pods-BucketSDK_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81C4EAB51B379EBBA217D3A1B7206C7F /* Pods_BucketSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BucketSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83327AB58C4439D5C5B2E7D2C4F3226A /* Pods-BucketSDK_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BucketSDK_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		8342A0694944FD05EBC1C903A7F1EEE3 /* Pods-BucketSDK_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BucketSDK_Example-dummy.m"; sourceTree = "<group>"; };
 		85D3DB4C78A555CB6EA84ED414869588 /* TegKeychainConstants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TegKeychainConstants.swift; path = Sources/TegKeychainConstants.swift; sourceTree = "<group>"; };
 		886756B3F076BDF487D4601662AA810E /* KeychainSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeychainSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		99C5C2B1E0E396267675B4505A147E20 /* BucketSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BucketSDK.modulemap; sourceTree = "<group>"; };
 		9F4FC330206F3D9EDBD5264133D56DB2 /* Bucket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
 		A2092470228CC60A4A6C901991CCD1E9 /* Pods-BucketSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BucketSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		A6C2F74E98CD894FF9461AB4AF89D012 /* BucketSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = BucketSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A6C2F74E98CD894FF9461AB4AF89D012 /* BucketSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = BucketSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		AF7D5AEF5464D61F1FC97E3307FC9249 /* Pods-BucketSDK_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Example-frameworks.sh"; sourceTree = "<group>"; };
 		B7B57836A34390E4BDE4E277FCC4F272 /* Pods-BucketSDK_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BucketSDK_Tests-umbrella.h"; sourceTree = "<group>"; };
 		C27F791992E17504CA80C30BA8E72A8F /* KeychainSwift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KeychainSwift-prefix.pch"; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 		DEA5E8E4963BDF78C8F859B1EC4C7C81 /* KeychainSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = KeychainSwift.modulemap; sourceTree = "<group>"; };
 		DF7B39419588CC0E4601E29A133A72A5 /* Pods-BucketSDK_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Tests-resources.sh"; sourceTree = "<group>"; };
 		E04AF0B2021A704A6CCACEF3499D9BA6 /* BucketSDK.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BucketSDK.xcconfig; sourceTree = "<group>"; };
-		F088BE62C1B6632C0C739F8D87187391 /* Pods_BucketSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BucketSDK_Example.framework; path = "Pods-BucketSDK_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F088BE62C1B6632C0C739F8D87187391 /* Pods_BucketSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BucketSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F14444C4C2D903D7E9EA40CE937D84DD /* BucketSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BucketSDK-dummy.m"; sourceTree = "<group>"; };
 		F956C1B8C00F5E6DD7A7D15A45B45CC3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD05FE1CA6C8B4A904397D2178752DB7 /* KeychainSwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "KeychainSwift-dummy.m"; sourceTree = "<group>"; };
@@ -195,7 +195,6 @@
 				85D3DB4C78A555CB6EA84ED414869588 /* TegKeychainConstants.swift */,
 				9DEB1F26B4893F05C8F57F8EC2CE740F /* Support Files */,
 			);
-			name = KeychainSwift;
 			path = KeychainSwift;
 			sourceTree = "<group>";
 		};
