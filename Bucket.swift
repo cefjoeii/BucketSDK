@@ -145,6 +145,8 @@ import KeychainSwift
         /// This is the hardware id of the POS terminal or device.
         @objc public dynamic var terminalId : String?
         
+        @objc public dynamic var totalAmount : Int
+        
         /// This returns the amount for the transaction in an integer form.  1000 would be $10.00
         @objc public dynamic var amount : Int
         /// This returns the client transaction id, that being the id for the order or sale.
@@ -153,8 +155,9 @@ import KeychainSwift
         @objc public dynamic var intervalId : String!
         
         /// You will need to initialize a transaction with an amount, and a transaction/order/sale id.
-        @objc public init(amount : Int, clientTransactionId : String) {
+        @objc public init(amount : Int, clientTransactionId : String, totalAmount : Int) {
             self.amount = amount
+            self.totalAmount = totalAmount
             self.clientTransactionId = clientTransactionId
             // Now lets set the terminalId - otherwise known as the unique identifier for the hardware.
             if let uuid = UIDevice.current.identifierForVendor { self.terminalId = uuid.uuidString }
@@ -169,6 +172,7 @@ import KeychainSwift
             json["amount"] = self.amount
             json["clientTransactionId"] = self.clientTransactionId
             json["intervalId"] = self.intervalId
+            json["totalTransactionAmount"] = self.totalAmount
             
             if (!self.locationId.isNil) { json["locationId"] = self.locationId! }
             if (!self.customerCode.isNil) { json["customerCode"] = self.customerCode! }
