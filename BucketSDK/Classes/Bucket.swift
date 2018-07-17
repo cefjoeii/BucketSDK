@@ -9,18 +9,24 @@ import Foundation
 import KeychainSwift
 
 @objc public class Bucket: NSObject {
-    /// This is the singleton for the Bucket object.
+    
+    // This is the singleton for the Bucket object.
     @objc public static let shared = Bucket()
+    
+    // This is used to store small sensitive information such as the retailerId and retailerSecret
+    private var keychain : KeychainSwift = KeychainSwift()
+    
     private override init() {
         super.init()
-        /// Make sure our interval ids are using the UTC datestamp:
+        
+        // Make sure our interval ids are using the UTC datestamp.
         self.dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
     }
     
-    /// This is our date formatter for sending the interval ids.
+    // This is our date formatter for sending the interval ids.
     fileprivate var dateFormatter : DateFormatter = DateFormatter(format: "yyyyMMdd")
     
-    /// This is the denominations of the dollar bills in the register for this retailer:
+    // This is the denominations of the dollar bills in the register for this retailer.
     @objc public dynamic var denominations : [Int] {
         get {
             return UserDefaults.standard.denominations ?? [10000, 5000, 2000, 1000, 500, 200, 100]
@@ -29,9 +35,8 @@ import KeychainSwift
             UserDefaults.standard.denominations = newValue
         }
     }
-    private var keychain : KeychainSwift = KeychainSwift()
     
-    /// This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
+    // This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
     @objc public dynamic var environment : DeploymentEnvironment = .Development
     
     private var useNaturalChangeFunction : Bool {
@@ -43,9 +48,10 @@ import KeychainSwift
         }
     }
     
-    /// This function returns the bucket amount based on the dollar & change amount.
+    // This function returns the bucket amount based on the dollar & change amount.
     @objc public func bucketAmount(for changeDueBack: Int) -> Int {
         var bucketAmount = changeDueBack
+        
         if self.useNaturalChangeFunction {
             for denom in self.denominations {
                 bucketAmount = bucketAmount % denom
@@ -58,7 +64,7 @@ import KeychainSwift
         return bucketAmount
     }
     
-    // This function will close the specified interval.  This initiates an ACH bank transfer from the retailer to Bucket.
+    // This function will close the specified interval. This initiates an ACH bank transfer from the retailer to Bucket.
     @objc public func close(interval: String, _ completion: ((_ success: Bool, _ error: Error?)->Void)?=nil) {
         
         guard let clientSecret = Bucket.Credentials.retailerSecret, let clientId = Bucket.Credentials.retailerId else {
@@ -66,7 +72,7 @@ import KeychainSwift
             return
         }
         
-        // Okay - they have their client id & client secret.  Lets make the request:
+        // Okay, they have their client id and client secret.  Lets make the request.
         var theURL = URL.close.interval
         theURL.appendPathComponent("transaction")
         theURL.appendPathComponent(clientId)
@@ -82,29 +88,29 @@ import KeychainSwift
                 completion?(response.isSuccess, error)
             }
             }.resume()
-        
     }
     
-    /// This function fetches the bill denominations for the retailer and caches them for the Bucket class.
+    // This function fetches the bill denominations for the retailer and caches them for the Bucket class.
     @objc public func fetchBillDenominations(_ CurrencyCode : BillDenomination, completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
         
-        // This is just the URL for the bill denominations.  This does not change between dev & production.
+        // This is just the URL for the bill denominations. This does not change between dev & production.
         let url = URL.Retail.billDenominations
-        // We default to USD:
+        
+        // We default to USD.
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if response.isSuccess {
-                // We successfully logged in, we should go & check for the denominations & returned:
+                // We successfully logged in, we should go & check for the denominations & returned.
                 if let json = data?.asJSON {
-                    // We have an array of the currencies based on the currency code, lets grab the correct currency code:
+                    // We have an array of the currencies based on the currency code, lets grab the correct currency code.
                     if let currencies = json["currencies"] as? [[String:Any]] {
                         
                         for currency in currencies {
-                            // Get the currency code:
+                            // Get the currency code.
                             let currencyCode = currency["currencyCode"].stringValue
-                            // If it is not the correct one, lets continue looping:
+                            // If it is not the correct one, lets continue looping.
                             if currencyCode != CurrencyCode.stringValue { continue }
                             
-                            // Finish processing if it is the correct code:
+                            // Finish processing if it is the correct code.
                             if currency["useNaturalChangeFunction"] as? Bool == true {
                                 self.useNaturalChangeFunction = true
                                 if let denoms = currency["commonDenominations"] as? [Int] {
@@ -116,7 +122,7 @@ import KeychainSwift
                         }
                     }
                 }
-                // Return the completion:
+                // Return the completion.
                 completion(response.isSuccess, error)
             } else if let bucketError = data?.bucketError {
                 completion(response.isSuccess, bucketError)
@@ -127,7 +133,8 @@ import KeychainSwift
     }
     
     @objc public class Retailer : NSObject {
-        /// This function will log in the retailer with their username & password.  This should go & fetch the clientId & clientSecret for that retailer account.
+        
+        // This function will log in the retailer with their username and password. This should go and fetch the clientId and clientSecret for that retailer account.
         @objc public static func logInWith(password: String, username: String, _ completion: @escaping (_ success: Bool, _ error: Error?)->Void) {
             completion(false, NSError(domain: "none", code: 400, userInfo: [NSLocalizedDescriptionKey:"Retailer login is not supported just yet."]))
         }
@@ -135,26 +142,32 @@ import KeychainSwift
     
     @objc public class Transaction : NSObject {
         
-        /// This is the primary key for the transaction table.
+        // This is the primary key for the transaction table.
         @objc public dynamic var bucketTransactionId : String?
+        
         @objc public dynamic var customerCode : String?
-        /// This is the URL for the qr code, in order for the user to redeem their bucket change.
+        
+        // This is the URL for the qr code, in order for the user to redeem their bucket change.
         @objc public dynamic var qrCodeContent : URL?
-        /// This is defined by the retailer.  This is used if the retailer has multiple locations for their retailer account.
+        
+        // This is defined by the retailer.  This is used if the retailer has multiple locations for their retailer account.
         @objc public dynamic var locationId : String?
-        /// This is the hardware id of the POS terminal or device.
+        
+        // This is the hardware id of the POS terminal or device.
         @objc public dynamic var terminalId : String?
         
         @objc public dynamic var totalAmount : Int
         
-        /// This returns the amount for the transaction in an integer form.  1000 would be $10.00
+        // This returns the amount for the transaction in an integer form.  1000 would be $10.00
         @objc public dynamic var amount : Int
-        /// This returns the client transaction id, that being the id for the order or sale.
+        
+        // This returns the client transaction id, that being the id for the order or sale.
         @objc public dynamic var clientTransactionId : String
-        /// This is associated with the day that the store has created the transaction.
+        
+        // This is associated with the day that the store has created the transaction.
         @objc public dynamic var intervalId : String!
         
-        /// You will need to initialize a transaction with an amount, and a transaction/order/sale id.
+        // You will need to initialize a transaction with an amount, and a transaction/order/sale id.
         @objc public init(amount : Int, clientTransactionId : String, totalAmount : Int) {
             self.amount = amount
             self.totalAmount = totalAmount
@@ -167,7 +180,7 @@ import KeychainSwift
         private var toJSON : [String:Any] {
             var json : [String:Any] = .init()
             
-            // Take care of all the values that we would always send:
+            // Take care of all the values that we would always send.
             self.intervalId = Date.now.toYYYYMMDD
             json["amount"] = self.amount
             json["clientTransactionId"] = self.clientTransactionId
@@ -207,9 +220,9 @@ import KeychainSwift
             
             URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if response.isSuccess {
-                    // First we need to update the transaction object with the json data:
+                    // First we need to update the transaction object with the json data.
                     self.updateWith(data?.asJSON)
-                    // Return the completion as successful:
+                    // Return the completion as successful.
                     completion(response.isSuccess, error)
                 } else if let bucketError = data?.bucketError {
                     completion(response.isSuccess, bucketError)
@@ -221,13 +234,13 @@ import KeychainSwift
     }
     
     @objc public class Credentials : NSObject {
-        /// This is the client id of the retailer.  This is used to authorize requests with Bucket.
+        // This is the client id of the retailer.  This is used to authorize requests with Bucket.
         @objc public  /*private(set)*/ static var retailerId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
             }
             set {
-                // Implement the setter:
+                // Implement the setter.
                 if newValue.isNil {
                     Bucket.shared.keychain.delete("BUCKETID")
                 } else {
@@ -235,13 +248,14 @@ import KeychainSwift
                 }
             }
         }
-        /// This is the client secret of the retailer.  This is used to authorize requests with Bucket.
+        
+        // This is the client secret of the retailer.  This is used to authorize requests with Bucket.
         @objc public  /*private(set)*/ static var retailerSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
             }
             set {
-                // Implement the setter:
+                // Implement the setter.
                 if newValue.isNil {
                     Bucket.shared.keychain.delete("BUCKETSECRET")
                 } else {
