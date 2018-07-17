@@ -47,7 +47,7 @@ extension URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
         // Start putting together the paths:
         for param in queryParams {
-            // If the query items is nil, we need to initialize so we can actually add the items:
+            // If the query items is nil, we need to initialize so we can actually add the items.
             if components?.queryItems.isNil  == true {
                 components?.queryItems = []
             }

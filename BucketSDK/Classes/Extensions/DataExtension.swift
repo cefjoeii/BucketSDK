@@ -8,6 +8,7 @@
 import Foundation
 
 public extension Data {
+    
     var asJSON : [String:Any]? {
         if let theTry = try? JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String:Any] {
             return theTry
@@ -15,6 +16,7 @@ public extension Data {
             return nil
         }
     }
+    
     var bucketError : Error? {
         if let json = self.asJSON {
             if !json["errorCode"].isNil {

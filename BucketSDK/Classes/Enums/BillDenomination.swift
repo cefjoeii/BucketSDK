@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc public enum BillDenomination : Int  {
+@objc public enum BillDenomination : Int {
     case usd, sgd
     
     var stringValue : String {
