@@ -37,7 +37,7 @@ import KeychainSwift
     }
     
     // This is the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
-    @objc public dynamic var environment : DeploymentEnvironment = .Development
+    @objc public dynamic var environment : DeploymentEnvironment = .development
     
     private var useNaturalChangeFunction : Bool {
         get {

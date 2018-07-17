@@ -29,7 +29,7 @@ Using the BucketSDK, you will be able to use either Swift or Objective-C to acce
 ```swift
 // Check your app's status of being in release or debug.  This will make it easier for you as the developer to always make sure you are hitting the Sandbox API rather than the Production API.  We suggest doing this in the App Delegate launch options.
 #if RELEASE
-   Bucket.shared.environment = .Production
+   Bucket.shared.environment = .production
 #endif
 
 // You may need to set your retailer id & retailer secret:

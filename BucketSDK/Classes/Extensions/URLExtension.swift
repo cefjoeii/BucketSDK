@@ -8,12 +8,13 @@
 import Foundation
 
 extension URL {
+    
     struct Retail {
         static var base : URL {
             switch Bucket.shared.environment {
-            case .Production:
+            case .production:
                 return URL(string: "https://bucketthechange.com/api")!
-            case .Development:
+            case .development:
                 return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
             }
         }
@@ -21,22 +22,24 @@ extension URL {
             return URL(string: "https://bucketresources.blob.core.windows.net/static/Currencies.json")!
         }
     }
+    
     struct Transaction {
         static var base : URL {
             switch Bucket.shared.environment {
-            case .Production:
+            case .production:
                 return URL(string: "https://bucketthechange.com/api")!
-            case .Development:
+            case .development:
                 return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
             }
         }
     }
+    
     struct close {
         static var interval : URL {
             switch Bucket.shared.environment {
-            case .Production:
+            case .production:
                 return URL(string: "https://bucketthechange.com/api")!
-            case .Development:
+            case .development:
                 return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
             }
         }

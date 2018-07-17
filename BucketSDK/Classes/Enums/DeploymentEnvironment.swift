@@ -6,5 +6,5 @@
 //
 
 @objc public enum DeploymentEnvironment : Int {
-    case Production, Development
+    case production, development
 }
