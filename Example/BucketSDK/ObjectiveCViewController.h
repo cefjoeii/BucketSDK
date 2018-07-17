@@ -1,5 +1,5 @@
 //
-//  AnotherViewController.h
+//  ObjectiveCViewController.h
 //  BucketSDK_Example
 //
 //  Created by Ryan Coyne on 4/6/18.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AnotherViewController : UIViewController
+@interface ObjectiveCViewController : UIViewController
 
 @end

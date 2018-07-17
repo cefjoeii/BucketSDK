@@ -1,19 +1,19 @@
 //
-//  AnotherViewController.m
+//  ObjectiveCViewController.m
 //  BucketSDK_Example
 //
 //  Created by Ryan Coyne on 4/6/18.
 //  Copyright © 2018 CocoaPods. All rights reserved.
 //
 
-#import "AnotherViewController.h"
+#import "ObjectiveCViewController.h"
 @import BucketSDK;
 
-@interface AnotherViewController ()
+@interface ObjectiveCViewController ()
 
 @end
 
-@implementation AnotherViewController
+@implementation ObjectiveCViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -52,7 +52,7 @@
 //        }
 //    }];
 
-    Transaction *t = [[Transaction alloc] initWithAmount:78 clientTransactionId:@"ZDFRPHGYKOUG"];
+    Transaction *t = [[Transaction alloc] initWithAmount:78 clientTransactionId:@"ZDFRPHGYKOUG" totalAmount:5000];
     [t create:^(BOOL success, NSError * _Nullable error) {
         if (success) {
             // You successfully created the transaction!
