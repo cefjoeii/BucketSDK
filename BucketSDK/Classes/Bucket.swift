@@ -13,7 +13,7 @@ import KeychainSwift
     // This is the singleton for the Bucket object.
     @objc public static let shared = Bucket()
     
-    // This is used to store small sensitive information such as the retailerId and retailerSecret
+    // This is used to store small sensitive information such as the retailerId and retailerSecret.
     private var keychain : KeychainSwift = KeychainSwift()
     
     private override init() {
@@ -48,7 +48,7 @@ import KeychainSwift
         }
     }
     
-    // This function returns the bucket amount based on the dollar & change amount.
+    // This function returns the bucket amount based on the dollar and change amount.
     @objc public func bucketAmount(for changeDueBack: Int) -> Int {
         var bucketAmount = changeDueBack
         
@@ -91,16 +91,18 @@ import KeychainSwift
     }
     
     // This function fetches the bill denominations for the retailer and caches them for the Bucket class.
-    @objc public func fetchBillDenominations(_ CurrencyCode : BillDenomination, completion: @escaping (_ success: Bool, _ error : Error?)->Void) {
+    @objc public func fetchBillDenominations(_ CurrencyCode : BillDenomination, completion: @escaping (_ success: Bool, _ error : Error?) -> Void) {
         
-        // This is just the URL for the bill denominations. This does not change between dev & production.
+        // This is just the URL for the bill denominations. This does not change between dev and production.
         let url = URL.Retail.billDenominations
         
         // We default to USD.
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if response.isSuccess {
-                // We successfully logged in, we should go & check for the denominations & returned.
+                
+                // We successfully logged in, we should go and check for the denominations and returned.
                 if let json = data?.asJSON {
+                    
                     // We have an array of the currencies based on the currency code, lets grab the correct currency code.
                     if let currencies = json["currencies"] as? [[String:Any]] {
                         
@@ -156,25 +158,26 @@ import KeychainSwift
         // This is the hardware id of the POS terminal or device.
         @objc public dynamic var terminalId : String?
         
-        @objc public dynamic var totalAmount : Int
+        // @objc public dynamic var totalAmount : Int
         
         // This returns the amount for the transaction in an integer form.  1000 would be $10.00
         @objc public dynamic var amount : Int
         
         // This returns the client transaction id, that being the id for the order or sale.
-        @objc public dynamic var clientTransactionId : String
+        // @objc public dynamic var clientTransactionId : String
         
         // This is associated with the day that the store has created the transaction.
         @objc public dynamic var intervalId : String!
         
         // You will need to initialize a transaction with an amount, and a transaction/order/sale id.
-        @objc public init(amount : Int, clientTransactionId : String, totalAmount : Int) {
+        @objc public init(amount : Int/* , clientTransactionId : String, totalAmount : Int */) {
             self.amount = amount
-            self.totalAmount = totalAmount
-            self.clientTransactionId = clientTransactionId
-            // Now lets set the terminalId - otherwise known as the unique identifier for the hardware.
-            if let uuid = UIDevice.current.identifierForVendor { self.terminalId = uuid.uuidString }
+            self.terminalId = Bucket.Credentials.terminalId
+            // self.totalAmount = totalAmount
+            // self.clientTransactionId = clientTransactionId
             
+            // Now lets set the terminalId - otherwise known as the unique identifier for the hardware.
+            // if let uuid = UIDevice.current.identifierForVendor { self.terminalId = uuid.uuidString }
         }
         
         private var toJSON : [String:Any] {
@@ -183,9 +186,9 @@ import KeychainSwift
             // Take care of all the values that we would always send.
             self.intervalId = Date.now.toYYYYMMDD
             json["amount"] = self.amount
-            json["clientTransactionId"] = self.clientTransactionId
+            // json["clientTransactionId"] = self.clientTransactionId
             json["intervalId"] = self.intervalId
-            json["totalTransactionAmount"] = self.totalAmount
+            // json["totalTransactionAmount"] = self.totalAmount
             
             if (!self.locationId.isNil) { json["locationId"] = self.locationId! }
             if (!self.customerCode.isNil) { json["customerCode"] = self.customerCode! }
@@ -215,6 +218,7 @@ import KeychainSwift
             var request = URLRequest(url: theURL)
             request.setMethod(.post)
             request.setJSONBody(self.toJSON)
+            
             request.addValue(clientSecret, forHTTPHeaderField: "x-functions-key")
             request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
             
@@ -234,7 +238,7 @@ import KeychainSwift
     }
     
     @objc public class Credentials : NSObject {
-        // This is the client id of the retailer.  This is used to authorize requests with Bucket.
+        // This is the client id of the retailer. This is used to authorize requests with Bucket.
         @objc public  /*private(set)*/ static var retailerId : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETID")
@@ -249,7 +253,7 @@ import KeychainSwift
             }
         }
         
-        // This is the client secret of the retailer.  This is used to authorize requests with Bucket.
+        // This is the client secret of the retailer. This is used to authorize requests with Bucket.
         @objc public  /*private(set)*/ static var retailerSecret : String? {
             get {
                 return Bucket.shared.keychain.get("BUCKETSECRET")
@@ -260,6 +264,22 @@ import KeychainSwift
                     Bucket.shared.keychain.delete("BUCKETSECRET")
                 } else {
                     Bucket.shared.keychain.set(newValue!, forKey: "BUCKETSECRET")
+                }
+            }
+        }
+        
+        // This is the terminal id of this device/register. This is used to make valid transaction requests with Bucket.
+        // You will need to register this terminal or device with your defined id.
+        @objc public  /*private(set)*/ static var terminalId : String? {
+            get {
+                return Bucket.shared.keychain.get("BUCKETTERMINALID")
+            }
+            set {
+                // Implement the setter.
+                if newValue.isNil {
+                    Bucket.shared.keychain.delete("BUCKETTERMINALID")
+                } else {
+                    Bucket.shared.keychain.set(newValue!, forKey: "BUCKETTERMINALID")
                 }
             }
         }

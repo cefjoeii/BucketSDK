@@ -31,8 +31,9 @@ class Tests: XCTestCase {
         // Make sure the client id & client secret is set:  these are 
         Bucket.Credentials.retailerId = "6644211a-c02a-4413-b307-04a11b16e6a4"
         Bucket.Credentials.retailerSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
+        Bucket.Credentials.terminalId = "qwerty1234"
         
-        let transaction = Bucket.Transaction(amount: 78, clientTransactionId: "ClientTransactionId")
+        let transaction = Bucket.Transaction(amount: 78)
         transaction.create { (success, error) in
             if success {
                 print(success)
@@ -40,7 +41,5 @@ class Tests: XCTestCase {
                 print(error!.localizedDescription)
             }
         }
-        
     }
-    
 }

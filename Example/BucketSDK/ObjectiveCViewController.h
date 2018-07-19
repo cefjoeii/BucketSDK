@@ -10,4 +10,8 @@
 
 @interface ObjectiveCViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *labelRetailerId;
+@property (weak, nonatomic) IBOutlet UILabel *labelRetailerSecret;
+@property (weak, nonatomic) IBOutlet UILabel *labelTerminalId;
+
 @end

@@ -11,7 +11,7 @@
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
-You will need to be registered with Bucket & have obtained a Retailer Account.  You will need to have received a clientId & clientSecret in order to access Bucket's API.
+You will need to be registered with Bucket and have obtained a **Retailer Account**. You will need to have received a *retailerId* and *retailerSecret* in order to access Bucket's API.
 
 ## Installation
 
