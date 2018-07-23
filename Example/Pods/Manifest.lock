@@ -1,24 +1,28 @@
 PODS:
-  - BucketSDK (1.0.0):
+  - BucketSDK (1.0):
     - KeychainSwift
   - KeychainSwift (11.0.0)
+  - QRCode (2.0)
 
 DEPENDENCIES:
   - BucketSDK (from `../`)
   - KeychainSwift
+  - QRCode
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - KeychainSwift
+    - QRCode
 
 EXTERNAL SOURCES:
   BucketSDK:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BucketSDK: 59979da7e9a81befa97d0f2b032b64f57b48f8ec
+  BucketSDK: 5c4010ec7899344c38d5374b73db60569001c881
   KeychainSwift: bea6bd9f98af7b8d7ca4aa79fe105c00fab532db
+  QRCode: f98a1886c8f37523704a7512a4c0cd45b34c18a4
 
-PODFILE CHECKSUM: 9b46a0455a15e36e389afe33adb3ab5f0ceef34d
+PODFILE CHECKSUM: b5744b108cec4e9ca1f95c405df644edc0a321e7
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3
