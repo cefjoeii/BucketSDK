@@ -13,7 +13,7 @@ extension URLRequest {
         self.httpMethod = method.rawValue
     }
     
-    mutating func setJSONBody(_ json : [String:Any]) {
+    mutating func setBody(_ json : [String:Any]) {
         self.httpBody = json.data
     }
 }

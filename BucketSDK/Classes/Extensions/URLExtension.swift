@@ -9,49 +9,25 @@ import Foundation
 
 extension URL {
     
-    struct Retail {
-        static var base : URL {
-            switch Bucket.shared.environment {
-            case .production:
-                return URL(string: "https://bucketthechange.com/api")!
-            case .development:
-                return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
-            }
-        }
-        static var billDenominations : URL {
-            return URL(string: "https://bucketresources.blob.core.windows.net/static/Currencies.json")!
-        }
+    static var registerTerminal: URL = Bucket.shared.environment.url.appendingPathComponent("registerterminal")
+    static var closeInterval: URL = Bucket.shared.environment.url.appendingPathComponent("closeinterval")
+    static var createTransaction: URL = Bucket.shared.environment.url.appendingPathComponent("transaction")
+    
+    // This URL for the bill denominations does not change between development and production. We default to USD.
+    static var billDenominations = URL(string: "https://bucketresources.blob.core.windows.net/static/Currencies.json")!
+    
+    // Add query parameters and set the value to itself. Thus, mutating.
+    public mutating func addQueryParams(_ queryParams: [String: Any]) {
+        self = self.addingQueryParams(queryParams)
     }
     
-    struct Transaction {
-        static var base : URL {
-            switch Bucket.shared.environment {
-            case .production:
-                return URL(string: "https://bucketthechange.com/api")!
-            case .development:
-                return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
-            }
-        }
-    }
-    
-    struct close {
-        static var interval : URL {
-            switch Bucket.shared.environment {
-            case .production:
-                return URL(string: "https://bucketthechange.com/api")!
-            case .development:
-                return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
-            }
-        }
-    }
-    
-    // Add query parameters to your URL object using a dictionary.
-    public mutating func addQueryParams(_ queryParams : [String:Any]) {
+    // Add query parameters to your URL object using a dictionary and return.
+    public func addingQueryParams(_ queryParams: [String: Any]) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
         // Start putting together the paths:
         for param in queryParams {
             // If the query items is nil, we need to initialize so we can actually add the items.
-            if components?.queryItems.isNil  == true {
+            if components?.queryItems.isNil == true {
                 components?.queryItems = []
             }
             let queryItem = URLQueryItem(name: param.key, value: String(describing: param.value))
@@ -59,7 +35,9 @@ extension URL {
         }
         
         if let url = components?.url  {
-            self = url
+            return url
         }
+        
+        return self
     }
 }

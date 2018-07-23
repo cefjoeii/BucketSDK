@@ -9,8 +9,11 @@ import Foundation
 
 public extension Optional where Wrapped == URLResponse {
     
-    var isSuccess : Bool {
-        if self.isNil { return false }
+    var isSuccess: Bool {
+        if self.isNil {
+            return false
+        }
+        
         switch self!.code {
         case 200...299:
             return true

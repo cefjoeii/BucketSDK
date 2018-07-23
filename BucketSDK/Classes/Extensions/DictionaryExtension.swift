@@ -9,11 +9,11 @@ import Foundation
 
 extension Dictionary {
     
-    var data : Data? {
+    var data: Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
     }
     
-    var prettyPrint : String? {
+    var prettyPrint: String? {
         do {
             let data = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
             
