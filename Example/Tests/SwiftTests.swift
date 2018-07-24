@@ -1,7 +1,15 @@
+//
+//  SwiftTests.swift
+//  BucketSDK_Tests
+//
+//  Created by Ryan Coyne on 5/4/18.
+//  Copyright © 2018 CocoaPods. All rights reserved.
+//
+
 import XCTest
 import BucketSDK
 
-class Tests: XCTestCase {
+class SwiftTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -27,13 +35,13 @@ class Tests: XCTestCase {
         let expectation = XCTestExpectation(description: "Register the device with that terminalId.")
         
         Bucket.shared.registerDevice(with: "1234") { (success, error) in
-            XCTAssertTrue(success, "For now, the register device function should work.")
+            XCTAssertTrue(success, "For now, the register device function should just work.")
             XCTAssertNil(error)
             
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: 5)
     }
     
     func testFetchBillDenominations() {
