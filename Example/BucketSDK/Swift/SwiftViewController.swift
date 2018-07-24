@@ -27,7 +27,7 @@ class SwiftViewController: UIViewController {
         Bucket.shared.environment = .production
         #endif
         
-        // For now, you can decide how you are going to retrieve and store these information.
+        // You will need to set the retailer id, retailer secret, and terminal id.
         Bucket.Credentials.retailerId = "6644211a-c02a-4413-b307-04a11b16e6a4"
         Bucket.Credentials.retailerSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
         Bucket.Credentials.terminalId = "qwerty1234"
@@ -41,13 +41,14 @@ class SwiftViewController: UIViewController {
             }
         }
         
-        //        // No completion.
-        //        Bucket.shared.close(interval: "20180422")
+        // You will need to close the interval for the start-to-end of day.
+        // No completion.
+        //        Bucket.shared.close(intervalId: "20180422")
         //        // With completion.
-        //        Bucket.shared.close(interval: "20180422") { (response, success, error) in
+        //        Bucket.shared.close(intervalId: "20180422") { (response, success, error) in
         //            if success {
         //                // Success!!
-        //            } else if error = error {
+        //            } else if let error = error {
         //                print(error.localizedDescription)
         //            }
         //        }
@@ -59,7 +60,7 @@ class SwiftViewController: UIViewController {
         if let totalSale = Double(textFieldTotalSale.text!), let cashReceived = Double(textFieldCashReceived.text!) {
             if cashReceived >= totalSale {
                 let roundedChangeAmount = Double(round(100 * (cashReceived - totalSale)) / 100)
-                let roundedchangeAmountInt = Int(String(roundedChangeAmount).replacingOccurrences(of: ".", with: ""))! * 10
+                let roundedchangeAmountInt = Int(String(roundedChangeAmount).replacingOccurrences(of: ".", with: ""))!
                 let bucketAmount = Bucket.shared.bucketAmount(for: roundedchangeAmountInt)
 
                 print("\(TAG): roundedChangeAmount: \(roundedChangeAmount)")
@@ -69,6 +70,7 @@ class SwiftViewController: UIViewController {
                 if bucketAmount > 0 {
                     Loading.shared.show(self.view)
                     
+                    // Now that we have our bucket amount, we can go and create a transaction with that amount, and send it through the Bucket API.
                     let transaction = Bucket.Transaction(amount: bucketAmount, clientTransactionId: "YouDecide1234")
                     transaction.create { (response, success, error) in
                         Loading.shared.hide()
@@ -86,10 +88,10 @@ class SwiftViewController: UIViewController {
                         }
                     }
                 } else {
-                    showOKAlert(title: "Sorry", message: "Bucket amount results to 0. There is no change to bucket.")
+                    showOKAlert(title: "Invalid Amount", message: "Bucket amount results to 0. There is no change to bucket.")
                 }
             } else {
-                showOKAlert(title: "Invalid Amount", message: "Cash received must be equal to or greater than the total sale amount.")
+                showOKAlert(title: "Invalid Amount", message: "Cash received must be greater than the total sale amount to bucket the change.")
             }
         } else {
             showOKAlert(title: "Invalid Amount", message: "Please enter a valid amount in the required fields.")

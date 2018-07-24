@@ -190,7 +190,7 @@ import KeychainSwift
             self.intervalId = Date.now.toYYYYMMDD
         }
         
-        public func create(_ completion: @escaping (_ response: CreateTransactionResponse?, _ success: Bool, _ error: Error?) -> Void) {
+        @objc public func create(_ completion: @escaping (_ response: CreateTransactionResponse?, _ success: Bool, _ error: Error?) -> Void) {
             guard let retailerId = Bucket.Credentials.retailerId, let retailerSecret = Bucket.Credentials.retailerSecret else {
                 completion(nil, false, BucketError.invalidRetailer)
                 return

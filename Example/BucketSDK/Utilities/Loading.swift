@@ -8,17 +8,17 @@
 
 import UIKit
 
-public class Loading {
+@objc class Loading: NSObject {
     var activityIndicator = UIActivityIndicatorView()
     
-    class var shared: Loading {
+    @objc class var shared: Loading {
         struct Static {
             static let instance: Loading = Loading()
         }
         return Static.instance
     }
     
-    public func show(_ view: UIView) {
+    @objc public func show(_ view: UIView) {
         DispatchQueue.main.async {
             self.activityIndicator.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
             self.activityIndicator.activityIndicatorViewStyle = .whiteLarge
@@ -30,7 +30,7 @@ public class Loading {
         }
     }
     
-    public func hide() {
+    @objc public func hide() {
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()
         }
