@@ -6,6 +6,7 @@
 
 # BucketSDK
 This is the BucketSDK for iOS. Here is where you can create transactions and other important features of the Bucket API pre-wrapped for iOS.
+Check this [video](https://www.youtube.com/watch?v=QJxjZKIDxXA) out to see the POS flow demo.
 
 ## Requirements
 You will need to be registered with Bucket and have obtained a **Retailer Account**.
