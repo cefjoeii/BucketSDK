@@ -79,7 +79,7 @@ Bucket.shared.registerDevice(with: "TERMINAL1234") { (success, error) in
 ```
 
 ### Setting your currency code
-Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), might want to set your bill denominations.
+Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), you might want to set your bill denominations.
 SGD (Singapore) & USD (USA) currencies are currently supported.
 ```swift
 // Swift
