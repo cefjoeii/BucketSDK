@@ -60,11 +60,9 @@ class SwiftViewController: UIViewController {
         if let totalSale = Double(textFieldTotalSale.text!), let cashReceived = Double(textFieldCashReceived.text!) {
             if cashReceived >= totalSale {
                 let roundedChangeAmount = Double(round(100 * (cashReceived - totalSale)) / 100)
-                let roundedchangeAmountInt = Int(String(roundedChangeAmount).replacingOccurrences(of: ".", with: ""))!
-                let bucketAmount = Bucket.shared.bucketAmount(for: roundedchangeAmountInt)
+                let bucketAmount = Bucket.shared.bucketAmount(forDecimal: roundedChangeAmount)
 
-                print("\(TAG): roundedChangeAmount: \(roundedChangeAmount)")
-                print("\(TAG): roundedchangeAmountInt: \(roundedchangeAmountInt)")
+                print("\(TAG): roundedChangeAmount: \(String(format: "%.2f", roundedChangeAmount))")
                 print("\(TAG): bucketAmount: \(bucketAmount)")
                 
                 if bucketAmount > 0 {

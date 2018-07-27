@@ -172,6 +172,11 @@ import KeychainSwift
         return bucketAmount
     }
     
+    @objc public func bucketAmount(forDecimal changeDueBack: Double) -> Int {
+        let roundedAmountInt = Int(String(format: "%.2f", changeDueBack).replacingOccurrences(of: ".", with: ""))!
+        return bucketAmount(for: roundedAmountInt)
+    }
+    
     // MARK: Bucket Nested Classes
     @objc public class Transaction: NSObject {
         @objc public dynamic var amount: Int

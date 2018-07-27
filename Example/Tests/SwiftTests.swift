@@ -83,6 +83,9 @@ class SwiftTests: XCTestCase {
         
         bucketAmount = Bucket.shared.bucketAmount(for: 1234)
         XCTAssertEqual(bucketAmount, 34, "Bucket amount should be 34 when the change due back 1234.")
+        
+        bucketAmount = Bucket.shared.bucketAmount(forDecimal: 1.0)
+        XCTAssertEqual(bucketAmount, 100, "Bucket amout should be 100, not 10, when the change due back is 1.0 or 1.00.")
     }
     
     func testCreateTransaction() {
