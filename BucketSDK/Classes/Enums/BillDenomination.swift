@@ -1,15 +1,13 @@
 //
-//  DeploymentEnvironment.swift
+//  BillDenomination.swift
 //  BucketSDK
 //
-//  Created by Ryan Coyne on 4/6/18.
+//  Created by Ceferino Jose II on 7/17/18.
 //
 
-@objc public enum DeploymentEnvironment : Int {
-    case Production, Development
-}
+import Foundation
 
-@objc public enum BillDenomination : Int  {
+@objc public enum BillDenomination : Int {
     case usd, sgd
     
     var stringValue : String {

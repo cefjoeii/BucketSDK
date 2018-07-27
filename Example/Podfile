@@ -4,6 +4,7 @@ pod 'KeychainSwift'
 
 target 'BucketSDK_Example' do
   pod 'BucketSDK', :path => '../'
+  pod 'QRCode'
 
   target 'BucketSDK_Tests' do
     inherit! :search_paths

@@ -1,30 +1,405 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="HKE-LL-Lq8">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Another View Controller-->
+        <!--BucketSDK Example-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="AnotherViewController" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="MainViewController" customModule="BucketSDK_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dS2-m3-K4w" customClass="CustomButton" customModule="BucketSDK_Example" customModuleProvider="target">
+                                <rect key="frame" x="20" y="341" width="335" height="60"/>
+                                <color key="backgroundColor" red="0.9882352941176471" green="0.53725490196078429" blue="0.20392156862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="ali-4d-ZZT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Swift">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="pXX-WT-n3C" kind="show" identifier="goToSwift" id="6LX-Xe-bO7"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVT-yi-Asg">
+                                <rect key="frame" x="20" y="108" width="335" height="101.66666666666669"/>
+                                <string key="text">You will need to be registered with Bucket and have obtained a Retailer Account. You will need to have received a retailerId and retailerSecret in order to access Bucket's API.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i8g-oS-XWi" customClass="CustomButton" customModule="BucketSDK_Example" customModuleProvider="target">
+                                <rect key="frame" x="20" y="421" width="335" height="60"/>
+                                <color key="backgroundColor" red="0.1764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Objective-C">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="dlL-3c-2qq" kind="show" identifier="goToObjectiveC" id="uL7-Qg-y7Y"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="i8g-oS-XWi" firstAttribute="top" secondItem="dS2-m3-K4w" secondAttribute="bottom" constant="20" id="1Hc-bI-pzW"/>
+                            <constraint firstAttribute="trailing" secondItem="i8g-oS-XWi" secondAttribute="trailing" constant="20" id="2pL-rF-SZx"/>
+                            <constraint firstItem="dS2-m3-K4w" firstAttribute="top" relation="greaterThanOrEqual" secondItem="KVT-yi-Asg" secondAttribute="bottom" constant="20" id="8E6-XX-rcP"/>
+                            <constraint firstItem="KVT-yi-Asg" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="PF3-RC-jne"/>
+                            <constraint firstItem="i8g-oS-XWi" firstAttribute="height" secondItem="dS2-m3-K4w" secondAttribute="height" id="VSF-sA-jBn"/>
+                            <constraint firstAttribute="trailing" secondItem="KVT-yi-Asg" secondAttribute="trailing" constant="20" id="Wdp-9i-kmk"/>
+                            <constraint firstAttribute="trailing" secondItem="dS2-m3-K4w" secondAttribute="trailing" constant="20" id="f7o-cC-KyS"/>
+                            <constraint firstItem="i8g-oS-XWi" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="fC0-bn-saw"/>
+                            <constraint firstItem="dS2-m3-K4w" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="h84-5d-LLz"/>
+                            <constraint firstItem="KVT-yi-Asg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" id="kzQ-dn-aq8"/>
+                            <constraint firstItem="dS2-m3-K4w" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" constant="-35" id="qVO-5O-il1"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="BucketSDK Example" id="91R-hb-snq">
+                        <barButtonItem key="backBarButtonItem" title=" " id="nrS-22-zft"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1055.2" y="118.29085457271366"/>
+        </scene>
+        <!--Swift View Controller-->
+        <scene sceneID="TrF-NX-VBg">
+            <objects>
+                <viewController id="pXX-WT-n3C" customClass="SwiftViewController" customModule="BucketSDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="DGB-aI-IeU"/>
+                        <viewControllerLayoutGuide type="bottom" id="eLD-gq-QD9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aLQ-VT-xXL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Sale ($):" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ggf-kb-QKL">
+                                <rect key="frame" x="20" y="108" width="335" height="20.333333333333343"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fqd-iT-6Dt">
+                                <rect key="frame" x="20" y="138.33333333333334" width="335" height="30"/>
+                                <color key="tintColor" red="0.98823529409999999" green="0.53725490200000003" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="pXX-WT-n3C" id="RlZ-Sf-0sb"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cash Received ($):" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elT-Wc-cAi">
+                                <rect key="frame" x="20" y="188.33333333333334" width="335" height="20.333333333333343"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VEG-i3-GKc">
+                                <rect key="frame" x="20" y="218.33333333333334" width="335" height="30"/>
+                                <color key="tintColor" red="0.98823529409999999" green="0.53725490200000003" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="pXX-WT-n3C" id="Tos-zN-pAF"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TF8-XD-cBX" customClass="CustomButton" customModule="BucketSDK_Example" customModuleProvider="target">
+                                <rect key="frame" x="20" y="698" width="335" height="60"/>
+                                <color key="backgroundColor" red="0.98823529409999999" green="0.53725490200000003" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="8SE-IN-nUF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Bucket The Change">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="createTransaction:" destination="pXX-WT-n3C" eventType="touchUpInside" id="zaR-eM-PUU"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="elT-Wc-cAi" firstAttribute="top" secondItem="fqd-iT-6Dt" secondAttribute="bottom" constant="20" id="29K-hb-MzL"/>
+                            <constraint firstAttribute="trailing" secondItem="ggf-kb-QKL" secondAttribute="trailing" constant="20" id="6ju-z4-E01"/>
+                            <constraint firstAttribute="trailing" secondItem="fqd-iT-6Dt" secondAttribute="trailing" constant="20" id="AcW-vC-Ajj"/>
+                            <constraint firstItem="eLD-gq-QD9" firstAttribute="top" secondItem="TF8-XD-cBX" secondAttribute="bottom" constant="20" id="Afr-sb-HV3"/>
+                            <constraint firstItem="VEG-i3-GKc" firstAttribute="top" secondItem="elT-Wc-cAi" secondAttribute="bottom" constant="10" id="CRc-Z5-4ZN"/>
+                            <constraint firstAttribute="trailing" secondItem="TF8-XD-cBX" secondAttribute="trailing" constant="20" id="Kdz-Vg-KxU"/>
+                            <constraint firstItem="ggf-kb-QKL" firstAttribute="top" secondItem="DGB-aI-IeU" secondAttribute="bottom" constant="20" id="Sdj-Ze-jFg"/>
+                            <constraint firstItem="elT-Wc-cAi" firstAttribute="leading" secondItem="aLQ-VT-xXL" secondAttribute="leading" constant="20" id="SsI-eJ-Q42"/>
+                            <constraint firstItem="TF8-XD-cBX" firstAttribute="leading" secondItem="aLQ-VT-xXL" secondAttribute="leading" constant="20" id="U6S-Ut-2HG"/>
+                            <constraint firstItem="VEG-i3-GKc" firstAttribute="leading" secondItem="aLQ-VT-xXL" secondAttribute="leading" constant="20" id="cWn-nZ-mbB"/>
+                            <constraint firstAttribute="trailing" secondItem="elT-Wc-cAi" secondAttribute="trailing" constant="20" id="o0B-od-feh"/>
+                            <constraint firstItem="ggf-kb-QKL" firstAttribute="leading" secondItem="aLQ-VT-xXL" secondAttribute="leading" constant="20" id="q1L-1a-uEJ"/>
+                            <constraint firstItem="fqd-iT-6Dt" firstAttribute="top" secondItem="ggf-kb-QKL" secondAttribute="bottom" constant="10" id="qwE-hq-8TT"/>
+                            <constraint firstAttribute="trailing" secondItem="VEG-i3-GKc" secondAttribute="trailing" constant="20" id="w9r-WP-YVW"/>
+                            <constraint firstItem="fqd-iT-6Dt" firstAttribute="leading" secondItem="aLQ-VT-xXL" secondAttribute="leading" constant="20" id="xVP-EB-fuR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textFieldCashReceived" destination="VEG-i3-GKc" id="j1U-W4-23i"/>
+                        <outlet property="textFieldTotalSale" destination="fqd-iT-6Dt" id="yFD-op-b0g"/>
+                        <segue destination="hbw-W8-cev" kind="show" identifier="goToSwiftResult" id="7JM-td-BfG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="p5Q-MW-Wrr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1850" y="-220"/>
+        </scene>
+        <!--Sample Receipt-->
+        <scene sceneID="nHa-qE-72H">
+            <objects>
+                <viewController title="Sample Receipt" id="hbw-W8-cev" customClass="SwiftResultViewController" customModule="BucketSDK_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gZT-Zc-HcY"/>
+                        <viewControllerLayoutGuide type="bottom" id="zQE-Pc-neY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zk2-ro-HEk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="b2W-rC-0F3">
+                                <rect key="frame" x="60" y="192" width="255" height="255"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="b2W-rC-0F3" secondAttribute="height" multiplier="1:1" id="Yeh-qF-v6W"/>
+                                    <constraint firstAttribute="width" constant="255" id="z3W-n4-Igs"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Customer Code" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="olA-P7-c5m">
+                                <rect key="frame" x="20" y="128" width="335" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nac-U8-SXb">
+                                <rect key="frame" x="20" y="486.99999999999994" width="335" height="93.333333333333314"/>
+                                <string key="text">Per your request, your change has been Bucketed. This receipt contains the Code linked to your Bucketed funds. Please TREAT THIS CODE AS CASH. Lost or stolen codes will not be replaced. No cash refunds, except as required by law. See www.buckettechnologies.com for additional details.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Nac-U8-SXb" firstAttribute="leading" secondItem="zk2-ro-HEk" secondAttribute="leading" constant="20" id="5Vy-q6-CB5"/>
+                            <constraint firstItem="olA-P7-c5m" firstAttribute="top" secondItem="gZT-Zc-HcY" secondAttribute="bottom" constant="40" id="77a-Wv-JEm"/>
+                            <constraint firstAttribute="trailing" secondItem="Nac-U8-SXb" secondAttribute="trailing" constant="20" id="EeZ-0A-aWi"/>
+                            <constraint firstItem="Nac-U8-SXb" firstAttribute="top" secondItem="b2W-rC-0F3" secondAttribute="bottom" constant="40" id="OP1-dk-TCC"/>
+                            <constraint firstItem="b2W-rC-0F3" firstAttribute="top" secondItem="olA-P7-c5m" secondAttribute="bottom" constant="40" id="QfS-yo-CjC"/>
+                            <constraint firstItem="b2W-rC-0F3" firstAttribute="centerX" secondItem="zk2-ro-HEk" secondAttribute="centerX" id="dbZ-MP-ffS"/>
+                            <constraint firstAttribute="trailing" secondItem="olA-P7-c5m" secondAttribute="trailing" constant="20" id="mAo-rz-9n0"/>
+                            <constraint firstItem="olA-P7-c5m" firstAttribute="leading" secondItem="zk2-ro-HEk" secondAttribute="leading" constant="20" id="xw8-ay-B8y"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageViewQRCodeContent" destination="b2W-rC-0F3" id="pgG-Zw-rKr"/>
+                        <outlet property="labelCustomerCode" destination="olA-P7-c5m" id="wZU-Lt-NSQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gpO-Td-FVF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2604" y="-220"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="RUh-AD-QX1">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="HKE-LL-Lq8" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Frk-hb-yLS">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.10980392160000001" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="zQ0-Yk-sbG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bqx-YD-OaY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="252" y="118"/>
+        </scene>
+        <!--ObjectiveC View Controller-->
+        <scene sceneID="EfH-a5-H9a">
+            <objects>
+                <viewController id="dlL-3c-2qq" customClass="ObjectiveCViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jD3-98-2TR"/>
+                        <viewControllerLayoutGuide type="bottom" id="xYW-ll-pVV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="O5M-7Q-bGC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Sale ($):" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y5R-bC-1nM">
+                                <rect key="frame" x="20" y="108" width="335" height="20.333333333333343"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h0c-WR-xep">
+                                <rect key="frame" x="20" y="138.33333333333334" width="335" height="30"/>
+                                <color key="tintColor" red="0.1764705882" green="0.56470588239999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="dlL-3c-2qq" id="FLf-GR-dM7"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cash Received ($):" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ViS-5r-OEh">
+                                <rect key="frame" x="20" y="188.33333333333334" width="335" height="20.333333333333343"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Rc-Gk-uet">
+                                <rect key="frame" x="20" y="218.33333333333334" width="335" height="30"/>
+                                <color key="tintColor" red="0.1764705882" green="0.56470588239999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="dlL-3c-2qq" id="6Qa-ss-hpj"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ruF-O2-lHo" customClass="CustomButton" customModule="BucketSDK_Example" customModuleProvider="target">
+                                <rect key="frame" x="20" y="698" width="335" height="60"/>
+                                <color key="backgroundColor" red="0.1764705882" green="0.56470588239999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="Srm-lT-1lA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Bucket The Change">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="createTransaction:" destination="dlL-3c-2qq" eventType="touchUpInside" id="JCL-hU-0Ce"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ViS-5r-OEh" firstAttribute="leading" secondItem="O5M-7Q-bGC" secondAttribute="leading" constant="20" id="21R-23-2NA"/>
+                            <constraint firstItem="ViS-5r-OEh" firstAttribute="top" secondItem="h0c-WR-xep" secondAttribute="bottom" constant="20" id="3xs-o8-NFS"/>
+                            <constraint firstAttribute="trailing" secondItem="ViS-5r-OEh" secondAttribute="trailing" constant="20" id="4Qs-6Y-wb1"/>
+                            <constraint firstItem="3Rc-Gk-uet" firstAttribute="top" secondItem="ViS-5r-OEh" secondAttribute="bottom" constant="10" id="BIQ-sn-tUa"/>
+                            <constraint firstItem="h0c-WR-xep" firstAttribute="leading" secondItem="O5M-7Q-bGC" secondAttribute="leading" constant="20" id="Bam-Vg-YQY"/>
+                            <constraint firstItem="ruF-O2-lHo" firstAttribute="leading" secondItem="O5M-7Q-bGC" secondAttribute="leading" constant="20" id="CUv-Dv-Dyf"/>
+                            <constraint firstItem="y5R-bC-1nM" firstAttribute="leading" secondItem="O5M-7Q-bGC" secondAttribute="leading" constant="20" id="Eku-u1-Wsc"/>
+                            <constraint firstItem="h0c-WR-xep" firstAttribute="top" secondItem="y5R-bC-1nM" secondAttribute="bottom" constant="10" id="GEf-m8-7i9"/>
+                            <constraint firstAttribute="trailing" secondItem="3Rc-Gk-uet" secondAttribute="trailing" constant="20" id="IUE-Dq-OVi"/>
+                            <constraint firstAttribute="trailing" secondItem="ruF-O2-lHo" secondAttribute="trailing" constant="20" id="KOX-Fo-4Eg"/>
+                            <constraint firstItem="xYW-ll-pVV" firstAttribute="top" secondItem="ruF-O2-lHo" secondAttribute="bottom" constant="20" id="PvK-XO-Wmq"/>
+                            <constraint firstItem="3Rc-Gk-uet" firstAttribute="leading" secondItem="O5M-7Q-bGC" secondAttribute="leading" constant="20" id="ZeM-s8-h6I"/>
+                            <constraint firstItem="y5R-bC-1nM" firstAttribute="top" secondItem="jD3-98-2TR" secondAttribute="bottom" constant="20" id="b92-2z-Atb"/>
+                            <constraint firstAttribute="trailing" secondItem="h0c-WR-xep" secondAttribute="trailing" constant="20" id="noR-6f-Cqc"/>
+                            <constraint firstAttribute="trailing" secondItem="y5R-bC-1nM" secondAttribute="trailing" constant="20" id="nun-fc-lSP"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textFieldCashReceived" destination="3Rc-Gk-uet" id="5BS-4d-GOo"/>
+                        <outlet property="textFieldTotalSale" destination="h0c-WR-xep" id="0Bk-5e-NSQ"/>
+                        <segue destination="XPq-ce-Um5" kind="show" identifier="goToObjectiveCResult" id="FUG-6L-vhZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SU0-rd-t7j" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1849" y="474"/>
+        </scene>
+        <!--Sample Receipt-->
+        <scene sceneID="7cz-CP-sot">
+            <objects>
+                <viewController title="Sample Receipt" id="XPq-ce-Um5" customClass="ObjectiveCResultViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3r0-1Y-nMN"/>
+                        <viewControllerLayoutGuide type="bottom" id="cMr-xE-jZA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="WCB-TO-VHW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dme-1W-7ZZ">
+                                <rect key="frame" x="60" y="192" width="255" height="255"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="255" id="cLL-ni-hsm"/>
+                                    <constraint firstAttribute="width" secondItem="dme-1W-7ZZ" secondAttribute="height" multiplier="1:1" id="wlm-Fi-brL"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Customer Code" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZHF-PY-r2S">
+                                <rect key="frame" x="20" y="128" width="335" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TzW-1X-lXp">
+                                <rect key="frame" x="20" y="486.99999999999994" width="335" height="93.333333333333314"/>
+                                <string key="text">Per your request, your change has been Bucketed. This receipt contains the Code linked to your Bucketed funds. Please TREAT THIS CODE AS CASH. Lost or stolen codes will not be replaced. No cash refunds, except as required by law. See www.buckettechnologies.com for additional details.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ZHF-PY-r2S" firstAttribute="leading" secondItem="WCB-TO-VHW" secondAttribute="leading" constant="20" id="47o-iF-o9f"/>
+                            <constraint firstItem="ZHF-PY-r2S" firstAttribute="top" secondItem="3r0-1Y-nMN" secondAttribute="bottom" constant="40" id="F9L-JG-CcR"/>
+                            <constraint firstItem="dme-1W-7ZZ" firstAttribute="top" secondItem="ZHF-PY-r2S" secondAttribute="bottom" constant="40" id="W7e-IZ-tlF"/>
+                            <constraint firstItem="TzW-1X-lXp" firstAttribute="top" secondItem="dme-1W-7ZZ" secondAttribute="bottom" constant="40" id="lyF-8L-6v7"/>
+                            <constraint firstAttribute="trailing" secondItem="TzW-1X-lXp" secondAttribute="trailing" constant="20" id="mD8-Nl-3Qv"/>
+                            <constraint firstAttribute="trailing" secondItem="ZHF-PY-r2S" secondAttribute="trailing" constant="20" id="rIs-Su-g9S"/>
+                            <constraint firstItem="dme-1W-7ZZ" firstAttribute="centerX" secondItem="WCB-TO-VHW" secondAttribute="centerX" id="rbZ-SS-Hge"/>
+                            <constraint firstItem="TzW-1X-lXp" firstAttribute="leading" secondItem="WCB-TO-VHW" secondAttribute="leading" constant="20" id="tYA-2u-3q1"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageViewQRCodeContent" destination="dme-1W-7ZZ" id="Zq2-Xs-uhB"/>
+                        <outlet property="labelCustomerCode" destination="ZHF-PY-r2S" id="hID-8G-6xG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PSn-Ow-teV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2604" y="474"/>
         </scene>
     </scenes>
 </document>
