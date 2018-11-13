@@ -6,14 +6,18 @@
 //
 
 @objc public enum DeploymentEnvironment: Int {
-    case production, development
+    case development, staging, production
     
     var url: URL {
+        let version = "v1"
+        
         switch self {
-        case .production:
-            return URL(string: "https://bucketthechange.com/api")!
         case .development:
-            return URL(string: "https://sandboxretailerapi.bucketthechange.com/api")!
+            return URL(string: "https://dev.bucketthechange.com/api/\(version)")!
+        case .staging:
+            return URL(string: "https://staging.bucketthechange.com/api/\(version)")!
+        case .production:
+            return URL(string: "https://prod.bucketthechange.com/api/\(version)")!
         }
     }
 }
