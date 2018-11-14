@@ -8,8 +8,6 @@
 import Foundation
 
 extension URL {
-    
-    static var registerTerminal: URL = Bucket.shared.environment.url.appendingPathComponent("registerterminal")
     static var closeInterval: URL = Bucket.shared.environment.url.appendingPathComponent("closeinterval")
     static var createTransaction: URL = Bucket.shared.environment.url.appendingPathComponent("transaction")
     

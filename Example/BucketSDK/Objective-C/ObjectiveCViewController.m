@@ -31,9 +31,9 @@ CreateTransactionResponse *createTransactionResponse;
     #endif
     
     // You will need to set the retailer id, retailer secret, and terminal id.
-    Credentials.retailerId = @"6644211a-c02a-4413-b307-04a11b16e6a4";
-    Credentials.retailerSecret = @"9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw==";
-    Credentials.terminalId = @"qwerty1234";
+    // Credentials.retailerId = @"6644211a-c02a-4413-b307-04a11b16e6a4";
+    // Credentials.retailerSecret = @"9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw==";
+    // Credentials.terminalId = @"qwerty1234";
     
     // Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), you will need to set your bill denomination.
     [[Bucket shared] fetchBillDenominationsFor:BillDenominationUsd :^(BOOL success, NSError * _Nullable error) {

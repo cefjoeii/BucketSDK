@@ -31,16 +31,18 @@ class SwiftTests: XCTestCase {
         }
     }
     
-    func testRegisterDevice() {
-        let expectation = XCTestExpectation(description: "Register the device with that terminalId.")
+    func testRegisterTerminal() {
+        let expectation = XCTestExpectation(description: "Register the terminal.")
         
-        Bucket.shared.registerDevice(with: "1234") { (success, error) in
-            XCTAssertTrue(success, "For now, the register device function should just work.")
+        Bucket.Credentials.retailerCode = "bckt-1"
+        
+        Bucket.shared.registerTerminal(countryId: "us") { (success, error) in
+            XCTAssertTrue(success, "The registerTerminal() function should work.")
             XCTAssertNil(error)
-            
+        
             expectation.fulfill()
         }
-        
+    
         wait(for: [expectation], timeout: 5)
     }
     
@@ -92,9 +94,9 @@ class SwiftTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Create a transaction.")
         
         // Make sure the retailer id, retailer secret, and terminal id are set.
-        Bucket.Credentials.retailerId = "6644211a-c02a-4413-b307-04a11b16e6a4"
-        Bucket.Credentials.retailerSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
-        Bucket.Credentials.terminalId = "qwerty1234"
+        Bucket.Credentials.retailerCode = "6644211a-c02a-4413-b307-04a11b16e6a4"
+        Bucket.Credentials.terminalSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
+        // Bucket.Credentials.terminalId = "qwerty1234"
         
         let transaction = Bucket.Transaction(amount: 7843, clientTransactionId: "test")
         transaction.create { (response, success, error) in

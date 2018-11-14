@@ -35,12 +35,12 @@
 - (void)testRegisterDevice {
     XCTestExpectation *expectation =  [[XCTestExpectation alloc] initWithDescription:@"Register the device with that terminalId."];
     
-    [[Bucket shared] registerDeviceWith:@"1234" :^(BOOL success, NSError * _Nullable error) {
-        XCTAssertTrue(success == YES, @"For now, the register device function should just work.");
-        XCTAssertNil(error);
-        
-        [expectation fulfill];
-    }];
+//    [[Bucket shared] registerDeviceWith:@"1234" :^(BOOL success, NSError * _Nullable error) {
+//        XCTAssertTrue(success == YES, @"For now, the register device function should just work.");
+//        XCTAssertNil(error);
+//
+//        [expectation fulfill];
+//    }];
     
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
@@ -97,9 +97,9 @@
     XCTestExpectation *expectation =[[XCTestExpectation alloc] initWithDescription:@"Create a transaction."];
     
     // Make sure the retailer id, retailer secret, and terminal id are set.
-    Credentials.retailerId = @"6644211a-c02a-4413-b307-04a11b16e6a4";
-    Credentials.retailerSecret = @"9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw==";
-    Credentials.terminalId = @"qwerty1234";
+    // Credentials.retailerId = @"6644211a-c02a-4413-b307-04a11b16e6a4";
+    // Credentials.retailerSecret = @"9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw==";
+    // Credentials.terminalId = @"qwerty1234";
     
     long amount = 7834;
     

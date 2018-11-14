@@ -16,4 +16,8 @@ extension URLRequest {
     mutating func setBody(_ json : [String:Any]) {
         self.httpBody = json.data
     }
+    
+    mutating func addHeader(_ key: String, _ value: String) {
+        self.addValue(value, forHTTPHeaderField: key)
+    }
 }

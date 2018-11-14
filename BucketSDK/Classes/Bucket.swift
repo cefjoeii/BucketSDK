@@ -6,18 +6,18 @@
 //
 
 import Foundation
-import KeychainSwift
+import Strongbox
 
 @objc public class Bucket: NSObject {
     
     // Create a singleton for the Bucket object.
     @objc public static let shared = Bucket()
     
-    // Instantiate Keychain to store small sensitive information such as the retailerId and retailerSecret.
-    private var keychain = KeychainSwift()
+    // Instantiate Keychain to store small sensitive information such as the retailerCode and terminalSecret.
+    private var keychain = Strongbox()
     
     // Set the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
-    @objc public dynamic var environment : DeploymentEnvironment = .development
+    @objc public dynamic var environment: DeploymentEnvironment = .development
     
     // Set our date formatter for sending the interval ids.
     fileprivate var dateFormatter = DateFormatter(format: "yyyyMMdd")
@@ -29,54 +29,63 @@ import KeychainSwift
         self.dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
     }
     
-    // MARK: Bucket Functions
-    // Register the device with your own specified terminalId.
-    @objc public func registerDevice(with terminalId: String, _ completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        guard let retailerId = Bucket.Credentials.retailerId, let _ = Bucket.Credentials.retailerSecret else {
+    // MARK: - Bucket Functions
+    /// Registers a new device with Bucket to go and create your transactions.
+    /// - Parameter countryId: This is the **numeric** country id, or the **alpha** two letter country code.
+    @objc public func registerTerminal(countryId: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+        
+        guard let retailerId = Bucket.Credentials.retailerCode else {
             completion(false, BucketError.invalidRetailer)
             return
         }
         
-        var request = URLRequest(url: URL.registerTerminal)
+        // This device id changes whenever you uninstall and reinstall the app.
+        // We save the value to the keychain only once and when it's nil.
+        // The next time they uninstall and reinstall, we still have the last known value.
+        if Bucket.Credentials.terminalId.isNil {
+            Bucket.Credentials.terminalId = UIDevice.current.identifierForVendor!.uuidString
+        }
+        
+        let url = Bucket.shared.environment.url.appendingPathComponent("registerterminal")
+        var request = URLRequest(url: url)
         request.setMethod(.post)
-        request.setBody(["retailerId": retailerId, "terminalId": terminalId])
+        request.addHeader("countryId", countryId)
+        request.addHeader("retailerId", retailerId)
+        request.setBody(["terminalId": Bucket.Credentials.terminalId!])
         request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-                completion(false, error)
-                return
-            }
+            guard let data = data else { completion(false, error); return }
             
             if response.isSuccess {
                 do {
                     // Map the json response to the model class.
-                    let registerDeviceResponse = try JSONDecoder().decode(RegisterTerminalResponse.self, from: data)
+                    let response = try JSONDecoder().decode(RegisterTerminalResponse.self, from: data)
                     
-                    // Save the apiKey as the retailerSecret and save the specified terminalId.
-                    Bucket.Credentials.retailerSecret = registerDeviceResponse.apiKey
-                    Bucket.Credentials.terminalId = terminalId
+                    // Save the apiKey as the terminalSecret.
+                    Bucket.Credentials.terminalSecret = response.apiKey
                     
+                    Bucket.Credentials.retailerInfo = RetailerInfo(response.retailerName,
+                                                                   response.retailerPhone,
+                                                                   response.address?.address1,
+                                                                   response.address?.address2,
+                                                                   response.address?.address3,
+                                                                   response.address?.postalCode,
+                                                                   response.address?.city,
+                                                                   response.address?.state)
                     completion(true, nil)
                 } catch let error {
                     completion(false, error)
                 }
             } else {
-                do {
-                    // Map the json response to the model class.
-                    let bucketError = try JSONDecoder().decode(BucketError.self, from: data)
-                    completion(false, bucketError.asError(response?.code))
-                } catch let error {
-                    completion(false, error)
-                }
+                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
+                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
             }
             }.resume()
-        
-        print(URL.registerTerminal)
     }
     
     // Fetch the bill denominations for the retailer and cache them.
-    @objc public func fetchBillDenominations(for currencyCode: BillDenomination, _ completion: ((_ success: Bool, _ error : Error?) -> Void)? = nil) {
+    @objc public func fetchBillDenominations(for currencyCode: BillDenomination, _ completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
         URLSession.shared.dataTask(with: URL.billDenominations) { (data, response, error) in
             guard let data = data else {
                 completion?(false, error)
@@ -112,7 +121,7 @@ import KeychainSwift
     
     // Close the specified interval. This initiates an ACH bank transfer from the retailer to Bucket.
     @objc public func close(intervalId: String, _ completion: ((_ response: CloseIntervalResponse?, _ success: Bool, _ error: Error?) -> Void)? = nil) {
-        guard let retailerId = Bucket.Credentials.retailerId, let retailerSecret = Bucket.Credentials.retailerSecret else {
+        guard let retailerId = Bucket.Credentials.retailerCode, let retailerSecret = Bucket.Credentials.terminalSecret else {
             completion?(nil, false, BucketError.invalidRetailer)
             return
         }
@@ -196,7 +205,7 @@ import KeychainSwift
         }
         
         @objc public func create(_ completion: @escaping (_ response: CreateTransactionResponse?, _ success: Bool, _ error: Error?) -> Void) {
-            guard let retailerId = Bucket.Credentials.retailerId, let retailerSecret = Bucket.Credentials.retailerSecret else {
+            guard let retailerId = Bucket.Credentials.retailerCode, let retailerSecret = Bucket.Credentials.terminalSecret else {
                 completion(nil, false, BucketError.invalidRetailer)
                 return
             }
@@ -256,58 +265,50 @@ import KeychainSwift
     }
     
     @objc public class Credentials: NSObject {
-        // This is the client id of the retailer. This is used to authorize requests with Bucket.
-        @objc public static var retailerId : String? {
-            get {
-                return Bucket.shared.keychain.get("BUCKETID")
-            }
+        /// This is the **retailer code** creating the transaction.
+        @objc public static var retailerCode: String? {
+            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_CODE") as? String }
             set {
-                if newValue.isNil {
-                    Bucket.shared.keychain.delete("BUCKETID")
-                } else {
-                    Bucket.shared.keychain.set(newValue!, forKey: "BUCKETID")
-                }
+                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_RETAILER_CODE") }
+                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_RETAILER_CODE") }
             }
         }
         
-        // This is the client secret of the retailer. This is used to authorize requests with Bucket.
-        @objc public static var retailerSecret : String? {
-            get {
-                return Bucket.shared.keychain.get("BUCKETSECRET")
-            }
+        /// This is the terminal secret of the retailer. This is used to authorize requests with Bucket.
+        @objc public static var terminalSecret: String? {
+            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_SECRET") as? String }
             set {
-                if newValue.isNil {
-                    Bucket.shared.keychain.delete("BUCKETSECRET")
-                } else {
-                    Bucket.shared.keychain.set(newValue!, forKey: "BUCKETSECRET")
-                }
+                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_SECRET") }
+                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_SECRET") }
             }
         }
         
-        // This is the terminal id of this device/register. This is used to make valid transaction requests with Bucket.
-        // You will need to register this terminal or device with your defined id.
-        @objc public static var terminalId : String? {
-            get {
-                return Bucket.shared.keychain.get("BUCKETTERMINALID")
-            }
+        /// This is the **serial number** of the terminal or device creating the transaction.
+        static var terminalId: String? {
+            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_ID") as? String }
             set {
-                if newValue.isNil {
-                    Bucket.shared.keychain.delete("BUCKETTERMINALID")
-                } else {
-                    Bucket.shared.keychain.set(newValue!, forKey: "BUCKETTERMINALID")
-                }
+                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_ID") }
+                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_ID") }
+            }
+        }
+        
+        /// This contains the information about the retailer such as the phone number, adress, and etc.
+        @objc public static var retailerInfo: RetailerInfo? {
+            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
+            set {
+                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_RETAILER_INFO") }
+                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_RETAILER_INFO") }
             }
         }
     }
 }
 
 public extension Date {
-    
-    static var now : Date {
+    static var now: Date {
         return Date()
     }
     
-    fileprivate var toYYYYMMDD : String {
+    fileprivate var toYYYYMMDD: String {
         return Bucket.shared.dateFormatter.string(from: self)
     }
 }

@@ -1,6 +1,8 @@
-use_frameworks!
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
 
-pod 'KeychainSwift'
+# Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+use_frameworks!
 
 target 'BucketSDK_Example' do
   pod 'BucketSDK', :path => '../'
@@ -8,7 +10,6 @@ target 'BucketSDK_Example' do
 
   target 'BucketSDK_Tests' do
     inherit! :search_paths
-    
     
   end
 end
