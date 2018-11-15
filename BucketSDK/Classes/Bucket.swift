@@ -97,7 +97,7 @@ import Strongbox
         // We think we don't have to make an API call for the US.
         if countryCode.lowercased() == "us" {
             Bucket.Credentials.usesNaturalChangeFunction = true
-            Bucket.Credentials.denoms = [100, 50, 20, 10, 5, 2]
+            Bucket.Credentials.denoms = [100.00, 50.00, 20.00, 10.00, 5.00, 2.00, 1.00]
             completion?(true, nil)
             return
         }
@@ -132,29 +132,25 @@ import Strongbox
             }.resume()
     }
     
-    // Return the bucket amount based on the dollar and change amount.
-    @objc public func bucketAmount(for changeDueBack: Int) -> Int {
+    /// Returns the amount to be bucketed based on the change due back.
+    @objc public func bucketAmount(changeDueBack: Double) -> Double {
         var bucketAmount = changeDueBack
         
-        let denoms = UserDefaults.standard.denoms
-        let usesNaturalChangeFunction = UserDefaults.standard.usesNaturalChangeFunction
+        var denoms = Bucket.Credentials.denoms ?? []
+        let usesNaturalChangeFunction = Bucket.Credentials.usesNaturalChangeFunction
         
         if usesNaturalChangeFunction {
-            for denom in denoms {
-                bucketAmount = bucketAmount % denom
-            }
+            // Make sure this is ordered by the amount.
+            denoms.sort(by: >)
+            // These values should already be descended from 100.0 down to 1.0
+            denoms.forEach { denom in bucketAmount = bucketAmount.truncatingRemainder(dividingBy: denom) }
         } else {
-            while bucketAmount > 100 {
-                bucketAmount = bucketAmount % 100
-            }
+            while bucketAmount > 1.00 { bucketAmount = bucketAmount.truncatingRemainder(dividingBy: 1.00) }
         }
         
+        bucketAmount.updateDecimalPlaces(to: 2)
+        
         return bucketAmount
-    }
-    
-    @objc public func bucketAmount(forDecimal changeDueBack: Double) -> Int {
-        let roundedAmountInt = Int(String(format: "%.2f", changeDueBack).replacingOccurrences(of: ".", with: ""))!
-        return bucketAmount(for: roundedAmountInt)
     }
     
     // MARK: Bucket Nested Classes
@@ -255,7 +251,7 @@ import Strongbox
             }
         }
         
-        // MARK: - Private
+        // MARK: - Semi Private
         /// This is the terminal secret of the retailer. This is used to authorize requests with Bucket.
         fileprivate static var terminalSecret: String? {
             get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_SECRET") as? String }

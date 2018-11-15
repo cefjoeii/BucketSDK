@@ -65,7 +65,7 @@ CreateTransactionResponse *createTransactionResponse;
     
     if (cashReceived > totalSale) {
         double roundedChangeAmount = round(100 * (cashReceived - totalSale)) / 100;
-        long bucketAmount = [[Bucket shared] bucketAmountForDecimal:roundedChangeAmount];
+        long bucketAmount = 0; //[[Bucket shared] bucketAmountForDecimal:roundedChangeAmount];
         
         NSLog(@"roundedChangeAmount: %.2f", roundedChangeAmount);
         NSLog(@"bucketAmount: %ld", bucketAmount);

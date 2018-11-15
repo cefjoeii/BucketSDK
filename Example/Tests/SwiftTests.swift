@@ -35,14 +35,14 @@ class SwiftTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Register the terminal.")
         
         Bucket.Credentials.retailerCode = "bckt-1"
-
+        
         Bucket.shared.registerTerminal(countryCode: "us") { (success, error) in
             XCTAssertTrue(success, "The registerTerminal() function should work.")
             XCTAssertNil(error)
             
             expectation.fulfill()
         }
-    
+        
         wait(for: [expectation], timeout: 5)
     }
     
@@ -67,14 +67,26 @@ class SwiftTests: XCTestCase {
     }
     
     func testBucketAmount() {
-        var bucketAmount = Bucket.shared.bucketAmount(for: 1000)
-        XCTAssertEqual(bucketAmount, 0, "Bucket amount should be zero when the change due back is 1000.")
+        var bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.55)
+        XCTAssertEqual(bucketAmount, 0.55, "$0.55 should be bucketed for a $0.55 change.")
         
-        bucketAmount = Bucket.shared.bucketAmount(for: 1234)
-        XCTAssertEqual(bucketAmount, 34, "Bucket amount should be 34 when the change due back 1234.")
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 12.34)
+        XCTAssertEqual(bucketAmount, 0.34, "$0.34 should be bucketed for a $12.34 change.")
         
-        bucketAmount = Bucket.shared.bucketAmount(forDecimal: 1.0)
-        XCTAssertEqual(bucketAmount, 100, "Bucket amount should be 100, not 10, when the change due back is 1.0 or 1.00.")
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.234)
+        XCTAssertEqual(bucketAmount, 0.23, "$0.24 should be bucketed for a $1.234 change.")
+        
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 2.345)
+        XCTAssertEqual(bucketAmount, 0.35, "$0.35 should be bucketed for a $2.345 change.")
+        
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 3.456)
+        XCTAssertEqual(bucketAmount, 0.46, "$0.46 should be bucketed for a $3.456 change.")
+        
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.00)
+        XCTAssertEqual(bucketAmount, 0.00, "$0.00 should be bucketed for a $1.00 change.")
+        
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 5.00)
+        XCTAssertEqual(bucketAmount, 0.00, "$0.00 should be bucketed for a $5.00 change.")
     }
     
     func testCreateTransaction() {

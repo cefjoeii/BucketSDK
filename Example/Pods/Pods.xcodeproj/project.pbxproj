@@ -24,6 +24,7 @@
 		5D5A3E467D0A8A78F0C08AD326B3FAAA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BE1B3A489956134FE5CA8B8082F88D /* Foundation.framework */; };
 		5D7A470C931B7C98FC8C6052F241B554 /* Pods-BucketSDK_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C755907E364A1AA0140A31D482D5F31 /* Pods-BucketSDK_Tests-dummy.m */; };
 		6BE9FDB01EB268A05D5F0643E92B3866 /* Pods-BucketSDK_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDF39681404A738FA64B7DDB99982C3 /* Pods-BucketSDK_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E573E0C219DBF7E00F89D00 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E573E0B219DBF7E00F89D00 /* DoubleExtension.swift */; };
 		713F02BD1321A2E4220158F47EFABA84 /* URLResponseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538C1F0CFFE6DB86F91EFFB948E01457 /* URLResponseExtension.swift */; };
 		9232AE8A14143FEC9F0FBD3339D3718B /* Strongbox-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B95700A3BB5CF1D1080CDBF28D5B795B /* Strongbox-dummy.m */; };
 		95CFB718727DC94118501AF2E71D2FDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BE1B3A489956134FE5CA8B8082F88D /* Foundation.framework */; };
@@ -125,6 +126,7 @@
 		669FD83DB53596B4942E86C13A75DD25 /* Strongbox-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Strongbox-umbrella.h"; sourceTree = "<group>"; };
 		687EFF8C4C6FE8BC768B0BEB8B19AB63 /* Pods-BucketSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BucketSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6CDF39681404A738FA64B7DDB99982C3 /* Pods-BucketSDK_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BucketSDK_Example-umbrella.h"; sourceTree = "<group>"; };
+		6E573E0B219DBF7E00F89D00 /* DoubleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
 		6F6E64BB1F993A9FE358D0305D0AAC99 /* Pods-BucketSDK_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		789F319879E910A5DAEC595F4C1739D3 /* Strongbox.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Strongbox.modulemap; sourceTree = "<group>"; };
 		7A6EDB97520F2ABD56A220ADDBE05582 /* DeploymentEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeploymentEnvironment.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				C5727C3AE759456F9FCE494C4A62A023 /* URLRequestExtension.swift */,
 				538C1F0CFFE6DB86F91EFFB948E01457 /* URLResponseExtension.swift */,
 				A487262D323280316F8F64F1AC6E08F1 /* UserDefaultsExtension.swift */,
+				6E573E0B219DBF7E00F89D00 /* DoubleExtension.swift */,
 			);
 			name = Extensions;
 			path = BucketSDK/Classes/Extensions;
@@ -627,6 +630,7 @@
 				9CE109502185C670EA196A09DABDD486 /* DeploymentEnvironment.swift in Sources */,
 				42FB1A33A60EC6979D31F160408D24A2 /* DictionaryExtension.swift in Sources */,
 				46812D38BA776EC850A4E023F44F653A /* FetchBillDenominationsResponse.swift in Sources */,
+				6E573E0C219DBF7E00F89D00 /* DoubleExtension.swift in Sources */,
 				5B2C785C74F9B93C126C2C9E9EB48A7F /* HTTPMethod.swift in Sources */,
 				1DDC689D71EF65CB33C591D2B23C418F /* OptionalExtension.swift in Sources */,
 				F7FF2FAF6C305F298C2F6F342FD97487 /* RegisterTerminalResponse.swift in Sources */,
