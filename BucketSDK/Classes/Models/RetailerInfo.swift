@@ -8,24 +8,28 @@
 import Foundation
 
 @objc public class RetailerInfo: NSObject, NSSecureCoding {
-    let retailerName: String?
-    let retailerPhone: String?
-    let address1: String?
-    let address2: String?
-    let address3: String?
-    let postalCode: String?
-    let city: String?
-    let state: String?
+    @objc public let retailerName: String?
+    @objc public let retailerPhone: String?
+    @objc public let address1: String?
+    @objc public let address2: String?
+    @objc public let address3: String?
+    @objc public let postalCode: String?
+    @objc public let city: String?
+    @objc public let state: String?
+    @objc public let countryCode: String?
     
-    init(_ retailerName: String?,
+    init(
+        _ retailerName: String?,
         _ retailerPhone: String?,
         _ address1: String?,
         _ address2: String?,
         _ address3: String?,
         _ postalCode: String?,
         _ city: String?,
-        _ state: String?
+        _ state: String?,
+        _ countryCode: String?
         ) {
+        
         self.retailerName = retailerName
         self.retailerPhone = retailerPhone
         self.address1 = address1
@@ -34,6 +38,7 @@ import Foundation
         self.postalCode = postalCode
         self.city = city
         self.state = state
+        self.countryCode = countryCode
     }
     
     // MARK: - NSSecureCoding Protocols
@@ -50,8 +55,9 @@ import Foundation
         let postalCode = aDecoder.decodeObject(forKey: "BUCKET_POSTAL_CODE") as? String
         let city = aDecoder.decodeObject(forKey: "BUCKET_CITY") as? String
         let state = aDecoder.decodeObject(forKey: "BUCKET_STATE") as? String
+        let countryCode = aDecoder.decodeObject(forKey: "BUCKET_COUNTRY_CODE") as? String
         
-        self.init(retailerName, retailerPhone, address1, address2, address3, postalCode, city, state)
+        self.init(retailerName, retailerPhone, address1, address2, address3, postalCode, city, state, countryCode)
     }
     
     @objc public func encode(with aCoder: NSCoder) {
@@ -63,5 +69,6 @@ import Foundation
         aCoder.encode(self.postalCode, forKey: "BUCKET_POSTAL_CODE")
         aCoder.encode(self.city, forKey: "BUCKET_CITY")
         aCoder.encode(self.state, forKey: "BUCKET_STATE")
+        aCoder.encode(self.countryCode, forKey: "BUCKET_COUNTRY_CODE")
     }
 }

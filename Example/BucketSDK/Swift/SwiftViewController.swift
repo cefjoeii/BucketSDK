@@ -33,13 +33,13 @@ class SwiftViewController: UIViewController {
         // Bucket.Credentials.terminalId = "qwerty1234"
         
         // Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), you will need to set your bill denomination.
-        Bucket.shared.fetchBillDenominations(for: .usd) { (success, error) in
-            if success {
-                print("\(self.TAG): bill denominations fetched.")
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-        }
+//        Bucket.shared.fetchBillDenominations(for: .usd) { (success, error) in
+//            if success {
+//                print("\(self.TAG): bill denominations fetched.")
+//            } else if let error = error {
+//                print(error.localizedDescription)
+//            }
+//        }
         
         // You will need to close the interval for the start-to-end of day.
         // No completion.

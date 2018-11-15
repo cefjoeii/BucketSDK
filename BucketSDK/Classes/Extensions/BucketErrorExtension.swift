@@ -8,6 +8,15 @@
 import Foundation
 
 extension BucketError: Error {
+    static var unknown: Error {
+        return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Unknown issue.  Please try again later."])
+    }
+    
+    static var invalidCountryCode: Error {
+        return NSError(domain: "", code: 409, userInfo: [NSLocalizedDescriptionKey: "No such country code found"])
+    }
+    
+    // MARK: - Old
     static var invalidRetailer: Error {
         return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please check your retailer code."])
     }
@@ -30,9 +39,5 @@ extension BucketError: Error {
 
     static var noCurrencyFound: Error {
         return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "No currency found."])
-    }
-    
-    static var unknown: Error {
-        return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Unknown issue.  Please try again later."])
     }
 }

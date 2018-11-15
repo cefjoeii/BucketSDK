@@ -36,13 +36,13 @@ CreateTransactionResponse *createTransactionResponse;
     // Credentials.terminalId = @"qwerty1234";
     
     // Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), you will need to set your bill denomination.
-    [[Bucket shared] fetchBillDenominationsFor:BillDenominationUsd :^(BOOL success, NSError * _Nullable error) {
-        if (success) {
-            NSLog(@"%@: %@", TAG, @"Bill denominations fetched.");
-        } else if (error != NULL) {
-            NSLog(@"%@: %@", TAG, error.localizedDescription);
-        }
-    }];
+//    [[Bucket shared] fetchBillDenominationsFor:BillDenominationUsd :^(BOOL success, NSError * _Nullable error) {
+//        if (success) {
+//            NSLog(@"%@: %@", TAG, @"Bill denominations fetched.");
+//        } else if (error != NULL) {
+//            NSLog(@"%@: %@", TAG, error.localizedDescription);
+//        }
+//    }];
     
     // You will need to close the interval for the start-to-end of day.
     //    // No completion.

@@ -32,8 +32,7 @@ import Strongbox
     // MARK: - Bucket Functions
     /// Registers a new device with Bucket to go and create your transactions.
     /// - Parameter countryId: This is the **numeric** country id, or the **alpha** two letter country code.
-    @objc public func registerTerminal(countryId: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        
+    @objc public func registerTerminal(countryCode: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         guard let retailerId = Bucket.Credentials.retailerCode else {
             completion(false, BucketError.invalidRetailer)
             return
@@ -49,7 +48,7 @@ import Strongbox
         let url = Bucket.shared.environment.url.appendingPathComponent("registerterminal")
         var request = URLRequest(url: url)
         request.setMethod(.post)
-        request.addHeader("countryId", countryId)
+        request.addHeader("countryId", countryCode.lowercased())
         request.addHeader("retailerId", retailerId)
         request.setBody(["terminalId": Bucket.Credentials.terminalId!])
         request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
@@ -65,14 +64,18 @@ import Strongbox
                     // Save the apiKey as the terminalSecret.
                     Bucket.Credentials.terminalSecret = response.apiKey
                     
-                    Bucket.Credentials.retailerInfo = RetailerInfo(response.retailerName,
-                                                                   response.retailerPhone,
-                                                                   response.address?.address1,
-                                                                   response.address?.address2,
-                                                                   response.address?.address3,
-                                                                   response.address?.postalCode,
-                                                                   response.address?.city,
-                                                                   response.address?.state)
+                    Bucket.Credentials.retailerInfo = RetailerInfo(
+                        response.retailerName,
+                        response.retailerPhone,
+                        response.address?.address1,
+                        response.address?.address2,
+                        response.address?.address3,
+                        response.address?.postalCode,
+                        response.address?.city,
+                        response.address?.state,
+                        countryCode.lowercased()
+                    )
+                    
                     completion(true, nil)
                 } catch let error {
                     completion(false, error)
@@ -84,37 +87,47 @@ import Strongbox
             }.resume()
     }
     
-    // Fetch the bill denominations for the retailer and cache them.
-    @objc public func fetchBillDenominations(for currencyCode: BillDenomination, _ completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
-        URLSession.shared.dataTask(with: URL.billDenominations) { (data, response, error) in
+    /// Gathers the bill denominations for the the retailers country, in order to calculate the change using our natural change function.
+    @objc public func fetchBillDenominations(completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
+        guard let countryCode = Bucket.Credentials.retailerInfo?.countryCode else {
+            completion?(false, BucketError.invalidCountryCode)
+            return
+        }
+        
+        // We think we don't have to make an API call for the US.
+        if countryCode.lowercased() == "us" {
+            Bucket.Credentials.usesNaturalChangeFunction = true
+            Bucket.Credentials.denoms = [100, 50, 20, 10, 5, 2]
+            completion?(true, nil)
+            return
+        }
+        
+        let url = Bucket.shared.environment.url.appendingPathComponent("billDenoms")
+        var request = URLRequest(url: url)
+        request.setMethod(.post)
+        request.addHeader("countryId", countryCode)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
                 completion?(false, error)
                 return
             }
             
-            // We successfully logged in. We should go and check for the denominations returned.
             if response.isSuccess {
                 do {
                     // Map the json response to the model class.
-                    let currencies = try JSONDecoder().decode(FetchBillDenominationsResponse.self, from: data).currencies
+                    let response = try JSONDecoder().decode(FetchBillDenominationsResponse.self, from: data)
                     
-                    // Find that specific currencyCode in the result and store if found.
-                    // We use the filter method here instead of loop to take advantage of iOS's power.
-                    if let currency = currencies?.filter({ $0.currencyCode == currencyCode.stringValue }).first, let denoms = currency.commonDenominations {
-                        
-                        // Store its denominations and if such currency should use natural change function.
-                        UserDefaults.standard.denoms = denoms
-                        UserDefaults.standard.usesNaturalChangeFunction = currency.usesNaturalChangeFunction ?? false
-                        
-                        completion?(true, nil)
-                    } else {
-                        completion?(false, BucketError.noCurrencyFound)
-                    }
+                    Bucket.Credentials.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
+                    Bucket.Credentials.denoms = response.denominations ?? nil
+                    
+                    completion?(true, nil)
                 } catch let error {
                     completion?(false, error)
                 }
             } else {
-                completion?(false, error)
+                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
+                completion?(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
             }
             }.resume()
     }
@@ -265,6 +278,7 @@ import Strongbox
     }
     
     @objc public class Credentials: NSObject {
+        // MARK: - Public
         /// This is the **retailer code** creating the transaction.
         @objc public static var retailerCode: String? {
             get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_CODE") as? String }
@@ -274,8 +288,18 @@ import Strongbox
             }
         }
         
+        /// This contains the information about the retailer such as the phone number, adress, and etc.
+        @objc public static var retailerInfo: RetailerInfo? {
+            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
+            set {
+                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_RETAILER_INFO") }
+                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_RETAILER_INFO") }
+            }
+        }
+        
+        // MARK: - Private
         /// This is the terminal secret of the retailer. This is used to authorize requests with Bucket.
-        @objc public static var terminalSecret: String? {
+        fileprivate static var terminalSecret: String? {
             get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_SECRET") as? String }
             set {
                 if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_SECRET") }
@@ -284,7 +308,7 @@ import Strongbox
         }
         
         /// This is the **serial number** of the terminal or device creating the transaction.
-        static var terminalId: String? {
+        fileprivate static var terminalId: String? {
             get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_ID") as? String }
             set {
                 if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_ID") }
@@ -292,12 +316,22 @@ import Strongbox
             }
         }
         
-        /// This contains the information about the retailer such as the phone number, adress, and etc.
-        @objc public static var retailerInfo: RetailerInfo? {
-            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
+        fileprivate static var usesNaturalChangeFunction: Bool {
+            get {
+                return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_USES_NATURAL_CHANGE") as? Bool ?? false
+            }
             set {
-                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_RETAILER_INFO") }
-                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_RETAILER_INFO") }
+                _ = Bucket.shared.keychain.archive(newValue, key: "BUCKET_USES_NATURAL_CHANGE")
+            }
+        }
+        
+        fileprivate static var denoms: [Double]? {
+            get {
+                return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_DENOMS") as? [Double]
+            }
+            set {
+                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_DENOMS") }
+                _ = Bucket.shared.keychain.archive(newValue, key: "BUCKET_DENOMS")
             }
         }
     }
