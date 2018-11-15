@@ -132,48 +132,6 @@ import Strongbox
             }.resume()
     }
     
-    // Close the specified interval. This initiates an ACH bank transfer from the retailer to Bucket.
-    @objc public func close(intervalId: String, _ completion: ((_ response: CloseIntervalResponse?, _ success: Bool, _ error: Error?) -> Void)? = nil) {
-        guard let retailerId = Bucket.Credentials.retailerCode, let retailerSecret = Bucket.Credentials.terminalSecret else {
-            completion?(nil, false, BucketError.invalidRetailer)
-            return
-        }
-        
-        // Okay, they have their retailer id and retailer secret. Lets make the request.
-        var url = URL.closeInterval
-        url.appendPathComponent(retailerId)
-        url.appendPathComponent(intervalId)
-        
-        var request = URLRequest(url: url)
-        request.setMethod(.get)
-        request.addValue(retailerSecret, forHTTPHeaderField: "x-functions-key")
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-                completion?(nil, false, error)
-                return
-            }
-            
-            if response.isSuccess {
-                do {
-                    // Map the json response to the model class.
-                    let closeIntervalResponse = try JSONDecoder().decode(CloseIntervalResponse.self, from: data)
-                    completion?(closeIntervalResponse, true, nil)
-                } catch let error {
-                    completion?(nil, false, error)
-                }
-            } else {
-                do {
-                    // Map the json response to the model class.
-                    let bucketError = try JSONDecoder().decode(BucketError.self, from: data)
-                    completion?(nil, false, bucketError.asError(response?.code))
-                } catch let error {
-                    completion?(nil, false, error)
-                }
-            }
-            }.resume()
-    }
-    
     // Return the bucket amount based on the dollar and change amount.
     @objc public func bucketAmount(for changeDueBack: Int) -> Int {
         var bucketAmount = changeDueBack

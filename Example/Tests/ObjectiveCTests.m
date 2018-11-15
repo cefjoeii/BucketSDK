@@ -69,19 +69,6 @@
     [self waitForExpectations:[NSArray arrayWithObjects:expectationForSGD,nil] timeout:1];
 }
 
-- (void)testCloseInterval {
-    XCTestExpectation *expectation = [[XCTestExpectation alloc] initWithDescription:@"Close the interval with the interval id of '20170101'."];
-    
-    [[Bucket shared] closeWithIntervalId:@"20170101" :^(CloseIntervalResponse * _Nullable response, BOOL success, NSError * _Nullable error) {
-        XCTAssertFalse(success == YES, @"intervalId = '20170101' has been previously closed.");
-        XCTAssertNotNil(error);
-        
-        [expectation fulfill];
-        
-        [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
-    }];
-}
-
 - (void)testBucketAmount {
     long bucketAmount = [[Bucket shared] bucketAmountFor:1000];
     XCTAssertEqual(bucketAmount, 0, @"Bucket amount should be zero when the change due back is 1000.");

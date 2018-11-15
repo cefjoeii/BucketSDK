@@ -66,19 +66,6 @@ class SwiftTests: XCTestCase {
         wait(for: [expectationForSGD], timeout: 3)
     }
     
-    func testCloseInterval() {
-        let expectation = XCTestExpectation(description: "Close the interval with the interval id of '20170101'.")
-        
-        Bucket.shared.close(intervalId: "20170101") { (response, success, error) in
-            XCTAssertFalse(success, "intervalId = '20170101' has been previously closed.")
-            XCTAssertNotNil(error)
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 5)
-    }
-    
     func testBucketAmount() {
         var bucketAmount = Bucket.shared.bucketAmount(for: 1000)
         XCTAssertEqual(bucketAmount, 0, "Bucket amount should be zero when the change due back is 1000.")
