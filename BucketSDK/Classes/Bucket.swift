@@ -136,6 +136,11 @@ import Strongbox
     @objc public func bucketAmount(changeDueBack: Double) -> Double {
         var bucketAmount = changeDueBack
         
+        // Define the precision before we do the computation.
+        // Example: 0.999 should be 1.0, shouldn't it?
+        // See: Unit Test
+        bucketAmount.updateDecimalPlaces(to: 2)
+        
         var denoms = Bucket.Credentials.denoms ?? []
         let usesNaturalChangeFunction = Bucket.Credentials.usesNaturalChangeFunction
         
