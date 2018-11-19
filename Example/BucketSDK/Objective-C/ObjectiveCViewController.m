@@ -74,22 +74,22 @@ CreateTransactionResponse *createTransactionResponse;
             [[Loading shared] show:self.view];
             
             // Now that we have our bucket amount, we can go and create a transaction with that amount, and send it through the Bucket API.
-            Transaction *transaction = [[Transaction alloc] initWithAmount:bucketAmount clientTransactionId:@"YouDecide1234"];
-            [transaction create:^(CreateTransactionResponse *response, BOOL success, NSError * _Nullable error) {
-                [[Loading shared] hide];
-                
-                if (success) {
-                    createTransactionResponse = response;
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self performSegueWithIdentifier: @"goToObjectiveCResult" sender:self];
-                        _textFieldTotalSale.text = nil;
-                        _textFieldCashReceived.text = nil;
-                    });
-                } else if (error != NULL) {
-                    [self showOKAlertWithTitle:@"Error" message:error.localizedDescription];
-                }
-            }];
+//            Transaction *transaction = [[Transaction alloc] initWithAmount:bucketAmount clientTransactionId:@"YouDecide1234"];
+//            [transaction create:^(CreateTransactionResponse *response, BOOL success, NSError * _Nullable error) {
+//                [[Loading shared] hide];
+//                
+//                if (success) {
+//                    createTransactionResponse = response;
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [self performSegueWithIdentifier: @"goToObjectiveCResult" sender:self];
+//                        _textFieldTotalSale.text = nil;
+//                        _textFieldCashReceived.text = nil;
+//                    });
+//                } else if (error != NULL) {
+//                    [self showOKAlertWithTitle:@"Error" message:error.localizedDescription];
+//                }
+//            }];
         } else {
             [self showOKAlertWithTitle:@"Invalid Amount" message:@"Bucket amount results to 0. There is no change to bucket."];
         }

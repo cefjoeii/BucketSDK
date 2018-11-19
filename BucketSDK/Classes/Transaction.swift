@@ -96,17 +96,17 @@ import Foundation
 
     /// Allows a POS integration developer add a transaction.
     @objc public func create(transactionType: TrannsactionType, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        guard let retailerId = Bucket.Credentials.retailerCode, let terminalSecret = Bucket.Credentials.terminalSecret else {
+        guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
             completion(false, BucketError.invalidRetailer)
             return
         }
         
-        guard let terminalId = Bucket.Credentials.terminalId else {
+        guard let terminalId = Credentials.terminalId else {
             completion(false, BucketError.noTerminalId)
             return
         }
         
-        guard let countryCode = Bucket.Credentials.retailerInfo?.countryCode else {
+        guard let countryCode = Credentials.retailerInfo?.countryCode else {
             completion(false, BucketError.invalidCountryCode)
             return
         }
@@ -158,17 +158,17 @@ import Foundation
     
     /// Allows POS integration developer delete a transaction that has not been redeemed by a user in Bucket's system.
     @objc public func delete(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        guard let retailerId = Bucket.Credentials.retailerCode, let terminalSecret = Bucket.Credentials.terminalSecret else {
+        guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
             completion(false, BucketError.invalidRetailer)
             return
         }
         
-        guard let terminalId = Bucket.Credentials.terminalId else {
+        guard let terminalId = Credentials.terminalId else {
             completion(false, BucketError.noTerminalId)
             return
         }
         
-        guard let countryCode = Bucket.Credentials.retailerInfo?.countryCode else {
+        guard let countryCode = Credentials.retailerInfo?.countryCode else {
             completion(false, BucketError.invalidCountryCode)
             return
         }

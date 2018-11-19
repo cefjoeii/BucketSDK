@@ -20,7 +20,7 @@
     // Do any additional setup after loading the view.
     
     _labelCustomerCode.text = _createTransactionResponse.customerCode;
-    _imageViewQRCodeContent.image = [QRCodeObjectiveC generateQRCodeImageWith:_createTransactionResponse.qrCodeContent];
+    // _imageViewQRCodeContent.image = [QRCodeObjectiveC generateQRCodeImageWith:_createTransactionResponse.qrCodeContent];
 }
 
 - (void)didReceiveMemoryWarning {

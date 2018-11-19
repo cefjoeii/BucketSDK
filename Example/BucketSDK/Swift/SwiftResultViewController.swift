@@ -21,6 +21,6 @@ class SwiftResultViewController: UIViewController {
         super.viewDidLoad()
         
         labelCustomerCode.text = createTransactionResponse?.customerCode
-        imageViewQRCodeContent.image = QRCode((createTransactionResponse?.qrCodeContent)!)?.image
+        // imageViewQRCodeContent.image = QRCode((createTransactionResponse?.qrCodeContent)!)?.image
     }
 }

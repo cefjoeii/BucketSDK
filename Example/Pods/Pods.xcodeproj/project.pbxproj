@@ -27,6 +27,7 @@
 		6EB84235219F0BBA00DF060A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB84234219F0BBA00DF060A /* Transaction.swift */; };
 		6EE65C8A21A2AC9A0063BB8F /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE65C8921A2AC9A0063BB8F /* StringExtension.swift */; };
 		6EE65C8C21A2B01D0063BB8F /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE65C8B21A2B01D0063BB8F /* UIImageExtension.swift */; };
+		6EE65C8E21A2DF580063BB8F /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE65C8D21A2DF580063BB8F /* Credentials.swift */; };
 		713F02BD1321A2E4220158F47EFABA84 /* URLResponseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538C1F0CFFE6DB86F91EFFB948E01457 /* URLResponseExtension.swift */; };
 		9232AE8A14143FEC9F0FBD3339D3718B /* Strongbox-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B95700A3BB5CF1D1080CDBF28D5B795B /* Strongbox-dummy.m */; };
 		95CFB718727DC94118501AF2E71D2FDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BE1B3A489956134FE5CA8B8082F88D /* Foundation.framework */; };
@@ -128,6 +129,7 @@
 		6EB84234219F0BBA00DF060A /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Transaction.swift; path = BucketSDK/Classes/Transaction.swift; sourceTree = "<group>"; };
 		6EE65C8921A2AC9A0063BB8F /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6EE65C8B21A2B01D0063BB8F /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		6EE65C8D21A2DF580063BB8F /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Credentials.swift; path = BucketSDK/Classes/Credentials.swift; sourceTree = "<group>"; };
 		6F6E64BB1F993A9FE358D0305D0AAC99 /* Pods-BucketSDK_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		789F319879E910A5DAEC595F4C1739D3 /* Strongbox.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Strongbox.modulemap; sourceTree = "<group>"; };
 		7A6EDB97520F2ABD56A220ADDBE05582 /* DeploymentEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeploymentEnvironment.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 			isa = PBXGroup;
 			children = (
 				D79644A5580487D5759DF89A3E6191C8 /* Bucket.swift */,
+				6EE65C8D21A2DF580063BB8F /* Credentials.swift */,
 				6EB84234219F0BBA00DF060A /* Transaction.swift */,
 				7A6EDB97520F2ABD56A220ADDBE05582 /* DeploymentEnvironment.swift */,
 				0F555B3885306416FB8BA5545DFBFC07 /* Extensions */,
@@ -639,6 +642,7 @@
 				46812D38BA776EC850A4E023F44F653A /* FetchBillDenominationsResponse.swift in Sources */,
 				6E573E0C219DBF7E00F89D00 /* DoubleExtension.swift in Sources */,
 				6EE65C8A21A2AC9A0063BB8F /* StringExtension.swift in Sources */,
+				6EE65C8E21A2DF580063BB8F /* Credentials.swift in Sources */,
 				1DDC689D71EF65CB33C591D2B23C418F /* OptionalExtension.swift in Sources */,
 				F7FF2FAF6C305F298C2F6F342FD97487 /* RegisterTerminalResponse.swift in Sources */,
 				02EBEBBFC88E675B8A10F6BB2EFC344D /* RetailerInfo.swift in Sources */,

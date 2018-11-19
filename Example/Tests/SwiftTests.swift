@@ -36,7 +36,7 @@ class SwiftTests: XCTestCase {
     func testRegisterTerminal() {
         let expectation = XCTestExpectation(description: "Register the terminal.")
         
-        Bucket.Credentials.retailerCode = "bckt-1"
+        Credentials.retailerCode = "bckt-1"
         
         Bucket.shared.registerTerminal(countryCode: "us") { (success, error) in
             XCTAssertTrue(success, "The registerTerminal() function should work.")

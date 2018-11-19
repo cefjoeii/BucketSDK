@@ -13,9 +13,6 @@ import Strongbox
     // Create a singleton for the Bucket object.
     @objc public static let shared = Bucket()
     
-    // Instantiate Keychain to store small sensitive information such as the retailerCode and terminalSecret.
-    private var keychain = Strongbox()
-    
     // Set the environment that defines which endpoint we will hit for either sandbox or the production endpoint.
     @objc public dynamic var environment: DeploymentEnvironment = .development
     
@@ -33,7 +30,7 @@ import Strongbox
     /// Registers a new device with Bucket to go and create your transactions.
     /// - Parameter countryId: This is the **numeric** country id, or the **alpha** two letter country code.
     @objc public func registerTerminal(countryCode: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        guard let retailerId = Bucket.Credentials.retailerCode else {
+        guard let retailerId = Credentials.retailerCode else {
             completion(false, BucketError.invalidRetailer)
             return
         }
@@ -41,8 +38,8 @@ import Strongbox
         // This device id changes whenever you uninstall and reinstall the app.
         // We save the value to the keychain only once and when it's nil.
         // The next time they uninstall and reinstall, we still have the last known value.
-        if Bucket.Credentials.terminalId.isNil {
-            Bucket.Credentials.terminalId = UIDevice.current.identifierForVendor!.uuidString
+        if Credentials.terminalId.isNil {
+            Credentials.terminalId = UIDevice.current.identifierForVendor!.uuidString
         }
         
         let url = Bucket.shared.environment.url.appendingPathComponent("registerterminal")
@@ -50,7 +47,7 @@ import Strongbox
         request.setMethod(.post)
         request.addHeader("countryId", countryCode.lowercased())
         request.addHeader("retailerId", retailerId)
-        request.setBody(["terminalId": Bucket.Credentials.terminalId!])
+        request.setBody(["terminalId": Credentials.terminalId!])
         // request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -62,9 +59,9 @@ import Strongbox
                     let response = try JSONDecoder().decode(RegisterTerminalResponse.self, from: data)
                     
                     // Save the apiKey as the terminalSecret.
-                    Bucket.Credentials.terminalSecret = response.apiKey
+                    Credentials.terminalSecret = response.apiKey
                     
-                    Bucket.Credentials.retailerInfo = RetailerInfo(
+                    Credentials.retailerInfo = RetailerInfo(
                         response.retailerName,
                         response.retailerPhone,
                         response.address?.address1,
@@ -89,15 +86,15 @@ import Strongbox
     
     /// Gathers the bill denominations for the the retailers country, in order to calculate the change using our natural change function.
     @objc public func fetchBillDenominations(completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
-        guard let countryCode = Bucket.Credentials.retailerInfo?.countryCode else {
+        guard let countryCode = Credentials.retailerInfo?.countryCode else {
             completion?(false, BucketError.invalidCountryCode)
             return
         }
         
         // We think we don't have to make an API call for the US.
         if countryCode.lowercased() == "us" {
-            Bucket.Credentials.usesNaturalChangeFunction = true
-            Bucket.Credentials.denoms = [100.00, 50.00, 20.00, 10.00, 5.00, 2.00, 1.00]
+            Credentials.usesNaturalChangeFunction = true
+            Credentials.denoms = [100.00, 50.00, 20.00, 10.00, 5.00, 2.00, 1.00]
             completion?(true, nil)
             return
         }
@@ -118,8 +115,8 @@ import Strongbox
                     // Map the json response to the model class.
                     let response = try JSONDecoder().decode(FetchBillDenominationsResponse.self, from: data)
                     
-                    Bucket.Credentials.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
-                    Bucket.Credentials.denoms = response.denominations ?? nil
+                    Credentials.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
+                    Credentials.denoms = response.denominations ?? nil
                     
                     completion?(true, nil)
                 } catch let error {
@@ -141,8 +138,8 @@ import Strongbox
         // See: Unit Test
         bucketAmount.updateDecimalPlaces(to: 2)
         
-        var denoms = Bucket.Credentials.denoms ?? []
-        let usesNaturalChangeFunction = Bucket.Credentials.usesNaturalChangeFunction
+        var denoms = Credentials.denoms ?? []
+        let usesNaturalChangeFunction = Credentials.usesNaturalChangeFunction
         
         if usesNaturalChangeFunction {
             // Make sure this is ordered by the amount.
@@ -158,64 +155,7 @@ import Strongbox
         return bucketAmount
     }
     
-    @objc public class Credentials: NSObject {
-        // MARK: - Public
-        /// This is the **retailer code** creating the transaction.
-        @objc public static var retailerCode: String? {
-            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_CODE") as? String }
-            set {
-                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_RETAILER_CODE") }
-                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_RETAILER_CODE") }
-            }
-        }
-        
-        /// This contains the information about the retailer such as the phone number, adress, and etc.
-        @objc public static var retailerInfo: RetailerInfo? {
-            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
-            set {
-                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_RETAILER_INFO") }
-                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_RETAILER_INFO") }
-            }
-        }
-        
-        // MARK: - Semi Private
-        /// This is the terminal secret of the retailer. This is used to authorize requests with Bucket.
-        internal static var terminalSecret: String? {
-            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_SECRET") as? String }
-            set {
-                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_SECRET") }
-                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_SECRET") }
-            }
-        }
-        
-        /// This is the **serial number** of the terminal or device creating the transaction.
-        internal static var terminalId: String? {
-            get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_ID") as? String }
-            set {
-                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_ID") }
-                else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_ID") }
-            }
-        }
-        
-        internal static var usesNaturalChangeFunction: Bool {
-            get {
-                return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_USES_NATURAL_CHANGE") as? Bool ?? false
-            }
-            set {
-                _ = Bucket.shared.keychain.archive(newValue, key: "BUCKET_USES_NATURAL_CHANGE")
-            }
-        }
-        
-        internal static var denoms: [Double]? {
-            get {
-                return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_DENOMS") as? [Double]
-            }
-            set {
-                if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_DENOMS") }
-                _ = Bucket.shared.keychain.archive(newValue, key: "BUCKET_DENOMS")
-            }
-        }
-    }
+    
 }
 
 public extension Date {

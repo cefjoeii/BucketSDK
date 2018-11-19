@@ -69,22 +69,22 @@ class SwiftViewController: UIViewController {
                     Loading.shared.show(self.view)
                     
                     // Now that we have our bucket amount, we can go and create a transaction with that amount, and send it through the Bucket API.
-                    let transaction = Bucket.Transaction(amount: bucketAmount, clientTransactionId: "YouDecide1234")
-                    transaction.create { (response, success, error) in
-                        Loading.shared.hide()
-                        
-                        if success {
-                            self.createTransactionResponse = response
-                            
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "goToSwiftResult", sender: self)
-                                self.textFieldTotalSale.text = nil
-                                self.textFieldCashReceived.text = nil
-                            }
-                        } else if let error = error {
-                            self.showOKAlert(title: "Error", message: error.localizedDescription)
-                        }
-                    }
+                    // let transaction = Bucket.Transaction(amount: bucketAmount, clientTransactionId: "YouDecide1234")
+//                    transaction.create { (response, success, error) in
+//                        Loading.shared.hide()
+//                        
+//                        if success {
+//                            self.createTransactionResponse = response
+//                            
+//                            DispatchQueue.main.async {
+//                                self.performSegue(withIdentifier: "goToSwiftResult", sender: self)
+//                                self.textFieldTotalSale.text = nil
+//                                self.textFieldCashReceived.text = nil
+//                            }
+//                        } else if let error = error {
+//                            self.showOKAlert(title: "Error", message: error.localizedDescription)
+//                        }
+//                    }
                 } else {
                     showOKAlert(title: "Invalid Amount", message: "Bucket amount results to 0. There is no change to bucket.")
                 }
