@@ -11,6 +11,8 @@ import BucketSDK
 
 class SwiftTests: XCTestCase {
     
+    var customerCode = ""
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -121,6 +123,8 @@ class SwiftTests: XCTestCase {
                 XCTAssertEqual(transaction.amount, bucketAmount)
                 XCTAssertNil(transaction.locationId)
                 XCTAssertNil(transaction.clientTransactionId)
+                
+                self.customerCode = transaction.customerCode ?? ""
             } else {
                 XCTAssertNotNil(error)
             }
@@ -153,6 +157,8 @@ class SwiftTests: XCTestCase {
                 XCTAssertNotEqual(transaction.bucketTransactionId, -1)
                 XCTAssertEqual(transaction.amount, bucketAmount)
                 XCTAssertEqual(transaction.clientTransactionId, "clientTransactionId")
+                
+                self.customerCode = transaction.customerCode ?? ""
             } else {
                 XCTAssertNotNil(error)
             }
@@ -187,6 +193,8 @@ class SwiftTests: XCTestCase {
                 XCTAssertNotEqual(transaction.bucketTransactionId, -1)
                 XCTAssertEqual(transaction.amount, bucketAmount)
                 XCTAssertEqual(transaction.clientTransactionId, "clientTransactionId")
+                
+                self.customerCode = transaction.customerCode ?? ""
             } else {
                 XCTAssertNotNil(error)
             }
@@ -219,8 +227,28 @@ class SwiftTests: XCTestCase {
                 XCTAssertNotNil(transaction.qrCode)
                 XCTAssertNotEqual(transaction.bucketTransactionId, -1)
                 XCTAssertEqual(transaction.amount, bucketAmount)
-                XCTAssertEqual(transaction.eventName, "eventName") 
+                XCTAssertEqual(transaction.eventName, "eventName")
                 XCTAssertEqual(transaction.eventMessage, "eventMessage")
+                
+                self.customerCode = transaction.customerCode ?? ""
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 7)
+    }
+    
+    func testDeleteTransaction() {
+        let expectation = XCTestExpectation(description: "Delete transaction.")
+        
+        let transaction = Transaction(customerCode: self.customerCode)
+        
+        transaction.delete { (success, error) in
+            if (success) {
+                XCTAssertNil(error)
             } else {
                 XCTAssertNotNil(error)
             }

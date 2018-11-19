@@ -32,7 +32,7 @@ import Foundation
     
     // MARK: - Body ============================================================
     /// This is the currency described in decimal. This is a required field.
-    @objc public dynamic var amount: Double
+    @objc public dynamic var amount: Double = 0
     
     /// The entire amount with tax, for the items purchased at the point of the sale. Represented in decimal.
     @objc public dynamic var totalTransactionAmount: Double = 0
@@ -89,8 +89,13 @@ import Foundation
         self.employeeId = employeeId
         // self.eventId = eventId
     }
+    
+    @objc public init(customerCode: String) {
+        self.customerCode = customerCode
+    }
 
-    @objc public func create(transactionType: TrannsactionType, _ completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    /// Allows a POS integration developer add a transaction.
+    @objc public func create(transactionType: TrannsactionType, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         guard let retailerId = Bucket.Credentials.retailerCode, let terminalSecret = Bucket.Credentials.terminalSecret else {
             completion(false, BucketError.invalidRetailer)
             return
@@ -139,13 +144,52 @@ import Foundation
         request.setBody(params)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else {
-                completion(false, error)
-                return
-            }
+            guard let data = data else {completion(false, error); return }
             
             if response.isSuccess {
                 self.update(with: data.asJSON)
+                completion(true, nil)
+            } else {
+                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
+                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+            }
+            }.resume()
+    }
+    
+    /// Allows POS integration developer delete a transaction that has not been redeemed by a user in Bucket's system.
+    @objc public func delete(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+        guard let retailerId = Bucket.Credentials.retailerCode, let terminalSecret = Bucket.Credentials.terminalSecret else {
+            completion(false, BucketError.invalidRetailer)
+            return
+        }
+        
+        guard let terminalId = Bucket.Credentials.terminalId else {
+            completion(false, BucketError.noTerminalId)
+            return
+        }
+        
+        guard let countryCode = Bucket.Credentials.retailerInfo?.countryCode else {
+            completion(false, BucketError.invalidCountryCode)
+            return
+        }
+        
+        guard let customerCode = self.customerCode else {
+            completion(false, BucketError.invalidCode)
+            return
+        }
+        
+        let url = Bucket.shared.environment.url.appendingPathComponent("transaction").appendingPathComponent(customerCode)
+        var request = URLRequest(url: url)
+        request.setMethod(.delete)
+        request.addHeader("retailerId", retailerId)
+        request.addHeader("terminalId", terminalId)
+        request.addHeader("countryId", countryCode)
+        request.addHeader("x-functions-key", terminalSecret)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else { completion(false, error); return }
+            
+            if response.isSuccess {
                 completion(true, nil)
             } else {
                 let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)

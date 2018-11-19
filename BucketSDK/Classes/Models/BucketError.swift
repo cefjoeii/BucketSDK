@@ -8,7 +8,6 @@
 import Foundation
 
 struct BucketError: Decodable {
-    
     let errorCode: String?
     let message: String?
     
@@ -36,5 +35,9 @@ struct BucketError: Decodable {
     
     static var noTerminalId: Error {
         return NSError(domain: "", code: 403, userInfo: [NSLocalizedDescriptionKey: "You must send in a 'terminalId' key with the serial number of the device as the value."])
+    }
+    
+    static var invalidCode: Error {
+        return NSError(domain: "", code: 450, userInfo: [NSLocalizedDescriptionKey: "Please check your customer code."])
     }
 }
