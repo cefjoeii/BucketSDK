@@ -90,28 +90,28 @@
     
     long amount = 7834;
     
-    Transaction *transaction = [[Transaction alloc] initWithAmount:amount clientTransactionId:@"test"];
-    [transaction create :^(CreateTransactionResponse * _Nullable response, BOOL success, NSError * _Nullable error) {
-        if (success == YES) {
-            XCTAssertNotNil(response);
-            
-            if (response != NULL) {
-                XCTAssertEqual(response.amount, amount);
-                XCTAssertTrue([response.clientTransactionId isEqualToString:@"test"]);
-                XCTAssertNotEqual(response.customerCode, @"");
-                XCTAssertNotNil(response.qrCodeContent);
-            }
-            
-            XCTAssertTrue(success == YES);
-            XCTAssertNil(error);
-        } else {
-            XCTAssertNil(response);
-            XCTAssertFalse(success == YES);
-            XCTAssertNotNil(error);
-        }
-        
-        [expectation fulfill];
-    }];
+//    Transaction *transaction = [[Transaction alloc] initWithAmount:amount clientTransactionId:@"test"];
+//    [transaction create :^(CreateTransactionResponse * _Nullable response, BOOL success, NSError * _Nullable error) {
+//        if (success == YES) {
+//            XCTAssertNotNil(response);
+//            
+//            if (response != NULL) {
+//                XCTAssertEqual(response.amount, amount);
+//                XCTAssertTrue([response.clientTransactionId isEqualToString:@"test"]);
+//                XCTAssertNotEqual(response.customerCode, @"");
+//                XCTAssertNotNil(response.qrCodeContent);
+//            }
+//            
+//            XCTAssertTrue(success == YES);
+//            XCTAssertNil(error);
+//        } else {
+//            XCTAssertNil(response);
+//            XCTAssertFalse(success == YES);
+//            XCTAssertNotNil(error);
+//        }
+//        
+//        [expectation fulfill];
+//    }];
     
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }

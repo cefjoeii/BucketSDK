@@ -20,4 +20,21 @@ struct BucketError: Decodable {
     func asError(_ code: Int?) -> Error {
         return NSError(domain: "", code: code ?? 400, userInfo: [NSLocalizedDescriptionKey: message ?? "Unknown issue. Please try again later."])
     }
+    
+    // MARK: - Offline
+    static var unknown: Error {
+        return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Unknown issue.  Please try again later."])
+    }
+    
+    static var invalidCountryCode: Error {
+        return NSError(domain: "", code: 409, userInfo: [NSLocalizedDescriptionKey: "No such country code found"])
+    }
+    
+    static var invalidRetailer: Error {
+        return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please Check Retailer Id and Secret Code."])
+    }
+    
+    static var noTerminalId: Error {
+        return NSError(domain: "", code: 403, userInfo: [NSLocalizedDescriptionKey: "You must send in a 'terminalId' key with the serial number of the device as the value."])
+    }
 }

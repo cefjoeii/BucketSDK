@@ -8,22 +8,20 @@
 import Foundation
 
 @objc public class CreateTransactionResponse: NSObject, Decodable {
-    
+    /// This is the code associated with the transaction.  This gives the customer a way to redeem their change!
     @objc public let customerCode: String?
     
-    // This is the URL for the qr code, in order for the user to redeem their bucket change.
-    @objc public let qrCodeContent: URL?
+    /// This is the URL that will redirect the user to Bucket's website & redeem to their account.
+    let qrCodeContent: URL?
     
-    // This is the primary key for the transaction table.
+    /// Bucket-generated unique identifier for this transaction.
     @objc public let bucketTransactionId: String?
     
-    // This returns the amount for the transaction in an integer form.  1000 would be $10.00
+    /// This is the currency described in decimal.
     @objc public var amount: Int = 0
     
+    /// Retailer-defined unique identifier for the location of the device.
     @objc public var totalTransactionAmount: Int = 0
-    
-    // This is associated with the day that the store has created the transaction.
-    @objc public let intervalId: String?
     
     // This is defined by the retailer.  This is used if the retailer has multiple locations for their retailer account.
     @objc public let locationId: String?
@@ -34,7 +32,7 @@ import Foundation
     // This is the hardware id of the POS terminal or device.
     @objc public let terminalId: String?
     
-    init(json: [String: Any]) {
+    /* init(json: [String: Any]) {
         customerCode = json["customerCode"] as? String
         qrCodeContent = json["qrCodeContent"] as? URL
         bucketTransactionId = json["bucketTransactionId"] as? String
@@ -44,5 +42,5 @@ import Foundation
         locationId = json["locationId"] as? String
         clientTransactionId = json["clientTransactionId"] as? String
         terminalId = json["terminalId"] as? String
-    }
+    } */
 }

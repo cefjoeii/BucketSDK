@@ -7,6 +7,10 @@
 
 import Foundation
 
+enum HTTPMethod: String {
+    case post = "POST", put = "PUT", delete = "DELETE", get = "GET"
+}
+
 extension URLRequest {
     
     mutating func setMethod(_ method: HTTPMethod) {

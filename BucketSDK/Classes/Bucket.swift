@@ -51,7 +51,7 @@ import Strongbox
         request.addHeader("countryId", countryCode.lowercased())
         request.addHeader("retailerId", retailerId)
         request.setBody(["terminalId": Bucket.Credentials.terminalId!])
-        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        // request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { completion(false, error); return }
@@ -158,84 +158,6 @@ import Strongbox
         return bucketAmount
     }
     
-    // MARK: Bucket Nested Classes
-    @objc public class Transaction: NSObject {
-        @objc public dynamic var amount: Int
-        @objc public dynamic var totalTransactionAmount: Int = 0
-        @objc public dynamic var intervalId: String
-        @objc public dynamic var locationId: String?
-        @objc public dynamic var clientTransactionId: String
-        // @objc public dynamic var terminalId: String?
-        
-        // You will need to initialize a transaction with an amount, and a client transaction/order/sale id
-        @objc public init(amount: Int, clientTransactionId: String) {
-            self.amount = amount
-            self.clientTransactionId = clientTransactionId
-            
-            // Take care of all the values that we would always send.
-            self.intervalId = Date.now.toYYYYMMDD
-        }
-        
-        @objc public func create(_ completion: @escaping (_ response: CreateTransactionResponse?, _ success: Bool, _ error: Error?) -> Void) {
-            guard let retailerId = Bucket.Credentials.retailerCode, let retailerSecret = Bucket.Credentials.terminalSecret else {
-                completion(nil, false, BucketError.invalidRetailer)
-                return
-            }
-            
-            guard let terminalId = Bucket.Credentials.terminalId else {
-                completion(nil, false, BucketError.noIntervalId)
-                return
-            }
-            
-            // Return an error if the bucket amount returned is zero
-            if self.amount == 0 {
-                completion(nil, false, BucketError.zeroTransaction)
-                return
-            }
-            
-            // Prepare for a JSON body request param
-            var json : [String: Any] = .init()
-            json["amount"] = self.amount
-            if totalTransactionAmount != 0 { json["totalTransactionAmount"] = self.totalTransactionAmount }
-            json["intervalId"] = self.intervalId
-            if let locationId = self.locationId { json["locationId"] = locationId }
-            json["clientTransactionId"] = self.clientTransactionId
-            json["terminalId"] = terminalId
-            
-            var request = URLRequest(url: URL.createTransaction.appendingPathComponent(retailerId))
-            request.setMethod(.post)
-            request.setBody(json)
-            
-            request.addValue(retailerSecret, forHTTPHeaderField: "x-functions-key")
-            request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-            
-            URLSession.shared.dataTask(with: request) { (data, response, error) in
-                guard let data = data else {
-                    completion(nil, false, error)
-                    return
-                }
-                
-                if response.isSuccess {
-                    do {
-                        // Map the json response to the model class.
-                        let createTransactionResponse = try JSONDecoder().decode(CreateTransactionResponse.self, from: data)
-                        completion(createTransactionResponse, true, nil)
-                    } catch let error {
-                        completion(nil, false, error)
-                    }
-                } else {
-                    do {
-                        // Map the json response to the model class.
-                        let bucketError = try JSONDecoder().decode(BucketError.self, from: data)
-                        completion(nil, false, bucketError.asError(response?.code))
-                    } catch let error {
-                        completion(nil, false, error)
-                    }
-                }
-                }.resume()
-        }
-    }
-    
     @objc public class Credentials: NSObject {
         // MARK: - Public
         /// This is the **retailer code** creating the transaction.
@@ -258,7 +180,7 @@ import Strongbox
         
         // MARK: - Semi Private
         /// This is the terminal secret of the retailer. This is used to authorize requests with Bucket.
-        fileprivate static var terminalSecret: String? {
+        internal static var terminalSecret: String? {
             get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_SECRET") as? String }
             set {
                 if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_SECRET") }
@@ -267,7 +189,7 @@ import Strongbox
         }
         
         /// This is the **serial number** of the terminal or device creating the transaction.
-        fileprivate static var terminalId: String? {
+        internal static var terminalId: String? {
             get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_ID") as? String }
             set {
                 if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_ID") }
@@ -275,7 +197,7 @@ import Strongbox
             }
         }
         
-        fileprivate static var usesNaturalChangeFunction: Bool {
+        internal static var usesNaturalChangeFunction: Bool {
             get {
                 return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_USES_NATURAL_CHANGE") as? Bool ?? false
             }
@@ -284,7 +206,7 @@ import Strongbox
             }
         }
         
-        fileprivate static var denoms: [Double]? {
+        internal static var denoms: [Double]? {
             get {
                 return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_DENOMS") as? [Double]
             }

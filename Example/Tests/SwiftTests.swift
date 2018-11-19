@@ -85,55 +85,149 @@ class SwiftTests: XCTestCase {
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.99)
         XCTAssertEqual(bucketAmount, 0.99, "$0.99 should be bucketed for a $9.99 change.")
-        
-        // MARK: - Strange
+
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.9)
-        XCTAssertEqual(bucketAmount, 0.90, "$0.90 should be bucketed for a $0.90 change.")
+        XCTAssertEqual(bucketAmount, 0.90, "$0.90 should be bucketed for a $0.9 change.")
         
-        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.999)
-        XCTAssertEqual(bucketAmount, 0.00, "$0.00 should be bucketed for a $9.999 change.")
-        
+        // MARK: - Dr. Strange
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.234)
-        XCTAssertEqual(bucketAmount, 0.23, "$0.24 should be bucketed for a $1.234 change.")
+        XCTAssertEqual(bucketAmount, 0.23, "$0.23 should be bucketed for a $1.234 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 2.345)
         XCTAssertEqual(bucketAmount, 0.35, "$0.35 should be bucketed for a $2.345 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 3.456)
         XCTAssertEqual(bucketAmount, 0.46, "$0.46 should be bucketed for a $3.456 change.")
+        
+        // MARK: - Murphy's Law
+        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.999)
+        XCTAssertEqual(bucketAmount, 0.00)
     }
     
-    func testCreateTransaction() {
-        let expectation = XCTestExpectation(description: "Create a transaction.")
+    func testCreateSimpleTransaction() {
+        let expectation = XCTestExpectation(description: "Create a simple transaction.")
         
-        // Make sure the retailer id, retailer secret, and terminal id are set.
-        Bucket.Credentials.retailerCode = "6644211a-c02a-4413-b307-04a11b16e6a4"
-        // Bucket.Credentials.terminalSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
-        // Bucket.Credentials.terminalId = "qwerty1234"
+        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.55)
         
-        let transaction = Bucket.Transaction(amount: 7843, clientTransactionId: "test")
-        transaction.create { (response, success, error) in
+        let transaction = Transaction(amount: bucketAmount)
+        transaction.create(transactionType: .regular) { (success, error) in
             if (success) {
-                XCTAssertNotNil(response)
-                
-                if let response = response {
-                    XCTAssertEqual(response.amount, 7843)
-                    XCTAssertEqual(response.clientTransactionId, "test")
-                    XCTAssertNotEqual(response.customerCode, "")
-                    XCTAssertNotNil(response.qrCodeContent)
-                }
-                
-                XCTAssertTrue(success)
                 XCTAssertNil(error)
+                
+                // Assert response attributes
+                XCTAssertNotNil(transaction.customerCode)
+                XCTAssertNotNil(transaction.qrCode)
+                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
+                XCTAssertEqual(transaction.amount, bucketAmount)
+                XCTAssertNil(transaction.locationId)
+                XCTAssertNil(transaction.clientTransactionId)
             } else {
-                XCTAssertNil(response)
-                XCTAssertFalse(success)
                 XCTAssertNotNil(error)
             }
             
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 5)
+        wait(for: [expectation], timeout: 7)
+    }
+    
+    func testCreateAlternativeTransaction() {
+        let expectation = XCTestExpectation(description: "Create a transaction with alternative constructor.")
+        
+        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 5.32)
+        
+        let transaction = Transaction(
+            amount: bucketAmount,
+            totalTransactionAmount: 6,
+            clientTransactionId: "clientTransactionId",
+            employeeId: "employeeId"
+        )
+        
+        transaction.create(transactionType: .regular) { (success, error) in
+            if (success) {
+                XCTAssertNil(error)
+                
+                // Assert response attributes
+                XCTAssertNotNil(transaction.customerCode)
+                XCTAssertNotNil(transaction.qrCode)
+                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
+                XCTAssertEqual(transaction.amount, bucketAmount)
+                XCTAssertEqual(transaction.clientTransactionId, "clientTransactionId")
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 7)
+    }
+    
+    func testCreateDetailedRegularTransaction() {
+        let expectation = XCTestExpectation(description: "Create a detailed regular transaction.")
+        
+        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 6.09)
+        
+        let transaction = Transaction(
+            amount: bucketAmount,
+            totalTransactionAmount: 6.50,
+            clientTransactionId: "clientTransactionId",
+            employeeId: "employeeId"
+        )
+        transaction.locationId = "locationId"
+        transaction.sample = false
+        
+        transaction.create(transactionType: .regular) { (success, error) in
+            if (success) {
+                XCTAssertNil(error)
+                
+                // Assert response attributes
+                XCTAssertNotNil(transaction.customerCode)
+                XCTAssertNotNil(transaction.qrCode)
+                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
+                XCTAssertEqual(transaction.amount, bucketAmount)
+                XCTAssertEqual(transaction.clientTransactionId, "clientTransactionId")
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 7)
+    }
+    
+    func testCreateADetailedEventTransaction() {
+        let expectation = XCTestExpectation(description: "Create a detailed event transaction.")
+        
+        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 6.09)
+        
+        let transaction = Transaction(
+            amount: bucketAmount,
+            totalTransactionAmount: 6.50
+        )
+        transaction.eventId = 1
+        transaction.eventName = "eventName"
+        transaction.eventMessage = "eventMessage"
+        
+        transaction.create(transactionType: .event) { (success, error) in
+            if (success) {
+                XCTAssertNil(error)
+                
+                // Assert response attributes
+                XCTAssertNotNil(transaction.customerCode)
+                XCTAssertNotNil(transaction.qrCode)
+                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
+                XCTAssertEqual(transaction.amount, bucketAmount)
+                XCTAssertEqual(transaction.eventName, "eventName") 
+                XCTAssertEqual(transaction.eventMessage, "eventMessage")
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 7)
     }
 }
