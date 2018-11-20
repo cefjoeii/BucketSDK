@@ -267,7 +267,8 @@ class SwiftTests: XCTestCase {
 
         var range = ["start": "This is a random string.", "end": 1234] as [String: Any]
 
-        Bucket.shared.fetchReports(range: range) { (success, error) in
+        Bucket.shared.fetchReports(range: range) { (response, success, error) in
+            XCTAssertNil(response)
             XCTAssertFalse(success)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
@@ -280,7 +281,8 @@ class SwiftTests: XCTestCase {
         expectation = XCTestExpectation(description: "Fetch invalid reports.")
         range = ["start": 1234, "end": "This is a random string."] as [String: Any]
         
-        Bucket.shared.fetchReports(range: range) { (success, error) in
+        Bucket.shared.fetchReports(range: range) { (response, success, error) in
+            XCTAssertNil(response)
             XCTAssertFalse(success)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
@@ -293,7 +295,8 @@ class SwiftTests: XCTestCase {
         expectation = XCTestExpectation(description: "Fetch invalid reports.")
         range = ["day": 1234] as [String: Any]
         
-        Bucket.shared.fetchReports(range: range) { (success, error) in
+        Bucket.shared.fetchReports(range: range) { (response, success, error) in
+            XCTAssertNil(response)
             XCTAssertFalse(success)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
@@ -310,7 +313,7 @@ class SwiftTests: XCTestCase {
         // let range = ["day": "2018-09-01"]
         let range = ["start": "2018-09-01 00:00:00+0800", "end": "2018-11-20 00:00:00+0800"]
         
-        Bucket.shared.fetchReports(range: range) { (success, error) in
+        Bucket.shared.fetchReports(range: range) { (response, success, error) in
             if (success) {
                 XCTAssertNil(error)
             } else {

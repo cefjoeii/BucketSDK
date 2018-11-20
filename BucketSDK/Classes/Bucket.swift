@@ -162,33 +162,33 @@ import Strongbox
         eventId: Int = -1,
         offset: Int = 0,
         limit: Int = 200,
-        completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)
+        completion: @escaping ((_ response: FetchReportsResponse?, _ success: Bool, _ error: Error?) -> Void)
         ) {
         
         // Return if the range dictionary count is invalid.
-        if range.count < 1 || range.count > 2 { completion(false, BucketErrorResponse.invalidRange); return }
+        if range.count < 1 || range.count > 2 { completion(nil, false, BucketErrorResponse.invalidRange); return }
         
         // Return if it is a day but its value is not of type String.
-        if range.count == 1 && !(range["day"] is String) { completion(false, BucketErrorResponse.invalidRange); return }
+        if range.count == 1 && !(range["day"] is String) { completion(nil, false, BucketErrorResponse.invalidRange); return }
         
         // Return if start and end are both not of the same type (String or Int).
         if !(range["start"] is String && range["end"] is String || range["start"] is Int && range["end"] is Int) {
-            completion(false, BucketErrorResponse.invalidRange)
+            completion(nil, false, BucketErrorResponse.invalidRange)
             return
         }
         
         guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, BucketErrorResponse.invalidRetailer)
+            completion(nil, false, BucketErrorResponse.invalidRetailer)
             return
         }
         
         guard let terminalId = Credentials.terminalId else {
-            completion(false, BucketErrorResponse.noTerminalId)
+            completion(nil, false, BucketErrorResponse.noTerminalId)
             return
         }
         
         guard let countryCode = Credentials.retailerInfo?.countryCode else {
-            completion(false, BucketErrorResponse.invalidCountryCode)
+            completion(nil, false, BucketErrorResponse.invalidCountryCode)
             return
         }
         
@@ -209,23 +209,20 @@ import Strongbox
         request.setBody(body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else { completion(false, error); return }
+            guard let data = data else { completion(nil, false, error); return }
             
             if response.isSuccess {
                 do {
                     // Map the json response to the model class.
-                    let response = try JSONDecoder().decode(FetchBillDenominationsResponse.self, from: data)
+                    let response = try JSONDecoder().decode(FetchReportsResponse.self, from: data)
                     
-                    Credentials.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
-                    Credentials.denoms = response.denominations ?? nil
-                    
-                    completion(true, nil)
+                    completion(response, true, nil)
                 } catch let error {
-                    completion(false, error)
+                    completion(nil, false, error)
                 }
             } else {
                 let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
-                completion(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
+                completion(nil, false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }
