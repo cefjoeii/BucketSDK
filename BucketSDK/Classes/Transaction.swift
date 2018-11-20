@@ -97,17 +97,17 @@ import Foundation
     /// Allows a POS integration developer add a transaction.
     @objc public func create(transactionType: TrannsactionType, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, BucketError.invalidRetailer)
+            completion(false, BucketErrorResponse.invalidRetailer)
             return
         }
         
         guard let terminalId = Credentials.terminalId else {
-            completion(false, BucketError.noTerminalId)
+            completion(false, BucketErrorResponse.noTerminalId)
             return
         }
         
         guard let countryCode = Credentials.retailerInfo?.countryCode else {
-            completion(false, BucketError.invalidCountryCode)
+            completion(false, BucketErrorResponse.invalidCountryCode)
             return
         }
         
@@ -150,8 +150,8 @@ import Foundation
                 self.update(with: data.asJSON)
                 completion(true, nil)
             } else {
-                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
-                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }
@@ -159,22 +159,22 @@ import Foundation
     /// Allows POS integration developer delete a transaction that has not been redeemed by a user in Bucket's system.
     @objc public func delete(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, BucketError.invalidRetailer)
+            completion(false, BucketErrorResponse.invalidRetailer)
             return
         }
         
         guard let terminalId = Credentials.terminalId else {
-            completion(false, BucketError.noTerminalId)
+            completion(false, BucketErrorResponse.noTerminalId)
             return
         }
         
         guard let countryCode = Credentials.retailerInfo?.countryCode else {
-            completion(false, BucketError.invalidCountryCode)
+            completion(false, BucketErrorResponse.invalidCountryCode)
             return
         }
         
         guard let customerCode = self.customerCode else {
-            completion(false, BucketError.invalidCode)
+            completion(false, BucketErrorResponse.invalidCode)
             return
         }
         
@@ -192,8 +192,8 @@ import Foundation
             if response.isSuccess {
                 completion(true, nil)
             } else {
-                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
-                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }

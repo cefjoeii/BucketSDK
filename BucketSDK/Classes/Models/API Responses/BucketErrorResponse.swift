@@ -1,5 +1,5 @@
 //
-//  BucketError.swift
+//  BucketErrorResponse.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 7/21/18.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BucketError: Decodable {
+struct BucketErrorResponse: Decodable {
     let errorCode: String?
     let message: String?
     

@@ -1,5 +1,5 @@
 //
-//  CreateTransaction.swift
+//  CreateTransactionResponse.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 7/21/18.

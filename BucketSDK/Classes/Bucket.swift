@@ -31,7 +31,7 @@ import Strongbox
     /// - Parameter countryId: This is the **numeric** country id, or the **alpha** two letter country code.
     @objc public func registerTerminal(countryCode: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         guard let retailerId = Credentials.retailerCode else {
-            completion(false, BucketError.invalidRetailer)
+            completion(false, BucketErrorResponse.invalidRetailer)
             return
         }
         
@@ -78,8 +78,8 @@ import Strongbox
                     completion(false, error)
                 }
             } else {
-                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
-                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }
@@ -87,7 +87,7 @@ import Strongbox
     /// Gathers the bill denominations for the the retailers country, in order to calculate the change using our natural change function.
     @objc public func fetchBillDenominations(completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
         guard let countryCode = Credentials.retailerInfo?.countryCode else {
-            completion?(false, BucketError.invalidCountryCode)
+            completion?(false, BucketErrorResponse.invalidCountryCode)
             return
         }
         
@@ -123,8 +123,8 @@ import Strongbox
                     completion?(false, error)
                 }
             } else {
-                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
-                completion?(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion?(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }
@@ -166,29 +166,29 @@ import Strongbox
         ) {
         
         // Return if the range dictionary count is invalid.
-        if range.count < 1 || range.count > 2 { completion(false, BucketError.invalidRange); return }
+        if range.count < 1 || range.count > 2 { completion(false, BucketErrorResponse.invalidRange); return }
         
         // Return if it is a day but its value is not of type String.
-        if range.count == 1 && !(range["day"] is String) { completion(false, BucketError.invalidRange); return }
+        if range.count == 1 && !(range["day"] is String) { completion(false, BucketErrorResponse.invalidRange); return }
         
         // Return if start and end are both not of the same type (String or Int).
         if !(range["start"] is String && range["end"] is String || range["start"] is Int && range["end"] is Int) {
-            completion(false, BucketError.invalidRange)
+            completion(false, BucketErrorResponse.invalidRange)
             return
         }
         
         guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, BucketError.invalidRetailer)
+            completion(false, BucketErrorResponse.invalidRetailer)
             return
         }
         
         guard let terminalId = Credentials.terminalId else {
-            completion(false, BucketError.noTerminalId)
+            completion(false, BucketErrorResponse.noTerminalId)
             return
         }
         
         guard let countryCode = Credentials.retailerInfo?.countryCode else {
-            completion(false, BucketError.invalidCountryCode)
+            completion(false, BucketErrorResponse.invalidCountryCode)
             return
         }
         
@@ -224,8 +224,8 @@ import Strongbox
                     completion(false, error)
                 }
             } else {
-                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
-                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }
