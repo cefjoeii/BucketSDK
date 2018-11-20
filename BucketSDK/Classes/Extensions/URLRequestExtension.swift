@@ -12,13 +12,16 @@ enum HTTPMethod: String {
 }
 
 extension URLRequest {
-    
     mutating func setMethod(_ method: HTTPMethod) {
         self.httpMethod = method.rawValue
     }
     
-    mutating func setBody(_ json : [String:Any]) {
+    mutating func setBody(_ json: [String: Any]) {
         self.httpBody = json.data
+    }
+    
+    mutating func setHeaders(_ headers: [String: String]) {
+        self.allHTTPHeaderFields = headers
     }
     
     mutating func addHeader(_ key: String, _ value: String) {

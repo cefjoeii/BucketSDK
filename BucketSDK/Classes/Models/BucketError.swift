@@ -26,11 +26,15 @@ struct BucketError: Decodable {
     }
     
     static var invalidCountryCode: Error {
-        return NSError(domain: "", code: 409, userInfo: [NSLocalizedDescriptionKey: "No such country code found"])
+        return NSError(domain: "", code: 409, userInfo: [NSLocalizedDescriptionKey: "No such country code found."])
     }
     
     static var invalidRetailer: Error {
         return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please Check Retailer Id and Secret Code."])
+    }
+    
+    static var invalidRange: Error {
+        return NSError(domain: "", code: 402, userInfo: [NSLocalizedDescriptionKey: "Please make sure that the range is valid."])
     }
     
     static var noTerminalId: Error {

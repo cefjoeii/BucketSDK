@@ -39,8 +39,11 @@ class SwiftTests: XCTestCase {
         Credentials.retailerCode = "bckt-1"
         
         Bucket.shared.registerTerminal(countryCode: "us") { (success, error) in
-            XCTAssertTrue(success, "The registerTerminal() function should work.")
-            XCTAssertNil(error)
+            if success {
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNotNil(error)
+            }
             
             expectation.fulfill()
         }
@@ -242,11 +245,72 @@ class SwiftTests: XCTestCase {
     }
     
     func testDeleteTransaction() {
-        let expectation = XCTestExpectation(description: "Delete transaction.")
+        let expectation = XCTestExpectation(description: "Delete a transaction.")
         
         let transaction = Transaction(customerCode: self.customerCode)
         
         transaction.delete { (success, error) in
+            if (success) {
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 7)
+    }
+    
+    func testInvalidFetchReports() {
+        var expectation = XCTestExpectation(description: "Fetch invalid reports.")
+
+        var range = ["start": "This is a random string.", "end": 1234] as [String: Any]
+
+        Bucket.shared.fetchReports(range: range) { (success, error) in
+            XCTAssertFalse(success)
+            XCTAssertNotNil(error)
+            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1)
+        
+        expectation = XCTestExpectation(description: "Fetch invalid reports.")
+        range = ["start": 1234, "end": "This is a random string."] as [String: Any]
+        
+        Bucket.shared.fetchReports(range: range) { (success, error) in
+            XCTAssertFalse(success)
+            XCTAssertNotNil(error)
+            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1)
+        
+        expectation = XCTestExpectation(description: "Fetch invalid reports.")
+        range = ["day": 1234] as [String: Any]
+        
+        Bucket.shared.fetchReports(range: range) { (success, error) in
+            XCTAssertFalse(success)
+            XCTAssertNotNil(error)
+            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    func testValidFetchReports() {
+        let expectation = XCTestExpectation(description: "Fetch valid reports.")
+        
+        // let range = ["day": "2018-09-01"]
+        let range = ["start": "2018-09-01 00:00:00+0800", "end": "2018-11-20 00:00:00+0800"]
+        
+        Bucket.shared.fetchReports(range: range) { (success, error) in
             if (success) {
                 XCTAssertNil(error)
             } else {

@@ -45,9 +45,9 @@ import Strongbox
         let url = Bucket.shared.environment.url.appendingPathComponent("registerterminal")
         var request = URLRequest(url: url)
         request.setMethod(.post)
-        request.addHeader("countryId", countryCode.lowercased())
         request.addHeader("retailerId", retailerId)
         request.setBody(["terminalId": Credentials.terminalId!])
+        request.addHeader("countryId", countryCode.lowercased())
         // request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -155,7 +155,80 @@ import Strongbox
         return bucketAmount
     }
     
-    
+    @objc public func fetchReports(
+        range: [String: Any],
+        terminalId bodyTerminalId: String? = nil,
+        employeeId: String? = nil,
+        eventId: Int = -1,
+        offset: Int = 0,
+        limit: Int = 200,
+        completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)
+        ) {
+        
+        // Return if the range dictionary count is invalid.
+        if range.count < 1 || range.count > 2 { completion(false, BucketError.invalidRange); return }
+        
+        // Return if it is a day but its value is not of type String.
+        if range.count == 1 && !(range["day"] is String) { completion(false, BucketError.invalidRange); return }
+        
+        // Return if start and end are both not of the same type (String or Int).
+        if !(range["start"] is String && range["end"] is String || range["start"] is Int && range["end"] is Int) {
+            completion(false, BucketError.invalidRange)
+            return
+        }
+        
+        guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
+            completion(false, BucketError.invalidRetailer)
+            return
+        }
+        
+        guard let terminalId = Credentials.terminalId else {
+            completion(false, BucketError.noTerminalId)
+            return
+        }
+        
+        guard let countryCode = Credentials.retailerInfo?.countryCode else {
+            completion(false, BucketError.invalidCountryCode)
+            return
+        }
+        
+        let url = Bucket.shared.environment.url.appendingPathComponent("report").addingQueryParams(["offset": offset, "limit": limit])
+        var request = URLRequest(url: url)
+        request.setMethod(.post)
+        request.addHeader("retailerId", retailerId)
+        request.addHeader("terminalId", terminalId)
+        request.addHeader("countryId", countryCode)
+        request.addHeader("x-functions-key", terminalSecret)
+        if let employeeId = employeeId { request.addHeader("employeeId", employeeId) }
+        if eventId != -1 { request.addHeader("eventId", String(eventId)) }
+        
+        var body = range
+        if let bodyTerminalId = bodyTerminalId { body["terminalId"] = bodyTerminalId }
+        if let employeeId = employeeId { body["employeeId"] = employeeId }
+        
+        request.setBody(body)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else { completion(false, error); return }
+            
+            if response.isSuccess {
+                do {
+                    // Map the json response to the model class.
+                    let response = try JSONDecoder().decode(FetchBillDenominationsResponse.self, from: data)
+                    
+                    Credentials.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
+                    Credentials.denoms = response.denominations ?? nil
+                    
+                    completion(true, nil)
+                } catch let error {
+                    completion(false, error)
+                }
+            } else {
+                let bucketError = try? JSONDecoder().decode(BucketError.self, from: data)
+                completion(false, bucketError?.asError(response?.code) ?? BucketError.unknown)
+            }
+            }.resume()
+    }
 }
 
 public extension Date {
