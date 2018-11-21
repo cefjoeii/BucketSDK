@@ -17,13 +17,13 @@ import Strongbox
     @objc public dynamic var environment: DeploymentEnvironment = .development
     
     // Set our date formatter for sending the interval ids.
-    fileprivate var dateFormatter = DateFormatter(format: "yyyyMMdd")
+    // fileprivate var dateFormatter = DateFormatter(format: "yyyyMMdd")
     
     private override init() {
         super.init()
         
         // Make sure our interval ids are using the UTC datestamp.
-        self.dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        // self.dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
     }
     
     // MARK: - Bucket Functions
@@ -168,11 +168,20 @@ import Strongbox
         // Return if the range dictionary count is invalid.
         if range.count < 1 || range.count > 2 { completion(nil, false, BucketErrorResponse.invalidRange); return }
         
-        // Return if it is a day but its value is not of type String.
-        if range.count == 1 && !(range["day"] is String) { completion(nil, false, BucketErrorResponse.invalidRange); return }
-        
-        // Return if start and end are both not of the same type (String or Int).
-        if !(range["start"] is String && range["end"] is String || range["start"] is Int && range["end"] is Int) {
+        // Return if the day is not a String and its format is invalid.
+        if range.count == 1 && !(range["day"] is String && (range["day"] as! String).isValidDayDate) {
+            completion(nil, false, BucketErrorResponse.invalidRange)
+            return
+        }
+
+        if range["start"] is String && range["end"] is String {
+            // Return if start and end are both not valid dates
+            if (range["start"] as! String).isNotValidStartEndDate || (range["end"] as! String).isNotValidStartEndDate {
+                completion(nil, false, BucketErrorResponse.invalidRange)
+                return
+            }
+        } else if !(range["start"] is Int && range["end"] is Int) {
+            // Return if start and end are neither both Strings nor both Ints
             completion(nil, false, BucketErrorResponse.invalidRange)
             return
         }
@@ -228,7 +237,7 @@ import Strongbox
     }
 }
 
-public extension Date {
+/* public extension Date {
     static var now: Date {
         return Date()
     }
@@ -236,4 +245,4 @@ public extension Date {
     fileprivate var toYYYYMMDD: String {
         return Bucket.shared.dateFormatter.string(from: self)
     }
-}
+} */

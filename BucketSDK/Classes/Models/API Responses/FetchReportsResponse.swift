@@ -20,5 +20,5 @@
     @objc public let disputedBy: String?
     @objc public let locationId: String?
     @objc public let clientTransactionid: String?
-    @objc public let terminalId: String?
+    @objc public let terminalId: Int = -1
 }
