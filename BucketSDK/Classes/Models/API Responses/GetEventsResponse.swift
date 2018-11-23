@@ -1,5 +1,5 @@
 //
-//  FetchEventsResponse.swift
+//  GetEventsResponse.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 11/21/18.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc public class FetchEventsResponse: NSObject, Decodable {
+@objc public class GetEventsResponse: NSObject, Decodable {
     @objc public let events: [Event]?
 }
 

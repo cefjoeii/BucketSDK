@@ -8,7 +8,6 @@
 import Foundation
 
 public extension Optional where Wrapped == URLResponse {
-    
     var isSuccess: Bool {
         if self.isNil {
             return false
@@ -24,7 +23,6 @@ public extension Optional where Wrapped == URLResponse {
 }
 
 @objc public extension URLResponse {
-    
     @objc var code : Int {
         return (self as! HTTPURLResponse).statusCode
     }

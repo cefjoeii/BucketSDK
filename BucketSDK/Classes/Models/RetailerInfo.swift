@@ -16,7 +16,7 @@ import Foundation
     @objc public let postalCode: String?
     @objc public let city: String?
     @objc public let state: String?
-    @objc public let countryCode: String?
+    @objc public let country: String?
     
     init(
         _ retailerName: String?,
@@ -27,7 +27,7 @@ import Foundation
         _ postalCode: String?,
         _ city: String?,
         _ state: String?,
-        _ countryCode: String?
+        _ country: String?
         ) {
         
         self.retailerName = retailerName
@@ -38,7 +38,7 @@ import Foundation
         self.postalCode = postalCode
         self.city = city
         self.state = state
-        self.countryCode = countryCode
+        self.country = country
     }
     
     // MARK: - NSSecureCoding Protocols
@@ -69,6 +69,6 @@ import Foundation
         aCoder.encode(self.postalCode, forKey: "BUCKET_POSTAL_CODE")
         aCoder.encode(self.city, forKey: "BUCKET_CITY")
         aCoder.encode(self.state, forKey: "BUCKET_STATE")
-        aCoder.encode(self.countryCode, forKey: "BUCKET_COUNTRY_CODE")
+        aCoder.encode(self.country, forKey: "BUCKET_COUNTRY")
     }
 }

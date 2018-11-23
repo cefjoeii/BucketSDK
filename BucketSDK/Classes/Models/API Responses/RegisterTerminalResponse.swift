@@ -12,6 +12,7 @@ struct RegisterTerminalResponse: Decodable {
     let apiKey: String?
     let retailerName: String?
     let retailerPhone: String?
+    let requireEmployeeCode: Bool?
     let address: Address?
 
     struct Address: Decodable {

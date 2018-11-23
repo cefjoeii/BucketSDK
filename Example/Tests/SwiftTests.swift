@@ -9,8 +9,13 @@
 import XCTest
 import BucketSDK
 
+fileprivate extension Double {
+    func roundingDecimalPlaces(to precision: Int = 2) -> Double? {
+        return Double(String(format: "%.\(precision)f", self))
+    }
+}
+
 class SwiftTests: XCTestCase {
-    
     var customerCode = ""
     
     override func setUp() {
@@ -20,25 +25,12 @@ class SwiftTests: XCTestCase {
         Bucket.shared.environment = .development
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure() {
-            // Put the code you want to measure the time of here.
-            
-        }
-    }
-    
     func testRegisterTerminal() {
-        let expectation = XCTestExpectation(description: "Register the terminal.")
+        let expectation = XCTestExpectation()
         
         Credentials.retailerCode = "bckt-1"
         
-        Bucket.shared.registerTerminal(countryCode: "us") { (success, error) in
+        Bucket.shared.registerTerminal(country: "us") { (success, error) in
             if success {
                 XCTAssertNil(error)
             } else {
@@ -51,83 +43,79 @@ class SwiftTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
     }
     
-    func testFetchBillDenominations() {
-        let expectationForUSD = XCTestExpectation(description: "Fetch the USD denominations.")
-        Bucket.shared.fetchBillDenominations { (success, error) in
-            XCTAssertTrue(success, "USD denominations should be fetched.")
-            XCTAssertNil(error)
-            expectationForUSD.fulfill()
+    func testGetBillDenominations() {
+        let expectation = XCTestExpectation()
+        
+        Bucket.shared.getBillDenominations { (success, error) in
+            if success {
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
         }
         
-        wait(for: [expectationForUSD], timeout: 3)
-        
-        let expectationForSGD = XCTestExpectation(description: "Fetch the SGD denominations.")
-        Bucket.shared.fetchBillDenominations { (success, error) in
-            XCTAssertTrue(success, "SGD denominations should be fetched.")
-            XCTAssertNil(error)
-            expectationForSGD.fulfill()
-        }
-        
-        wait(for: [expectationForSGD], timeout: 3)
+        wait(for: [expectation], timeout: 3)
     }
     
     func testBucketAmount() {
-        // MARK: - Normal
+        // MARK: - Sane
         var bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.55)
-        XCTAssertEqual(bucketAmount, 0.55, "$0.55 should be bucketed for a $0.55 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.55)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 12.34)
-        XCTAssertEqual(bucketAmount, 0.34, "$0.34 should be bucketed for a $12.34 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.34, "$0.34 should be bucketed for a $12.34 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.00)
-        XCTAssertEqual(bucketAmount, 0.00, "$0.00 should be bucketed for a $1.00 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00, "$0.00 should be bucketed for a $1.00 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 5.00)
-        XCTAssertEqual(bucketAmount, 0.00, "$0.00 should be bucketed for a $5.00 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00, "$0.00 should be bucketed for a $5.00 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.99)
-        XCTAssertEqual(bucketAmount, 0.99, "$0.99 should be bucketed for a $0.99 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.99, "$0.99 should be bucketed for a $0.99 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.99)
-        XCTAssertEqual(bucketAmount, 0.99, "$0.99 should be bucketed for a $9.99 change.")
-
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.99, "$0.99 should be bucketed for a $9.99 change.")
+        
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.9)
-        XCTAssertEqual(bucketAmount, 0.90, "$0.90 should be bucketed for a $0.9 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.90, "$0.90 should be bucketed for a $0.9 change.")
         
         // MARK: - Dr. Strange
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.234)
-        XCTAssertEqual(bucketAmount, 0.23, "$0.23 should be bucketed for a $1.234 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.23, "$0.23 should be bucketed for a $1.234 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 2.345)
-        XCTAssertEqual(bucketAmount, 0.35, "$0.35 should be bucketed for a $2.345 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.35, "$0.35 should be bucketed for a $2.345 change.")
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 3.456)
-        XCTAssertEqual(bucketAmount, 0.46, "$0.46 should be bucketed for a $3.456 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.46, "$0.46 should be bucketed for a $3.456 change.")
         
         // MARK: - Murphy's Law
-        bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.999)
-        XCTAssertEqual(bucketAmount, 0.00)
+        // bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.999)
+        // XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00)
     }
     
     func testCreateSimpleTransaction() {
-        let expectation = XCTestExpectation(description: "Create a simple transaction.")
+        let expectation = XCTestExpectation()
         
         let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.55)
+        let transactionRequest = TransactionRequest(amount: bucketAmount)
         
-        let transaction = Transaction(amount: bucketAmount)
-        transaction.create(transactionType: .regular) { (success, error) in
-            if (success) {
+        Bucket.shared.createTransaction(transactionRequest) { (success, response, error) in
+            if success {
                 XCTAssertNil(error)
                 
                 // Assert response attributes
-                XCTAssertNotNil(transaction.customerCode)
-                XCTAssertNotNil(transaction.qrCode)
-                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
-                XCTAssertEqual(transaction.amount, bucketAmount)
-                XCTAssertNil(transaction.locationId)
-                XCTAssertNil(transaction.clientTransactionId)
+                XCTAssertNotNil(response?.customerCode)
+                XCTAssertNotNil(response?.qrCode)
+                XCTAssertNotEqual(response?.bucketTransactionId, -1)
+                XCTAssertEqual(response?.amount, bucketAmount.roundingDecimalPlaces())
+                XCTAssertNil(response?.locationId)
+                XCTAssertNil(response?.clientTransactionId)
                 
-                self.customerCode = transaction.customerCode ?? ""
+                self.customerCode = response?.customerCode ?? ""
             } else {
                 XCTAssertNotNil(error)
             }
@@ -135,33 +123,34 @@ class SwiftTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 7)
+        wait(for: [expectation], timeout: 5)
     }
     
-    func testCreateAlternativeTransaction() {
-        let expectation = XCTestExpectation(description: "Create a transaction with alternative constructor.")
+    func testCreateDetailedTransaction() {
+        let expectation = XCTestExpectation()
         
-        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 5.32)
+        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 3.70)
         
-        let transaction = Transaction(
-            amount: bucketAmount,
-            totalTransactionAmount: 6,
-            clientTransactionId: "clientTransactionId",
-            employeeId: "employeeId"
-        )
+        let transactionRequest = TransactionRequest(amount: bucketAmount)
+        transactionRequest.totalTransactionAmount = 6.30
+        transactionRequest.locationId = "locationId"
+        transactionRequest.clientTransactionId = "clientTransactionId"
+        transactionRequest.employeeCode = "1234"
+        transactionRequest.eventId = nil
         
-        transaction.create(transactionType: .regular) { (success, error) in
-            if (success) {
+        Bucket.shared.createTransaction(transactionRequest) { (success, response, error) in
+            if success {
                 XCTAssertNil(error)
                 
                 // Assert response attributes
-                XCTAssertNotNil(transaction.customerCode)
-                XCTAssertNotNil(transaction.qrCode)
-                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
-                XCTAssertEqual(transaction.amount, bucketAmount)
-                XCTAssertEqual(transaction.clientTransactionId, "clientTransactionId")
+                XCTAssertNotNil(response?.customerCode)
+                XCTAssertNotNil(response?.qrCode)
+                XCTAssertNotEqual(response?.bucketTransactionId, -1)
+                XCTAssertEqual(response?.amount, bucketAmount.roundingDecimalPlaces())
+                XCTAssertEqual(response?.locationId, transactionRequest.locationId)
+                XCTAssertEqual(response?.clientTransactionId, transactionRequest.clientTransactionId)
                 
-                self.customerCode = transaction.customerCode ?? ""
+                self.customerCode = response?.customerCode ?? ""
             } else {
                 XCTAssertNotNil(error)
             }
@@ -169,35 +158,15 @@ class SwiftTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 7)
+        wait(for: [expectation], timeout: 5)
     }
     
-    func testCreateDetailedRegularTransaction() {
-        let expectation = XCTestExpectation(description: "Create a detailed regular transaction.")
+    func testRefundTransaction() {
+        let expectation = XCTestExpectation()
         
-        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 6.09)
-        
-        let transaction = Transaction(
-            amount: bucketAmount,
-            totalTransactionAmount: 6.50,
-            clientTransactionId: "clientTransactionId",
-            employeeId: "employeeId"
-        )
-        transaction.locationId = "locationId"
-        transaction.sample = false
-        
-        transaction.create(transactionType: .regular) { (success, error) in
-            if (success) {
+        Bucket.shared.refundTransaction(customerCode: self.customerCode) { (success, error) in
+            if success {
                 XCTAssertNil(error)
-                
-                // Assert response attributes
-                XCTAssertNotNil(transaction.customerCode)
-                XCTAssertNotNil(transaction.qrCode)
-                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
-                XCTAssertEqual(transaction.amount, bucketAmount)
-                XCTAssertEqual(transaction.clientTransactionId, "clientTransactionId")
-                
-                self.customerCode = transaction.customerCode ?? ""
             } else {
                 XCTAssertNotNil(error)
             }
@@ -205,52 +174,14 @@ class SwiftTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 7)
-    }
-    
-    func testCreateADetailedEventTransaction() {
-        let expectation = XCTestExpectation(description: "Create a detailed event transaction.")
-        
-        let bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 6.09)
-        
-        let transaction = Transaction(
-            amount: bucketAmount,
-            totalTransactionAmount: 6.50
-        )
-        transaction.eventId = 1
-        transaction.eventName = "eventName"
-        transaction.eventMessage = "eventMessage"
-        
-        transaction.create(transactionType: .event) { (success, error) in
-            if (success) {
-                XCTAssertNil(error)
-                
-                // Assert response attributes
-                XCTAssertNotNil(transaction.customerCode)
-                XCTAssertNotNil(transaction.qrCode)
-                XCTAssertNotEqual(transaction.bucketTransactionId, -1)
-                XCTAssertEqual(transaction.amount, bucketAmount)
-                XCTAssertEqual(transaction.eventName, "eventName")
-                XCTAssertEqual(transaction.eventMessage, "eventMessage")
-                
-                self.customerCode = transaction.customerCode ?? ""
-            } else {
-                XCTAssertNotNil(error)
-            }
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 7)
+        wait(for: [expectation], timeout: 5)
     }
     
     func testDeleteTransaction() {
-        let expectation = XCTestExpectation(description: "Delete a transaction.")
+        let expectation = XCTestExpectation()
         
-        let transaction = Transaction(customerCode: self.customerCode)
-        
-        transaction.delete { (success, error) in
-            if (success) {
+        Bucket.shared.deleteTransaction(customerCode: self.customerCode) { (success, error) in
+            if success {
                 XCTAssertNil(error)
             } else {
                 XCTAssertNotNil(error)
@@ -259,88 +190,41 @@ class SwiftTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 7)
+        wait(for: [expectation], timeout: 5)
     }
     
-    func testInvalidFetchReports() {
-        var expectation = XCTestExpectation(description: "Fetch invalid reports.")
-
-        var range = ["start": "This is a random string.", "end": 1234] as [String: Any]
-
-        Bucket.shared.fetchReports(range: range) { (response, success, error) in
-            XCTAssertNil(response)
+    func testInvalidGetReports() {
+        var expectation = XCTestExpectation()
+        var reportRequest = ReportRequest(day: "This is an invalid day date String.")
+        Bucket.shared.getReports(reportRequest) { (success, response, error) in
             XCTAssertFalse(success)
+            XCTAssertNil(response)
             XCTAssertNotNil(error)
-            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
+            XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
             
             expectation.fulfill()
         }
-        
         wait(for: [expectation], timeout: 1)
         
         expectation = XCTestExpectation(description: "Fetch invalid reports.")
-        range = ["start": 1234, "end": "This is a random string."] as [String: Any]
-        
-        Bucket.shared.fetchReports(range: range) { (response, success, error) in
-            XCTAssertNil(response)
+        reportRequest = ReportRequest(startString: "This is an invalid start date String.", endString: "This is an invalid end date String.")
+        Bucket.shared.getReports(reportRequest) { (success, response, error) in
             XCTAssertFalse(success)
+            XCTAssertNil(response)
             XCTAssertNotNil(error)
-            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
+            XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
             
             expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 1)
-        
-        expectation = XCTestExpectation(description: "Fetch invalid reports.")
-        range = ["day": 1234] as [String: Any]
-        
-        Bucket.shared.fetchReports(range: range) { (response, success, error) in
-            XCTAssertNil(response)
-            XCTAssertFalse(success)
-            XCTAssertNotNil(error)
-            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 1)
-        
-        expectation = XCTestExpectation(description: "Fetch invalid reports.")
-        range = ["day": "This is a random string."] as [String: Any]
-        
-        Bucket.shared.fetchReports(range: range) { (response, success, error) in
-            XCTAssertNil(response)
-            XCTAssertFalse(success)
-            XCTAssertNotNil(error)
-            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 1)
-        
-        expectation = XCTestExpectation(description: "Fetch invalid reports.")
-        range = ["start": "This is a random string.", "end": "This is a random string."] as [String: Any]
-        
-        Bucket.shared.fetchReports(range: range) { (response, success, error) in
-            XCTAssertNil(response)
-            XCTAssertFalse(success)
-            XCTAssertNotNil(error)
-            XCTAssertEqual(error!.localizedDescription, "Please make sure that the range is valid.")
-            
-            expectation.fulfill()
-        }
-        
         wait(for: [expectation], timeout: 1)
     }
     
-    func testValidFetchReports() {
-        let expectation = XCTestExpectation(description: "Fetch valid reports.")
+    func testValidGetReports() {
+        var expectation = XCTestExpectation()
         
-        let range = ["start": "2018-09-01 00:00:00+0800", "end": "2018-11-20 00:00:00+0800"]
+        var reportRequest = ReportRequest(startString: "2018-09-01 00:00:00+0800", endString: "2018-11-20 00:00:00+0800")
         
-        Bucket.shared.fetchReports(range: range) { (response, success, error) in
+        Bucket.shared.getReports(reportRequest) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -352,6 +236,24 @@ class SwiftTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 7)
+        wait(for: [expectation], timeout: 5)
+        
+        expectation = XCTestExpectation()
+        
+        reportRequest = ReportRequest(startInt: 1535760000, endInt: 1542672000)
+        
+        Bucket.shared.getReports(reportRequest) { (success, response, error) in
+            if (success) {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNil(response)
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
     }
 }

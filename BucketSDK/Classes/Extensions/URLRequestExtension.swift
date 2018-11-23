@@ -8,7 +8,7 @@
 import Foundation
 
 enum HTTPMethod: String {
-    case post = "POST", put = "PUT", delete = "DELETE", get = "GET"
+    case post = "POST", put = "PUT", patch = "PATCH", delete = "DELETE", get = "GET"
 }
 
 extension URLRequest {

@@ -13,7 +13,7 @@ import Strongbox
     private static var keychain = Strongbox()
     
     // MARK: - Public
-    /// This is the **retailer code** creating the transaction.
+    /// The **retailer code** creating the transaction.
     @objc public static var retailerCode: String? {
         get { return self.keychain.unarchive(objectForKey: "BUCKET_RETAILER_CODE") as? String }
         set {
@@ -22,7 +22,7 @@ import Strongbox
         }
     }
     
-    /// This contains the information about the retailer such as the phone number, adress, and etc.
+    /// Contains the information about the retailer such as the phone number, adress, and etc.
     @objc public static var retailerInfo: RetailerInfo? {
         get { return self.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
         set {
@@ -31,9 +31,9 @@ import Strongbox
         }
     }
     
-    // MARK: - Semi Private
-    /// This is the terminal secret of the retailer. This is used to authorize requests with Bucket.
-    internal static var terminalSecret: String? {
+    // MARK: - Internal
+    /// The terminal secret of the retailer used to authorize requests with Bucket.
+    static var terminalSecret: String? {
         get { return self.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_SECRET") as? String }
         set {
             if newValue.isNil { self.keychain.remove(key: "BUCKET_TERMINAL_SECRET") }
@@ -41,8 +41,8 @@ import Strongbox
         }
     }
     
-    /// This is the **serial number** of the terminal or device creating the transaction.
-    internal static var terminalId: String? {
+    /// The **serial number** of the terminal or device creating the transaction.
+    static var terminalCode: String? {
         get { return self.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_ID") as? String }
         set {
             if newValue.isNil { self.keychain.remove(key: "BUCKET_TERMINAL_ID") }
@@ -50,7 +50,25 @@ import Strongbox
         }
     }
     
-    internal static var usesNaturalChangeFunction: Bool {
+    static var isApproved: Bool {
+        get {
+            return self.keychain.unarchive(objectForKey: "BUCKET_IS_APPROVED") as? Bool ?? false
+        }
+        set {
+            _ = self.keychain.archive(newValue, key: "BUCKET_IS_APPROVED")
+        }
+    }
+    
+    static var requireEmployeeCode: Bool {
+        get {
+            return self.keychain.unarchive(objectForKey: "BUCKET_REQUIRE_EMPLOYEE_CODE") as? Bool ?? false
+        }
+        set {
+            _ = self.keychain.archive(newValue, key: "BUCKET_REQUIRE_EMPLOYEE_CODE")
+        }
+    }
+
+    static var usesNaturalChangeFunction: Bool {
         get {
             return self.keychain.unarchive(objectForKey: "BUCKET_USES_NATURAL_CHANGE") as? Bool ?? false
         }
@@ -59,7 +77,7 @@ import Strongbox
         }
     }
     
-    internal static var denoms: [Double]? {
+    static var denoms: [Double]? {
         get {
             return self.keychain.unarchive(objectForKey: "BUCKET_DENOMS") as? [Double]
         }

@@ -24,24 +24,16 @@ extension String {
     }
     
     var isValidStartEndDate: Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:m:ssZZZ"
-        
+        let dateFormatter = DateFormatter(format: "yyyy-MM-dd HH:m:ssZZZ")   
         if let _ = dateFormatter.date(from: self) { return true } else { return false }
     }
     
-    var isNotValidStartEndDate: Bool {
-        return !self.isValidStartEndDate
-    }
+    var isNotValidStartEndDate: Bool { return !self.isValidStartEndDate }
     
     var isValidDayDate: Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
+        let dateFormatter = DateFormatter(format: "yyyy-MM-dd")
         if let _ = dateFormatter.date(from: self) { return true } else { return false }
     }
     
-    var isNotValidDayDate: Bool {
-        return !self.isValidDayDate
-    }
+    var isNotValidDayDate: Bool { return !self.isValidDayDate }
 }

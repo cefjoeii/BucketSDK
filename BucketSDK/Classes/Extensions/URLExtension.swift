@@ -8,27 +8,23 @@
 import Foundation
 
 extension URL {
-    static var closeInterval: URL = Bucket.shared.environment.url.appendingPathComponent("closeinterval")
-    static var createTransaction: URL = Bucket.shared.environment.url.appendingPathComponent("transaction")
-    
-    // This URL for the bill denominations does not change between development and production. We default to USD.
-    static var billDenominations = URL(string: "https://bucketresources.blob.core.windows.net/static/Currencies.json")!
-    
-    // Add query parameters and set the value to itself. Thus, mutating.
-    public mutating func addQueryParams(_ queryParams: [String: Any]) {
-        self = self.addingQueryParams(queryParams)
+    /// Adds query parameters and set the value to itself. Thus, mutating.
+    /// - Parameter queries: The queries to be appended as a `Dictionary`.
+    mutating func appendQueriesComponent(_ queries: [String: Any]) {
+        self = self.apendingQueriesComponent(queries)
     }
     
-    // Add query parameters to your URL object using a dictionary and return.
-    public func addingQueryParams(_ queryParams: [String: Any]) -> URL {
+    /// Adds query parameters and returns the new URL.
+    /// - Parameter queries: The queries to be appended as a `Dictionary`.
+    func apendingQueriesComponent(_ queries: [String: Any]) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)
         // Start putting together the paths:
-        for param in queryParams {
+        for query in queries {
             // If the query items is nil, we need to initialize so we can actually add the items.
             if components?.queryItems.isNil == true {
                 components?.queryItems = []
             }
-            let queryItem = URLQueryItem(name: param.key, value: String(describing: param.value))
+            let queryItem = URLQueryItem(name: query.key, value: String(describing: query.value))
             components?.queryItems?.append(queryItem)
         }
         

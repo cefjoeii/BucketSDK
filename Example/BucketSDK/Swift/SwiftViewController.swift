@@ -30,7 +30,7 @@ class SwiftViewController: UIViewController {
         // You will need to set the retailer id, retailer secret, and terminal id.
         // Bucket.Credentials.retailerCode = "6644211a-c02a-4413-b307-04a11b16e6a4"
         // Bucket.Credentials.terminalSecret = "9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw=="
-        // Bucket.Credentials.terminalId = "qwerty1234"
+        // Bucket.Credentials.terminalCode = "qwerty1234"
         
         // Now before using the Bucket.shared.bucketAmount(for: entireChangeAmountWithBills), you will need to set your bill denomination.
 //        Bucket.shared.fetchBillDenominations(for: .usd) { (success, error) in

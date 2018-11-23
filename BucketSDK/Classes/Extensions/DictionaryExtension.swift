@@ -8,7 +8,6 @@
 import Foundation
 
 extension Dictionary {
-    
     var data: Data? {
         return try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
     }
@@ -17,7 +16,7 @@ extension Dictionary {
         do {
             let data = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
             
-            // Now lets cast this back into a string
+            // Now lets cast this back into a string.
             return String(data: data, encoding: .utf8)
         } catch {
             return nil

@@ -17,31 +17,35 @@ struct BucketErrorResponse: Decodable {
     }
 
     func asError(_ code: Int?) -> Error {
-        return NSError(domain: "", code: code ?? 400, userInfo: [NSLocalizedDescriptionKey: message ?? "Unknown issue. Please try again later."])
+        return NSError(domain: "", code: code ?? 400, userInfo: [NSLocalizedDescriptionKey: message ?? BucketErrorResponse.unknown.localizedDescription])
     }
     
     // MARK: - Offline
-    static var unknown: Error {
-        return NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Unknown issue.  Please try again later."])
+    static var invalidRetailer: Error {
+        return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please check retailer id and secret code."])
+    }
+    
+    static var noTerminalId: Error {
+        return NSError(domain: "", code: 403, userInfo: [NSLocalizedDescriptionKey: "You must send in a 'terminalCode' key with the serial number of the device as the value."])
     }
     
     static var invalidCountryCode: Error {
         return NSError(domain: "", code: 409, userInfo: [NSLocalizedDescriptionKey: "No such country code found."])
     }
     
-    static var invalidRetailer: Error {
-        return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please Check Retailer Id and Secret Code."])
+    static var invalidEmployeeCode: Error {
+        return NSError(domain: "", code: 412, userInfo: [NSLocalizedDescriptionKey: "Please check your employee code."])
     }
     
-    static var invalidRange: Error {
-        return NSError(domain: "", code: 402, userInfo: [NSLocalizedDescriptionKey: "Please make sure that the range is valid."])
-    }
-    
-    static var noTerminalId: Error {
-        return NSError(domain: "", code: 403, userInfo: [NSLocalizedDescriptionKey: "You must send in a 'terminalId' key with the serial number of the device as the value."])
+    static var invalidDateRange: Error {
+        return NSError(domain: "", code: 419, userInfo: [NSLocalizedDescriptionKey: "Please make sure that the date is valid."])
     }
     
     static var invalidCode: Error {
         return NSError(domain: "", code: 450, userInfo: [NSLocalizedDescriptionKey: "Please check your customer code."])
+    }
+    
+    static var unknown: Error {
+        return NSError(domain: "", code: 520, userInfo: [NSLocalizedDescriptionKey: "Unknown issue.  Please try again later."])
     }
 }

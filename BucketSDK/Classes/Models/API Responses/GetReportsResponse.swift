@@ -1,11 +1,11 @@
 //
-//  FetchReportsResponse.swift
+//  GetReportsResponse.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 11/20/18.
 //
 
-@objc public class FetchReportsResponse: NSObject, Decodable {
+@objc public class GetReportsResponse: NSObject, Decodable {
     @objc public let bucketTotal: Double = 0
     @objc public let transactions: [ReportTransaction]?
 }

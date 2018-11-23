@@ -7,9 +7,8 @@
 
 import Foundation
 
-@objc public extension DateFormatter {
-    
-    public convenience init(format: String) {
+extension DateFormatter {
+    convenience init(format: String) {
         self.init()
         self.dateFormat = format
     }
