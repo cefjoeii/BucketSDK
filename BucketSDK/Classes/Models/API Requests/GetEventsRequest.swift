@@ -1,0 +1,37 @@
+//
+//  GetEventsRequest.swift
+//  BucketSDK
+//
+//  Created by Ceferino Jose II on 11/26/18.
+//
+
+import Foundation
+
+@objc public class GetEventsRequest: NSObject {
+    // MARK: - Headers
+    /// This will **position** the array of transactions for the request.
+    @objc public dynamic var offset: Int = 0
+    
+    /// This limits the **number** of transactions that are returned in the transactions array.
+    /// The **maximum limit** for this endpoint is **500**.
+    @objc public dynamic var limit: Int = 200
+    
+    // MARK: - Body
+    var range: [String: Any]
+    
+    @objc public init(startString start: String, endString end: String) {
+        self.range = ["start": start, "end": end]
+    }
+    
+    @objc public init(startInt start: Int, endInt end: Int) {
+        self.range = ["start": start, "end": end]
+    }
+    
+    @objc public init(id: Int) {
+        self.range = ["id": id]
+    }
+    
+    var body: [String: Any] {
+        return self.range
+    }
+}

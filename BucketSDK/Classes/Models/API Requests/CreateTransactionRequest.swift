@@ -1,5 +1,5 @@
 //
-//  TransactionRequest.swift
+//  CreateTransactionRequest.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 11/16/18.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc public class TransactionRequest: NSObject {
+@objc public class CreateTransactionRequest: NSObject {
     // MARK: - Headers
     /// The four digit code assigned to the employee. **This only required when the retailer turns on employee codes.**
     @objc public dynamic var employeeCode: String?

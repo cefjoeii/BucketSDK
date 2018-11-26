@@ -10,26 +10,26 @@ import Foundation
 extension Bucket {
     /// Allows a POS integration developer to give a summed history of the transactions.
     @objc public func getReports(
-        _ reportRequest: ReportRequest,
+        _ getReportRequest: GetReportRequest,
         completion: @escaping ((_ success: Bool, _ response: GetReportsResponse?, _ error: Error?) -> Void)
         ) {
         
         // Some of these pitfalls should never occur unless the SDK is manually modified.
-        switch reportRequest.range.count {
+        switch getReportRequest.range.count {
         case 1:
-            if !(reportRequest.range["day"] is String && (reportRequest.range["day"] as! String).isValidDayDate) {
+            if !(getReportRequest.range["day"] is String && (getReportRequest.range["day"] as! String).isValidDayDate) {
                 // Return if the day is not a String and its format is invalid.
                 completion(false, nil, BucketErrorResponse.invalidDateRange)
                 return
             }
         case 2:
-            if reportRequest.range["start"] is String && reportRequest.range["end"] is String {
-                if (reportRequest.range["start"] as! String).isNotValidStartEndDate || (reportRequest.range["end"] as! String).isNotValidStartEndDate {
+            if getReportRequest.range["start"] is String && getReportRequest.range["end"] is String {
+                if (getReportRequest.range["start"] as! String).isNotValidStartEndDate || (getReportRequest.range["end"] as! String).isNotValidStartEndDate {
                     // Return if neither start nor end is a valid date.
                     completion(false, nil, BucketErrorResponse.invalidDateRange)
                     return
                 }
-            } else if !(reportRequest.range["start"] is Int && reportRequest.range["end"] is Int) {
+            } else if !(getReportRequest.range["start"] is Int && getReportRequest.range["end"] is Int) {
                 // Return if the start and end is neither a pair of Ints nor a pair of Strings above.
                 completion(false, nil, BucketErrorResponse.invalidDateRange)
                 return
@@ -41,7 +41,7 @@ extension Bucket {
         }
         
         // Return and tell the developer that the employee code is required.
-        if Credentials.requireEmployeeCode && reportRequest.employeeCode.isNil {
+        if Credentials.requireEmployeeCode && getReportRequest.employeeCode.isNil {
             completion(false, nil, BucketErrorResponse.invalidEmployeeCode)
             return
         }
@@ -63,7 +63,7 @@ extension Bucket {
         
         var url = Bucket.shared.environment.url
         url.appendPathComponent("report")
-        url.appendQueriesComponent(["offset": reportRequest.offset, "limit": reportRequest.limit])
+        url.appendQueriesComponent(["offset": getReportRequest.offset, "limit": getReportRequest.limit])
         
         var request = URLRequest(url: url)
         request.setMethod(.post)
@@ -71,10 +71,10 @@ extension Bucket {
         request.addHeader("terminalCode", terminalCode)
         request.addHeader("country", country)
         request.addHeader("x-functions-key", terminalSecret)
-        if let employeeCode = reportRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
-        if let eventId = reportRequest.eventId { request.addHeader("eventId", eventId) }
+        if let employeeCode = getReportRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
+        if let eventId = getReportRequest.eventId { request.addHeader("eventId", eventId) }
         
-        request.setBody(reportRequest.body)
+        request.setBody(getReportRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { completion(false, nil, error); return }

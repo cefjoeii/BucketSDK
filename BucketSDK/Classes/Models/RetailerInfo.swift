@@ -55,7 +55,7 @@ import Foundation
         let postalCode = aDecoder.decodeObject(forKey: "BUCKET_POSTAL_CODE") as? String
         let city = aDecoder.decodeObject(forKey: "BUCKET_CITY") as? String
         let state = aDecoder.decodeObject(forKey: "BUCKET_STATE") as? String
-        let countryCode = aDecoder.decodeObject(forKey: "BUCKET_COUNTRY_CODE") as? String
+        let countryCode = aDecoder.decodeObject(forKey: "BUCKET_COUNTRY") as? String
         
         self.init(retailerName, retailerPhone, address1, address2, address3, postalCode, city, state, countryCode)
     }

@@ -1,5 +1,5 @@
 //
-//  ReportRequest.swift
+//  GetReportRequest.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 11/23/18.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc public class ReportRequest: NSObject {
+@objc public class GetReportRequest: NSObject {
     // MARK: - Headers
     /// This is **only required if** the retailer is **set to require employeeCodes**.
     /// If you want to change the report to show only the transactions and total for a specific employee,

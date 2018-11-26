@@ -8,76 +8,127 @@
 import Foundation
 
 extension Bucket {
-    @objc public func fetchEvents(
-        range: [String: Any],
-        offset: Int = 0,
-        limit: Int = 200,
-        completion: @escaping ((_ response: GetEventsResponse?, _ success: Bool, _ error: Error?) -> Void)
+    @objc public func getEvents(
+        _ getEventRequest: GetEventsRequest,
+        completion: @escaping ((_ success: Bool, _ response: GetEventsResponse?, _ error: Error?) -> Void)
         ) {
         
-        // Return if the range dictionary count is invalid.
-        if range.count < 1 || range.count > 2 { completion(nil, false, BucketErrorResponse.invalidDateRange); return }
-        
-        // Return if the id is not an integer.
-        if range.count == 1 && !(range["id"] is Int) {
-            // TODO: Make specific error types and messages.
-            completion(nil, false, BucketErrorResponse.invalidDateRange)
-            return
-        }
-        
-        if range["start"] is String && range["end"] is String {
-            // Return if start and end are both not valid dates
-            if (range["start"] as! String).isNotValidStartEndDate || (range["end"] as! String).isNotValidStartEndDate {
-                completion(nil, false, BucketErrorResponse.invalidDateRange)
+        // Some of these pitfalls should never occur unless the SDK is manually modified.
+        switch getEventRequest.range.count {
+        case 1:
+            if !(getEventRequest.range["id"] is Int) {
+                // Return if the id is not an Int
+                completion(false, nil, BucketErrorResponse.eventIdDNE)
                 return
             }
-        } else if !(range["start"] is Int && range["end"] is Int) {
-            // Return if start and end are neither both Strings nor both Ints
-            completion(nil, false, BucketErrorResponse.invalidDateRange)
+        case 2:
+            if getEventRequest.range["start"] is String && getEventRequest.range["end"] is String {
+                if (getEventRequest.range["start"] as! String).isNotValidStartEndDate || (getEventRequest.range["end"] as! String).isNotValidStartEndDate {
+                    // Return if neither start nor end is a valid date.
+                    completion(false, nil, BucketErrorResponse.invalidDateRange)
+                    return
+                }
+            } else if !(getEventRequest.range["start"] is Int && getEventRequest.range["end"] is Int) {
+                // Return if the start and end is neither a pair of Ints nor a pair of Strings above.
+                completion(false, nil, BucketErrorResponse.invalidDateRange)
+                return
+            }
+        default:
+            // Return if the range dictionary count is invalid.
+            completion(false, nil, BucketErrorResponse.invalidDateRange)
             return
         }
         
-        guard let retailerId = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(nil, false, BucketErrorResponse.invalidRetailer)
+        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
+            completion(false, nil, BucketErrorResponse.invalidRetailer)
             return
         }
         
-        guard let terminalId = Credentials.terminalCode else {
-            completion(nil, false, BucketErrorResponse.noTerminalId)
+        guard let terminalCode = Credentials.terminalCode else {
+            completion(false, nil, BucketErrorResponse.noTerminalId)
             return
         }
         
-        guard let countryCode = Credentials.retailerInfo?.country else {
-            completion(nil, false, BucketErrorResponse.invalidCountryCode)
+        guard let country = Credentials.retailerInfo?.country else {
+            completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
         
-        let url = Bucket.shared.environment.url.appendingPathComponent("events").apendingQueriesComponent(["offset": offset, "limit": limit])
+        let url = Bucket.shared.environment.url
+            .appendingPathComponent("events")
+            .apendingQueriesComponent(["offset": getEventRequest.offset, "limit": getEventRequest.limit])
+        
         var request = URLRequest(url: url)
         request.setMethod(.post)
-        
-        request.addHeader("retailerId", retailerId)
-        request.addHeader("terminalCode", terminalId)
-        request.addHeader("countryId", countryCode)
+        request.addHeader("retailerCode", retailerCode)
+        request.addHeader("terminalCode", terminalCode)
+        request.addHeader("country", country)
         request.addHeader("x-functions-key", terminalSecret)
-        
-        request.setBody(range)
+        request.setBody(getEventRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else { completion(nil, false, error); return }
+            guard let data = data else { completion(false, nil, error); return }
             
             if response.isSuccess {
                 do {
                     // Map the json response to the model class.
                     let response = try JSONDecoder().decode(GetEventsResponse.self, from: data)
                     
-                    completion(response, true, nil)
+                    completion(true, response, nil)
                 } catch let error {
-                    completion(nil, false, error)
+                    completion(false, nil, error)
                 }
             } else {
                 let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
-                completion(nil, false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
+                completion(false, nil, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
+            }
+            }.resume()
+    }
+    
+    @objc public func createEvent(
+        _ createEventRequest: CreateEventRequest,
+        completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)
+        ) {
+        
+        if createEventRequest.start.isNotValidStartEndDate || createEventRequest.end.isNotValidStartEndDate {
+            // Return if neither start nor end is a valid date.
+            completion(false, BucketErrorResponse.invalidDateRange)
+            return
+        }
+        
+        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
+            completion(false, BucketErrorResponse.invalidRetailer)
+            return
+        }
+        
+        guard let terminalCode = Credentials.terminalCode else {
+            completion(false, BucketErrorResponse.noTerminalId)
+            return
+        }
+        
+        guard let country = Credentials.retailerInfo?.country else {
+            completion(false, BucketErrorResponse.invalidCountryCode)
+            return
+        }
+        
+        let url = Bucket.shared.environment.url.appendingPathComponent("event")
+        
+        var request = URLRequest(url: url)
+        request.setMethod(.put)
+        request.addHeader("retailerCode", retailerCode)
+        request.addHeader("terminalCode", terminalCode)
+        request.addHeader("country", country)
+        request.addHeader("x-functions-key", terminalSecret)
+        request.setBody(createEventRequest.body)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else { completion(false, error); return }
+            
+            if response.isSuccess {
+                completion(true, nil)
+            } else {
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion(false, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
             }
             }.resume()
     }

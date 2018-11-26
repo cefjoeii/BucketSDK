@@ -10,12 +10,12 @@ import Foundation
 extension Bucket {
     /// Allows a POS integration developer add a transaction.
     @objc public func createTransaction(
-        _ transactionRequest: TransactionRequest,
+        _ createTransactionRequest: CreateTransactionRequest,
         completion: @escaping (_ success: Bool, _ response: CreateTransactionResponse?, _ error: Error?) -> Void
         ) {
         
         // Return and tell the developer that the employee code is required.
-        if Credentials.requireEmployeeCode && transactionRequest.employeeCode.isNil {
+        if Credentials.requireEmployeeCode && createTransactionRequest.employeeCode.isNil {
             completion(false, nil, BucketErrorResponse.invalidEmployeeCode)
             return
         }
@@ -42,9 +42,9 @@ extension Bucket {
         request.addHeader("terminalCode", terminalCode)
         request.addHeader("country", country)
         request.addHeader("x-functions-key", terminalSecret)
-        if let employeeCode = transactionRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
-        if let eventId = transactionRequest.eventId { request.addHeader("eventId", eventId) }
-        request.setBody(transactionRequest.body)
+        if let employeeCode = createTransactionRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
+        if let eventId = createTransactionRequest.eventId { request.addHeader("eventId", eventId) }
+        request.setBody(createTransactionRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {completion(false, nil, error); return }

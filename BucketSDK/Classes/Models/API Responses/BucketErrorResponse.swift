@@ -21,6 +21,10 @@ struct BucketErrorResponse: Decodable {
     }
     
     // MARK: - Offline
+    static var eventIdDNE: Error {
+         return NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "The event ID does not exist."])
+    }
+    
     static var invalidRetailer: Error {
         return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please check retailer id and secret code."])
     }
