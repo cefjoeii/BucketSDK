@@ -40,14 +40,20 @@ import Foundation
     /// Since you wouldn't know their employeeCode, you can filter the report by their id.
     @objc public dynamic var reportEmployeeId: Int = -1
     
+    /// - Parameter startString: This date is formatted as 'yyyy-MM-dd HH:m:ssZZZ'
+    /// - Parameter endString: This date is formatted as 'yyyy-MM-dd HH:m:ssZZZ'
     @objc public init(startString start: String, endString end: String) {
         self.range = ["start": start, "end": end]
     }
     
+    /// - Parameter startInt: The starting epoch integer in SECONDS that is UTC based.
+    /// - Parameter endInt: The ending epoch integer in SECONDS that is UTC based.
     @objc public init(startInt start: Int, endInt end: Int) {
         self.range = ["start": start, "end": end]
     }
     
+    /// - Parameter day: This is formatted as 'yyyy-MM-dd'.
+    ///   This covers starting from 12AM that day to 11:59:59PM that day.
     @objc public init(day: String) {
         self.range = ["day": day]
     }

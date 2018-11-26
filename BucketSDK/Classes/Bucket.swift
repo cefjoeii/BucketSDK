@@ -18,11 +18,11 @@ import Strongbox
     /// Registers a new device with Bucket.
     /// Make sure to set `Credentials.retailerCode` first before calling this function.
     /// - Parameter country: This is the **numeric** country id, or the **alpha** two letter country code.
-    @objc public func registerTerminal(country: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        guard let retailerCode = Credentials.retailerCode else {
-            completion(false, BucketErrorResponse.invalidRetailer)
-            return
-        }
+    @objc public func registerTerminal(
+        retailerCode: String,
+        country: String,
+        completion: @escaping (_ success: Bool, _ error: Error?) -> Void
+        ) {
         
         // This device id changes whenever you uninstall and reinstall the app.
         // We save the value to the keychain only once and when it's nil.

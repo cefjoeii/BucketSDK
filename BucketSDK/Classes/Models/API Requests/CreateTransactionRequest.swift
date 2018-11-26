@@ -16,7 +16,7 @@ import Foundation
     @objc public dynamic var eventId: String?
     
     // MARK: - Body
-    /// This is the currency described in decimal. This is a required field.
+    /// The currency described in decimal. This is a required field.
     @objc public dynamic var amount: Double
     
     /// The entire amount with tax, for the items purchased at the point of the sale. Represented in decimal.
@@ -32,6 +32,7 @@ import Foundation
     /// If this is passed in, only sample users can redeem this code.
     @objc public dynamic var sample: Bool = false
     
+    /// - Parameter amount: The currency described in decimal. This is a required field.
     @objc public init(amount: Double) {
         self.amount = amount
     }

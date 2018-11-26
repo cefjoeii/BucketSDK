@@ -27,7 +27,7 @@ import Foundation
     @objc public let locationId: String?
     
     /// The retailer-defined unique id of the transaction.
-    /// - Example - Use the internal id to the POS to relate back to the bucket defined unique id.
+    /// - Example: Use the internal id to the POS to relate back to the bucket defined unique id.
     @objc public let clientTransactionId: String?
     
     init(json: [String: Any]?) {

@@ -19,14 +19,19 @@ import Foundation
     // MARK: - Body
     var range: [String: Any]
     
+    /// - Parameter startString: This date is formatted as 'yyyy-MM-dd HH:m:ssZZZ'
+    /// - Parameter endString: This date is formatted as 'yyyy-MM-dd HH:m:ssZZZ'
     @objc public init(startString start: String, endString end: String) {
         self.range = ["start": start, "end": end]
     }
     
+    /// - Parameter startInt: This is the starting epoch integer in SECONDS that is UTC based.
+    /// - Parameter endInt: This is the ending epoch integer in SECONDS that is UTC based.
     @objc public init(startInt start: Int, endInt end: Int) {
         self.range = ["start": start, "end": end]
     }
     
+    /// - Parameter id: The specific id of the event.
     @objc public init(id: Int) {
         self.range = ["id": id]
     }

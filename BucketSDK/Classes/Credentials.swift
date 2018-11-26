@@ -12,9 +12,18 @@ import Strongbox
     // Instantiate Keychain to store small sensitive information such as the retailerCode and terminalSecret.
     private static var keychain = Strongbox()
     
-    // MARK: - Public
+    // MARK: - Public(get) Internal(set)
+    /// Contains the information about the retailer such as the phone number, adress, and etc.
+    @objc public static internal(set) var retailerInfo: RetailerInfo? {
+        get { return self.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
+        set {
+            if newValue.isNil { self.keychain.remove(key: "BUCKET_RETAILER_INFO") }
+            else { _ = self.keychain.archive(newValue!, key: "BUCKET_RETAILER_INFO") }
+        }
+    }
+    
     /// The **retailer code** creating the transaction.
-    @objc public static var retailerCode: String? {
+    @objc public static internal(set) var retailerCode: String? {
         get { return self.keychain.unarchive(objectForKey: "BUCKET_RETAILER_CODE") as? String }
         set {
             if newValue.isNil { self.keychain.remove(key: "BUCKET_RETAILER_CODE") }
@@ -22,14 +31,6 @@ import Strongbox
         }
     }
     
-    /// Contains the information about the retailer such as the phone number, adress, and etc.
-    @objc public static var retailerInfo: RetailerInfo? {
-        get { return self.keychain.unarchive(objectForKey: "BUCKET_RETAILER_INFO") as? RetailerInfo}
-        set {
-            if newValue.isNil { self.keychain.remove(key: "BUCKET_RETAILER_INFO") }
-            else { _ = self.keychain.archive(newValue!, key: "BUCKET_RETAILER_INFO") }
-        }
-    }
     
     // MARK: - Internal
     /// The terminal secret of the retailer used to authorize requests with Bucket.

@@ -17,7 +17,7 @@ struct BucketErrorResponse: Decodable {
     }
 
     func asError(_ code: Int?) -> Error {
-        return NSError(domain: "", code: code ?? 400, userInfo: [NSLocalizedDescriptionKey: message ?? BucketErrorResponse.unknown.localizedDescription])
+        return NSError(domain: "", code: code ?? 520, userInfo: [NSLocalizedDescriptionKey: message ?? BucketErrorResponse.unknown.localizedDescription])
     }
     
     // MARK: - Offline

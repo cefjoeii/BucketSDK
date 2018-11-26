@@ -28,9 +28,7 @@ class SwiftTests: XCTestCase {
     func testRegisterTerminal() {
         let expectation = XCTestExpectation()
         
-        Credentials.retailerCode = "bckt-1"
-        
-        Bucket.shared.registerTerminal(country: "us") { (success, error) in
+        Bucket.shared.registerTerminal(retailerCode: "bckt-1", country: "us") { (success, error) in
             if success {
                 XCTAssertNil(error)
             } else {
@@ -137,7 +135,7 @@ class SwiftTests: XCTestCase {
         request.clientTransactionId = "clientTransactionId"
         request.employeeCode = "1234"
         request.eventId = nil
-
+        
         Bucket.shared.createTransaction(request) { (success, response, error) in
             if success {
                 XCTAssertNil(error)
