@@ -90,8 +90,38 @@ extension Bucket {
         completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)
         ) {
         
-        if createEventRequest.start.isNotValidStartEndDate || createEventRequest.end.isNotValidStartEndDate {
-            // Return if neither start nor end is a valid date.
+        self.requestCommonEvent(createEventRequest, completion: completion)
+    }
+    
+    @objc public func updateEvent(
+        _ updateEventRequest: UpdateEventRequest,
+        completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)
+        ) {
+        
+        self.requestCommonEvent(updateEventRequest, completion: completion)
+    }
+    
+    private func requestCommonEvent(
+        _ commonEventRequestDelegate: CommonEventRequestDelegate,
+        completion: @escaping ((_ success: Bool, _ error: Error?) -> Void)
+        ) {
+        
+        // Some of these pitfalls should never occur unless the SDK is manually modified.
+        switch commonEventRequestDelegate.range.count {
+        case 2:
+            if commonEventRequestDelegate.range["start"] is String && commonEventRequestDelegate.range["end"] is String {
+                if (commonEventRequestDelegate.range["start"] as! String).isNotValidStartEndDate || (commonEventRequestDelegate.range["end"] as! String).isNotValidStartEndDate {
+                    // Return if neither start nor end is a valid date.
+                    completion(false, BucketErrorResponse.invalidDateRange)
+                    return
+                }
+            } else if !(commonEventRequestDelegate.range["start"] is Int && commonEventRequestDelegate.range["end"] is Int) {
+                // Return if the start and end is neither a pair of Ints nor a pair of Strings above.
+                completion(false, BucketErrorResponse.invalidDateRange)
+                return
+            }
+        default:
+            // Return if the range dictionary count is invalid.
             completion(false, BucketErrorResponse.invalidDateRange)
             return
         }
@@ -119,7 +149,7 @@ extension Bucket {
         request.addHeader("terminalCode", terminalCode)
         request.addHeader("country", country)
         request.addHeader("x-functions-key", terminalSecret)
-        request.setBody(createEventRequest.body)
+        request.setBody(commonEventRequestDelegate.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { completion(false, error); return }

@@ -315,8 +315,8 @@ class SwiftTests: XCTestCase {
         let request = CreateEventRequest(
             eventName: "eventName",
             eventMessage: "eventMessage",
-            start: "This is an invalid start date String.",
-            end: "This is an invalid end date String."
+            startString: "This is an invalid start date String.",
+            endString: "This is an invalid end date String."
         )
         
         Bucket.shared.createEvent(request) { (success, error) in
@@ -334,8 +334,8 @@ class SwiftTests: XCTestCase {
         let request = CreateEventRequest(
             eventName: "eventName",
             eventMessage: "eventMessage",
-            start: "2018-11-25 00:00:00+0800",
-            end: "2018-11-25 23:59:59+0800"
+            startString: "2018-11-25 00:00:00+0800",
+            endString: "2018-11-25 23:59:59+0800"
         )
         
         Bucket.shared.createEvent(request) { (success, error) in

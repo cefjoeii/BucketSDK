@@ -1,5 +1,5 @@
 //
-//  CreateEventRequest.swift
+//  UpdateEventRequest.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 11/26/18.
@@ -7,9 +7,13 @@
 
 import Foundation
 
-@objc public class CreateEventRequest: NSObject, CommonEventRequestDelegate {
+@objc public class UpdateEventRequest: NSObject, CommonEventRequestDelegate {
     // MARK: - Body
     var range: [String: Any]
+    
+    /// The id of the event.
+    /// This is to modify the message or the name.
+    @objc public let id: Int
     
     /// The name of the event.
     @objc public let eventName: String
@@ -19,9 +23,10 @@ import Foundation
     
     /// - Parameter eventName: The name of the event.
     /// - Parameter eventMessage: The message of the event.
-    /// - Parameter startString: The date format is yyyy-MM-dd HH:mm:ssZZZ.
-    /// - Parameter endString: The date format is yyyy-MM-dd HH:mm:ssZZZ.
-    @objc public init(eventName: String, eventMessage: String, startString start: String, endString end: String) {
+    /// - Parameter start: The date format is yyyy-MM-dd HH:mm:ssZZZ.
+    /// - Parameter end: The date format is yyyy-MM-dd HH:mm:ssZZZ.
+    @objc public init(id: Int, eventName: String, eventMessage: String, startString start: String, endString end: String) {
+        self.id = id
         self.eventName = eventName
         self.eventMessage = eventMessage
         self.range = ["start": start, "end": end]
@@ -29,9 +34,10 @@ import Foundation
     
     /// - Parameter eventName: The name of the event.
     /// - Parameter eventMessage: The message of the event.
-    /// - Parameter startInt: The starting epoch integer in SECONDS that is UTC based.
-    /// - Parameter endInt: The ending epoch integer in SECONDS that is UTC based.
-    @objc public init(eventName: String, eventMessage: String, startInt start: String, endInt end: String) {
+    /// - Parameter start: The date format is yyyy-MM-dd HH:mm:ssZZZ.
+    /// - Parameter end: The date format is yyyy-MM-dd HH:mm:ssZZZ.
+    @objc public init(id: Int, eventName: String, eventMessage: String, start: String, end: String) {
+        self.id = id
         self.eventName = eventName
         self.eventMessage = eventMessage
         self.range = ["start": start, "end": end]
@@ -39,6 +45,7 @@ import Foundation
     
     var body: [String: Any] {
         var json = self.range
+        json["id"] = self.id
         json["eventName"] = self.eventName
         json["eventMessage"] = self.eventMessage
         

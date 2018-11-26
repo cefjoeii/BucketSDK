@@ -61,15 +61,15 @@ extension Bucket {
     
     /// Allows POS integration developer to refund a transaction that has not been redeemed by a user in Bucket's system.
     @objc public func refundTransaction(customerCode: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        self.updateTransaction(customerCode: customerCode, method: .patch, completion: completion)
+        self.makeCommonTransactionRequest(customerCode: customerCode, method: .patch, completion: completion)
     }
     
     /// Allows POS integration developer delete a transaction that has not been redeemed by a user in Bucket's system.
     @objc public func deleteTransaction(customerCode: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        self.updateTransaction(customerCode: customerCode, method: .delete, completion: completion)
+        self.makeCommonTransactionRequest(customerCode: customerCode, method: .delete, completion: completion)
     }
     
-    private func updateTransaction(customerCode: String, method: HTTPMethod, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    private func makeCommonTransactionRequest(customerCode: String, method: HTTPMethod, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
             completion(false, BucketErrorResponse.invalidRetailer)
             return
