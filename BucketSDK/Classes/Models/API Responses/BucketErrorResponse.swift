@@ -21,16 +21,16 @@ struct BucketErrorResponse: Decodable {
     }
     
     // MARK: - Offline
-    static var eventIdDNE: Error {
-         return NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "The event ID does not exist."])
-    }
-    
     static var invalidRetailer: Error {
         return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Please check retailer id and secret code."])
     }
     
     static var noTerminalId: Error {
         return NSError(domain: "", code: 403, userInfo: [NSLocalizedDescriptionKey: "You must send in a 'terminalCode' key with the serial number of the device as the value."])
+    }
+    
+    static var eventIdDNE: Error {
+        return NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "The event ID does not exist."])
     }
     
     static var invalidCountryCode: Error {
@@ -42,7 +42,7 @@ struct BucketErrorResponse: Decodable {
     }
     
     static var invalidDateRange: Error {
-        return NSError(domain: "", code: 419, userInfo: [NSLocalizedDescriptionKey: "Please make sure that the date is valid."])
+        return NSError(domain: "", code: 422, userInfo: [NSLocalizedDescriptionKey: "Please make sure that the date is valid."])
     }
     
     static var invalidCode: Error {

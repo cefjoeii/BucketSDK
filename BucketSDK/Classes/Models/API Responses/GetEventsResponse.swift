@@ -17,4 +17,6 @@ import Foundation
     @objc public let eventMessage: String?
     @objc public let startDate: String?
     @objc public let endDate: String?
+    @objc public let created: String?
+    @objc public let modified: String?
 }

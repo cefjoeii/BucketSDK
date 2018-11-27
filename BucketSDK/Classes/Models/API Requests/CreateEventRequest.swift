@@ -7,15 +7,15 @@
 
 import Foundation
 
-@objc public class CreateEventRequest: NSObject, CommonEventRequestDelegate {
+@objc public class CreateEventRequest: NSObject {
     // MARK: - Body
     var range: [String: Any]
     
     /// The name of the event.
-    @objc public let eventName: String
+    @objc public dynamic var eventName: String
     
     /// The message of the event.
-    @objc public let eventMessage: String
+    @objc public dynamic var eventMessage: String
     
     /// - Parameter eventName: The name of the event.
     /// - Parameter eventMessage: The message of the event.
@@ -31,7 +31,7 @@ import Foundation
     /// - Parameter eventMessage: The message of the event.
     /// - Parameter startInt: The starting epoch integer in SECONDS that is UTC based.
     /// - Parameter endInt: The ending epoch integer in SECONDS that is UTC based.
-    @objc public init(eventName: String, eventMessage: String, startInt start: String, endInt end: String) {
+    @objc public init(eventName: String, eventMessage: String, startInt start: Int, endInt end: Int) {
         self.eventName = eventName
         self.eventMessage = eventMessage
         self.range = ["start": start, "end": end]

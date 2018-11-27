@@ -265,7 +265,7 @@ class SwiftTests: XCTestCase {
     
     func testValidGetEvents() {
         var expectation = XCTestExpectation()
-        var request = GetEventsRequest(startString: "2018-09-01 00:00:00+0800", endString: "2018-11-20 00:00:00+0800")
+        var request = GetEventsRequest(startString: "2018-11-27 00:00:00+0800", endString: "2018-11-27 23:59:59+0800")
         Bucket.shared.getEvents(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
@@ -280,7 +280,7 @@ class SwiftTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
         
         expectation = XCTestExpectation()
-        request = GetEventsRequest(startInt: 1535760000, endInt: 1542672000)
+        request = GetEventsRequest(startInt: 1543276800, endInt: 1543363199)
         Bucket.shared.getEvents(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
@@ -295,7 +295,7 @@ class SwiftTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
         
         expectation = XCTestExpectation()
-        request = GetEventsRequest(id: 121)
+        request = GetEventsRequest(id: 7)
         Bucket.shared.getEvents(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
@@ -319,8 +319,9 @@ class SwiftTests: XCTestCase {
             endString: "This is an invalid end date String."
         )
         
-        Bucket.shared.createEvent(request) { (success, error) in
+        Bucket.shared.createEvent(request) { (success, response, error) in
             XCTAssertFalse(success)
+            XCTAssertNil(response)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
             
@@ -338,8 +339,54 @@ class SwiftTests: XCTestCase {
             endString: "2018-11-25 23:59:59+0800"
         )
         
-        Bucket.shared.createEvent(request) { (success, error) in
+        Bucket.shared.createEvent(request) { (success, response, error) in
             if (success) {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNil(response)
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testInvalidUpdateEvent() {
+        let expectation = XCTestExpectation()
+        let request = UpdateEventRequest(
+            id: 15,
+            eventName: "eventName",
+            eventMessage: "eventMessage",
+            startString: "This is an invalid start date String.",
+            endString: "This is an invalid end date String."
+        )
+        
+        Bucket.shared.updateEvent(request) { (success, response, error) in
+            XCTAssertFalse(success)
+            XCTAssertNil(response)
+            XCTAssertNotNil(error)
+            XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    func testValidUpdateEvent() {
+        let expectation = XCTestExpectation()
+        let request = UpdateEventRequest(
+            id: 15,
+            eventName: "eventName",
+            eventMessage: "eventMessage",
+            startString: "2018-11-25 00:00:00+0800",
+            endString: "2018-11-25 23:59:59+0800"
+        )
+        
+        Bucket.shared.updateEvent(request) { (success, response, error) in
+            if (success) {
+                XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
                 XCTAssertNotNil(error)
