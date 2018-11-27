@@ -17,6 +17,7 @@ fileprivate extension Double {
 
 class SwiftTests: XCTestCase {
     var customerCode = ""
+    var eventId = -1
     
     override func setUp() {
         super.setUp()
@@ -343,6 +344,8 @@ class SwiftTests: XCTestCase {
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
+                
+                self.eventId = response?.id ?? -1
             } else {
                 XCTAssertNil(response)
                 XCTAssertNotNil(error)
@@ -385,6 +388,22 @@ class SwiftTests: XCTestCase {
         )
         
         Bucket.shared.updateEvent(request) { (success, response, error) in
+            if (success) {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testDeleteEvent() {
+        let expectation = XCTestExpectation()
+
+        Bucket.shared.deleteEvent(id: self.eventId) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)

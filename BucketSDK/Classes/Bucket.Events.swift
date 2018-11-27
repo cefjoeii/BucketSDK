@@ -222,4 +222,51 @@ extension Bucket {
             }
             }.resume()
     }
+    
+    @objc public func deleteEvent(
+        id: Int,
+        completion: @escaping ((_ success: Bool, _ response: DeleteEventResponse?, _ error: Error?) -> Void)
+        ) {
+        
+        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
+            completion(false, nil, BucketErrorResponse.invalidRetailer)
+            return
+        }
+        
+        guard let terminalCode = Credentials.terminalCode else {
+            completion(false, nil, BucketErrorResponse.noTerminalId)
+            return
+        }
+        
+        guard let country = Credentials.retailerInfo?.country else {
+            completion(false, nil, BucketErrorResponse.invalidCountryCode)
+            return
+        }
+        
+        let url = Bucket.shared.environment.url.appendingPathComponent("event").appendingPathComponent(String(id))
+        var request = URLRequest(url: url)
+        request.setMethod(.delete)
+        request.addHeader("retailerCode", retailerCode)
+        request.addHeader("terminalCode", terminalCode)
+        request.addHeader("country", country)
+        request.addHeader("x-functions-key", terminalSecret)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else { completion(false, nil, error); return }
+            
+            if response.isSuccess {
+                do {
+                    // Map the json response to the model class.
+                    let response = try JSONDecoder().decode(DeleteEventResponse.self, from: data)
+                    
+                    completion(true, response, nil)
+                } catch let error {
+                    completion(false, nil, error)
+                }
+            } else {
+                let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
+                completion(false, nil, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
+            }
+            }.resume()
+    }
 }

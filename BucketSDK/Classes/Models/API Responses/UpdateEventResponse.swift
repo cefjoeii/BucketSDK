@@ -8,6 +8,6 @@
 import Foundation
 
 @objc public class UpdateEventResponse: NSObject, Decodable {
-    let id: Int?
-    let result: String?
+    @objc public let id: Int = -1
+    @objc public let result: String?
 }
