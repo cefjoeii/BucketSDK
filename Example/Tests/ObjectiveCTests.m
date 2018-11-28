@@ -41,28 +41,20 @@
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
-- (void)testFetchBillDenominations {
-    XCTestExpectation *expectationForUSD =  [[XCTestExpectation alloc] initWithDescription:@"Fetch the USD denominations."];
+- (void)testGetBillDenominations {
+    XCTestExpectation *expectation =  [[XCTestExpectation alloc] init];
     
-    //    [[Bucket shared] fetchBillDenominationsFor:BillDenominationUsd :^(BOOL success, NSError * _Nullable error) {
-    //        XCTAssertTrue(success == YES, @"USD denominations should be fetched.");
-    //        XCTAssertNil(error);
-    //
-    //        [expectationForUSD fulfill];
-    //    }];
+    [[Bucket shared] getBillDenominationsWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
     
-    [self waitForExpectations:[NSArray arrayWithObjects:expectationForUSD,nil] timeout:1];
-    
-    XCTestExpectation *expectationForSGD =  [[XCTestExpectation alloc] initWithDescription:@"Fetch the SGD denominations."];
-    
-    //    [[Bucket shared] fetchBillDenominationsFor:BillDenominationSgd :^(BOOL success, NSError * _Nullable error) {
-    //        XCTAssertTrue(success == YES, @"SGD denominations should be fetched.");
-    //        XCTAssertNil(error);
-    //
-    //        [expectationForSGD fulfill];
-    //    }];
-    
-    [self waitForExpectations:[NSArray arrayWithObjects:expectationForSGD,nil] timeout:1];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
 - (void)testBucketAmount {
