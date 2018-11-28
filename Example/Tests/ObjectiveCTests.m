@@ -132,4 +132,39 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
+- (void) testCreateDetailedTransaction {
+    XCTestExpectation *expectation =[[XCTestExpectation alloc] init];
+    
+    double bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:1.55];
+    CreateTransactionRequest *request = [[CreateTransactionRequest alloc] initWithAmount:bucketAmount];
+    request.totalTransactionAmount = 6.30;
+    request.locationId = @"locationId";
+    request.clientTransactionId = @"clientTransactionId";
+    request.employeeCode = @"1234";
+    request.eventId = nil;
+    
+    [[Bucket shared] createTransaction:request completion:^(BOOL success, CreateTransactionResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNil(error);
+            
+            // Assert response attributes
+            XCTAssertNotNil(response);
+            XCTAssertNotNil(response.customerCode);
+            XCTAssertNotNil(response.qrCode);
+            XCTAssertNotEqual(response.bucketTransactionId, -1);
+            XCTAssertEqual(response.amount, [self roundingDecimalPlaces:bucketAmount precision:2]);
+            XCTAssertTrue([response.locationId isEqualToString:request.locationId]);
+            XCTAssertTrue([response.clientTransactionId isEqualToString:request.clientTransactionId]);
+            
+            customerCode = response.customerCode;
+        } else {
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
 @end
