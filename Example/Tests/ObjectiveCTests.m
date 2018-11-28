@@ -279,4 +279,36 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
 }
 
+- (void) testValidGetEvents {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    GetEventsRequest *request = [[GetEventsRequest alloc] initWithStartString:@"2018-11-27 00:00:00+0800" endString: @"2018-11-27 23:59:59+0800"];
+    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+    
+    expectation = [[XCTestExpectation alloc] init];
+    request = [[GetEventsRequest alloc] initWithStartInt:1543276800 endInt: 1543363199];
+    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
 @end
