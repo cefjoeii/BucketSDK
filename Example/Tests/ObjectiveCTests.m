@@ -16,7 +16,7 @@
 @implementation ObjectiveCTests
 
 NSString *customerCode = @"";
-int eventId = -1;
+long eventId = -1;
 
 -(double) roundingDecimalPlaces:(double)value precision:(int)precision {
     return [NSString stringWithFormat:@"%.*f", precision, value].doubleValue;
@@ -311,11 +311,11 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
-- (void) testInvalidCreateEvents {
+- (void) testInvalidCreateEvent {
     XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
     
-    CreateEventRequest *request = [[CreateEventRequest alloc] initWithEventName:@"iOS SDK Unit Test Event Name"
-                                                                   eventMessage:@"iOS SDK Unit Test Event Message"
+    CreateEventRequest *request = [[CreateEventRequest alloc] initWithEventName:@"(Create) iOS SDK Unit Test Event Name"
+                                                                   eventMessage:@"(Create) iOS SDK Unit Test Event Message"
                                                                     startString:@"This is an invalid start date String."
                                                                       endString:@"This is an invalid end date String."];
     
@@ -331,4 +331,121 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
 }
 
+- (void) testValidCreateEvent {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    CreateEventRequest *request = [[CreateEventRequest alloc] initWithEventName:@"(Create) iOS SDK Unit Test Event Name"
+                                                                   eventMessage:@"(Create) iOS SDK Unit Test Event Message"
+                                                                    startString:@"2018-11-25 00:00:00+0800"
+                                                                      endString:@"2018-11-25 23:59:59+0800"];
+    [[Bucket shared] createEvent:request completion:^(BOOL success, CreateEventResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+            
+            eventId = response.id;
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+    
+    expectation = [[XCTestExpectation alloc] init];
+    request = [[CreateEventRequest alloc] initWithEventName:@"(Create) iOS SDK Unit Test Event Name"
+                                               eventMessage:@"(Create) iOS SDK Unit Test Event Message"
+                                                   startInt:1543276800
+                                                     endInt:1543363199];
+    [[Bucket shared] createEvent:request completion:^(BOOL success, CreateEventResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+            
+            eventId = response.id;
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
+- (void) testInvalidUpdateEvent {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    
+    UpdateEventRequest *request = [[UpdateEventRequest alloc] initWithId:15
+                                                               eventName:@"(Update) iOS SDK Unit Test Event Name"
+                                                            eventMessage:@"(Update) iOS SDK Unit Test Event Message"
+                                                             startString:@"This is an invalid start date String."
+                                                               endString:@"This is an invalid end date String."];
+    
+    [[Bucket shared] updateEvent:request completion:^(BOOL success, UpdateEventResponse * _Nullable response, NSError * _Nullable error) {
+        XCTAssertFalse(success);
+        XCTAssertNil(response);
+        XCTAssertNotNil(error);
+        XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
+}
+
+- (void) testValidUpdateEvent {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    UpdateEventRequest *request = [[UpdateEventRequest alloc] initWithId:eventId
+                                                               eventName:@"(Update) iOS SDK Unit Test Event Name"
+                                                            eventMessage:@"(Update) iOS SDK Unit Test Event Message"
+                                                             startString:@"2018-11-27 00:00:00+0800"
+                                                               endString:@"2018-11-27 23:59:59+0800"];
+    [[Bucket shared] updateEvent:request completion:^(BOOL success, UpdateEventResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+    
+    expectation = [[XCTestExpectation alloc] init];
+    request = [[UpdateEventRequest alloc] initWithId:eventId
+                                           eventName:@"(Update) iOS SDK Unit Test Event Name"
+                                        eventMessage:@"(Update) iOS SDK Unit Test Event Message"
+                                         startInt:1543276800
+                                           endInt:1543363199];
+    [[Bucket shared] updateEvent:request completion:^(BOOL success, UpdateEventResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
+- (void) testDeleteEvent {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    
+    [[Bucket shared] deleteEventWithId:eventId completion:^(BOOL success, DeleteEventResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
 @end

@@ -320,8 +320,8 @@ class SwiftTests: XCTestCase {
     func testInvalidCreateEvent() {
         let expectation = XCTestExpectation()
         let request = CreateEventRequest(
-            eventName: "iOS SDK Unit Test Event Name",
-            eventMessage: "iOS SDK Unit Test Event Message",
+            eventName: "(Create) iOS SDK Unit Test Event Name",
+            eventMessage: "(Create) iOS SDK Unit Test Event Message",
             startString: "This is an invalid start date String.",
             endString: "This is an invalid end date String."
         )
@@ -338,14 +338,35 @@ class SwiftTests: XCTestCase {
     }
     
     func testValidCreateEvent() {
-        let expectation = XCTestExpectation()
-        let request = CreateEventRequest(
-            eventName: "iOS SDK Unit Test Event Name",
-            eventMessage: "iOS SDK Unit Test Event Message",
-            startString: "2018-11-25 00:00:00+0800",
-            endString: "2018-11-25 23:59:59+0800"
+        var expectation = XCTestExpectation()
+        var request = CreateEventRequest(
+            eventName: "(Create) iOS SDK Unit Test Event Name",
+            eventMessage: "(Create) iOS SDK Unit Test Event Message",
+            startString: "2018-11-27 00:00:00+0800",
+            endString: "2018-11-27 23:59:59+0800"
         )
+        Bucket.shared.createEvent(request) { (success, response, error) in
+            if success {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+                
+                self.eventId = response?.id ?? -1
+            } else {
+                XCTAssertNil(response)
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
         
+        expectation = XCTestExpectation()
+        request = CreateEventRequest(
+            eventName: "(Create) iOS SDK Unit Test Event Name",
+            eventMessage: "(Create) iOS SDK Unit Test Event Message",
+            startInt: 1543276800,
+            endInt: 1543363199
+        )
         Bucket.shared.createEvent(request) { (success, response, error) in
             if success {
                 XCTAssertNotNil(response)
@@ -365,9 +386,9 @@ class SwiftTests: XCTestCase {
     func testInvalidUpdateEvent() {
         let expectation = XCTestExpectation()
         let request = UpdateEventRequest(
-            id: 15,
-            eventName: "iOS SDK Unit Test Event Namee (Update Event)",
-            eventMessage: "iOS SDK Unit Test Event Message (Update Event)",
+            id: self.eventId,
+            eventName: "(Update) iOS SDK Unit Test Event Name",
+            eventMessage: "(Update) iOS SDK Unit Test Event Message",
             startString: "This is an invalid start date String.",
             endString: "This is an invalid end date String."
         )
@@ -384,15 +405,34 @@ class SwiftTests: XCTestCase {
     }
     
     func testValidUpdateEvent() {
-        let expectation = XCTestExpectation()
-        let request = UpdateEventRequest(
+        var expectation = XCTestExpectation()
+        var request = UpdateEventRequest(
             id: self.eventId,
-            eventName: "iOS SDK Unit Test Event Name (Update Event)",
-            eventMessage: "iOS SDK Unit Test Event Message (Update Event)",
-            startString: "2018-11-25 00:00:00+0800",
-            endString: "2018-11-25 23:59:59+0800"
+            eventName: "(Update) iOS SDK Unit Test Event Name",
+            eventMessage: "(Update) iOS SDK Unit Test Event Message",
+            startString: "2018-11-27 00:00:00+0800",
+            endString: "2018-11-27 23:59:59+0800"
         )
+        Bucket.shared.updateEvent(request) { (success, response, error) in
+            if success {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
         
+        expectation = XCTestExpectation()
+        request = UpdateEventRequest(
+            id: self.eventId,
+            eventName: "(Update) iOS SDK Unit Test Event Name",
+            eventMessage: "(Update) iOS SDK Unit Test Event Message",
+            startInt: 1543276800,
+            endInt: 1543363199
+        )
         Bucket.shared.updateEvent(request) { (success, response, error) in
             if success {
                 XCTAssertNotNil(response)

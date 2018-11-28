@@ -37,7 +37,7 @@ import Foundation
     /// - Parameter eventMessage: The message of the event.
     /// - Parameter startInt: The starting epoch integer in SECONDS that is UTC based.
     /// - Parameter endInt: The ending epoch integer in SECONDS that is UTC based.
-    @objc public init(id: Int, eventName: String? = nil, eventMessage: String? = nil, start: Int = -1, end: Int = -1) {
+    @objc public init(id: Int, eventName: String? = nil, eventMessage: String? = nil, startInt start: Int = -1, endInt end: Int = -1) {
         self.id = id
         self.eventName = eventName
         self.eventMessage = eventMessage

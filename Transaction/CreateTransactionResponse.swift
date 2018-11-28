@@ -18,10 +18,10 @@ import Foundation
     @objc public let qrCode: UIImage?
     
     /// Bucket-generated unique identifier for this transaction.
-    @objc public var bucketTransactionId: Int = -1
+    @objc public let bucketTransactionId: Int
     
     /// The currency described in decimal.
-    @objc public var amount: Double = 0
+    @objc public let amount: Double
     
     /// The retailer-defined unique identifier for the location of the device.
     @objc public let locationId: String?
