@@ -274,7 +274,7 @@ class SwiftTests: XCTestCase {
         var expectation = XCTestExpectation()
         var request = GetEventsRequest(startString: "2018-11-27 00:00:00+0800", endString: "2018-11-27 23:59:59+0800")
         Bucket.shared.getEvents(request) { (success, response, error) in
-            if (success) {
+            if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
@@ -289,7 +289,7 @@ class SwiftTests: XCTestCase {
         expectation = XCTestExpectation()
         request = GetEventsRequest(startInt: 1543276800, endInt: 1543363199)
         Bucket.shared.getEvents(request) { (success, response, error) in
-            if (success) {
+            if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
@@ -304,7 +304,7 @@ class SwiftTests: XCTestCase {
         expectation = XCTestExpectation()
         request = GetEventsRequest(id: 7)
         Bucket.shared.getEvents(request) { (success, response, error) in
-            if (success) {
+            if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
@@ -347,7 +347,7 @@ class SwiftTests: XCTestCase {
         )
         
         Bucket.shared.createEvent(request) { (success, response, error) in
-            if (success) {
+            if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
                 
@@ -394,7 +394,7 @@ class SwiftTests: XCTestCase {
         )
         
         Bucket.shared.updateEvent(request) { (success, response, error) in
-            if (success) {
+            if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
@@ -410,7 +410,7 @@ class SwiftTests: XCTestCase {
         let expectation = XCTestExpectation()
 
         Bucket.shared.deleteEvent(id: self.eventId) { (success, response, error) in
-            if (success) {
+            if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
