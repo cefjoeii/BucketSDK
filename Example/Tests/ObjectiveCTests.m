@@ -311,4 +311,24 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
+- (void) testInvalidCreateEvents {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    
+    CreateEventRequest *request = [[CreateEventRequest alloc] initWithEventName:@"iOS SDK Unit Test Event Name"
+                                                                   eventMessage:@"iOS SDK Unit Test Event Message"
+                                                                    startString:@"This is an invalid start date String."
+                                                                      endString:@"This is an invalid end date String."];
+    
+    [[Bucket shared] createEvent:request completion:^(BOOL success, CreateEventResponse * _Nullable response, NSError * _Nullable error) {
+        XCTAssertFalse(success);
+        XCTAssertNil(response);
+        XCTAssertNotNil(error);
+        XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
+}
+
 @end
