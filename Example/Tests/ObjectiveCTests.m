@@ -229,4 +229,36 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
 }
 
+- (void) testValidGetReports {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    GetReportRequest *request = [[GetReportRequest alloc] initWithStartString:@"2018-09-01 00:00:00+0800" endString:@"2018-11-20 00:00:00+0800"];
+    [[Bucket shared] getReports:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+    
+    expectation = [[XCTestExpectation alloc] init];
+    request = [[GetReportRequest alloc] initWithStartInt:1535760000 endInt:1542672000];
+    [[Bucket shared] getReports:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
 @end
