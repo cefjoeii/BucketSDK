@@ -163,10 +163,12 @@ class SwiftTests: XCTestCase {
     func testRefundTransaction() {
         let expectation = XCTestExpectation()
         
-        Bucket.shared.refundTransaction(customerCode: self.customerCode) { (success, error) in
+        Bucket.shared.refundTransaction(customerCode: self.customerCode) { (success, response, error) in
             if success {
+                XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
+                XCTAssertNil(response)
                 XCTAssertNotNil(error)
             }
             
@@ -179,10 +181,12 @@ class SwiftTests: XCTestCase {
     func testDeleteTransaction() {
         let expectation = XCTestExpectation()
         
-        Bucket.shared.deleteTransaction(customerCode: self.customerCode) { (success, error) in
+        Bucket.shared.deleteTransaction(customerCode: self.customerCode) { (success, response, error) in
             if success {
+                XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
+                XCTAssertNil(response)
                 XCTAssertNotNil(error)
             }
             
@@ -380,7 +384,7 @@ class SwiftTests: XCTestCase {
     func testValidUpdateEvent() {
         let expectation = XCTestExpectation()
         let request = UpdateEventRequest(
-            id: 15,
+            id: self.eventId,
             eventName: "eventName",
             eventMessage: "eventMessage",
             startString: "2018-11-25 00:00:00+0800",

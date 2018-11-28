@@ -27,6 +27,8 @@
 		6E2164DA21AD5E7500CAB966 /* DeleteEventResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164D921AD5E7500CAB966 /* DeleteEventResponse.swift */; };
 		6E2164E121AD8B9200CAB966 /* Bucket.Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164E021AD8B9200CAB966 /* Bucket.Terminal.swift */; };
 		6E2164E321AD8BE600CAB966 /* Bucket.BillDenominations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164E221AD8BE600CAB966 /* Bucket.BillDenominations.swift */; };
+		6E2164E521AD904600CAB966 /* DeleteTransactionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164E421AD904600CAB966 /* DeleteTransactionResponse.swift */; };
+		6E2164E721AD99B600CAB966 /* RefundTransactionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164E621AD99B600CAB966 /* RefundTransactionResponse.swift */; };
 		6E54AAC921ABE59E00116AC1 /* GetEventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E54AAC821ABE59E00116AC1 /* GetEventsRequest.swift */; };
 		6E54AACB21AC0E8500116AC1 /* CreateEventRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E54AACA21AC0E8500116AC1 /* CreateEventRequest.swift */; };
 		6E54AACD21AC3D2800116AC1 /* UpdateEventRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E54AACC21AC3D2800116AC1 /* UpdateEventRequest.swift */; };
@@ -140,6 +142,8 @@
 		6E2164D921AD5E7500CAB966 /* DeleteEventResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteEventResponse.swift; sourceTree = "<group>"; };
 		6E2164E021AD8B9200CAB966 /* Bucket.Terminal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.Terminal.swift; sourceTree = "<group>"; };
 		6E2164E221AD8BE600CAB966 /* Bucket.BillDenominations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.BillDenominations.swift; sourceTree = "<group>"; };
+		6E2164E421AD904600CAB966 /* DeleteTransactionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTransactionResponse.swift; sourceTree = "<group>"; };
+		6E2164E621AD99B600CAB966 /* RefundTransactionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefundTransactionResponse.swift; sourceTree = "<group>"; };
 		6E54AAC821ABE59E00116AC1 /* GetEventsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEventsRequest.swift; sourceTree = "<group>"; };
 		6E54AACA21AC0E8500116AC1 /* CreateEventRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventRequest.swift; sourceTree = "<group>"; };
 		6E54AACC21AC3D2800116AC1 /* UpdateEventRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventRequest.swift; sourceTree = "<group>"; };
@@ -311,6 +315,8 @@
 				6E9BC82D21A7FCEB00AFAEE7 /* Bucket.Transaction.swift */,
 				6EB84234219F0BBA00DF060A /* CreateTransactionRequest.swift */,
 				45016CEA233D2D465DDFBD90DC3CB597 /* CreateTransactionResponse.swift */,
+				6E2164E421AD904600CAB966 /* DeleteTransactionResponse.swift */,
+				6E2164E621AD99B600CAB966 /* RefundTransactionResponse.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -690,6 +696,7 @@
 				DFE7C59ACE5D486DC4D4F45AAEAF38AD /* Bucket.swift in Sources */,
 				6EE65C8C21A2B01D0063BB8F /* UIImageExtension.swift in Sources */,
 				6E9BC83021A8092500AFAEE7 /* Bucket.Reporting.swift in Sources */,
+				6E2164E721AD99B600CAB966 /* RefundTransactionResponse.swift in Sources */,
 				6E2164E321AD8BE600CAB966 /* Bucket.BillDenominations.swift in Sources */,
 				6E9BC83921A8408C00AFAEE7 /* GetReportRequest.swift in Sources */,
 				6E2164DA21AD5E7500CAB966 /* DeleteEventResponse.swift in Sources */,
@@ -704,6 +711,7 @@
 				6E9BC82E21A7FCEB00AFAEE7 /* Bucket.Transaction.swift in Sources */,
 				9CE109502185C670EA196A09DABDD486 /* DeploymentEnvironment.swift in Sources */,
 				6EC88B7721A42F0A008F156A /* GetReportsResponse.swift in Sources */,
+				6E2164E521AD904600CAB966 /* DeleteTransactionResponse.swift in Sources */,
 				42FB1A33A60EC6979D31F160408D24A2 /* DictionaryExtension.swift in Sources */,
 				46812D38BA776EC850A4E023F44F653A /* GetBillDenominationsResponse.swift in Sources */,
 				6EE65C8A21A2AC9A0063BB8F /* StringExtension.swift in Sources */,
