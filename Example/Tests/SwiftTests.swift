@@ -320,8 +320,8 @@ class SwiftTests: XCTestCase {
     func testInvalidCreateEvent() {
         let expectation = XCTestExpectation()
         let request = CreateEventRequest(
-            eventName: "eventName",
-            eventMessage: "eventMessage",
+            eventName: "iOS SDK Unit Test Event Name",
+            eventMessage: "iOS SDK Unit Test Event Message",
             startString: "This is an invalid start date String.",
             endString: "This is an invalid end date String."
         )
@@ -340,8 +340,8 @@ class SwiftTests: XCTestCase {
     func testValidCreateEvent() {
         let expectation = XCTestExpectation()
         let request = CreateEventRequest(
-            eventName: "eventName",
-            eventMessage: "eventMessage",
+            eventName: "iOS SDK Unit Test Event Name",
+            eventMessage: "iOS SDK Unit Test Event Message",
             startString: "2018-11-25 00:00:00+0800",
             endString: "2018-11-25 23:59:59+0800"
         )
@@ -366,8 +366,8 @@ class SwiftTests: XCTestCase {
         let expectation = XCTestExpectation()
         let request = UpdateEventRequest(
             id: 15,
-            eventName: "eventName",
-            eventMessage: "eventMessage",
+            eventName: "iOS SDK Unit Test Event Namee (Update Event)",
+            eventMessage: "iOS SDK Unit Test Event Message (Update Event)",
             startString: "This is an invalid start date String.",
             endString: "This is an invalid end date String."
         )
@@ -387,8 +387,8 @@ class SwiftTests: XCTestCase {
         let expectation = XCTestExpectation()
         let request = UpdateEventRequest(
             id: self.eventId,
-            eventName: "eventName",
-            eventMessage: "eventMessage",
+            eventName: "iOS SDK Unit Test Event Name (Update Event)",
+            eventMessage: "iOS SDK Unit Test Event Message (Update Event)",
             startString: "2018-11-25 00:00:00+0800",
             endString: "2018-11-25 23:59:59+0800"
         )
