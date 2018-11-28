@@ -203,4 +203,30 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
+- (void) testInvalidGetReports {
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
+    GetReportRequest *request = [[GetReportRequest alloc] initWithDay:@"This is an invalid day date String."];
+    [[Bucket shared] getReports:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+        XCTAssertFalse(success);
+        XCTAssertNil(response);
+        XCTAssertNotNil(error);
+        XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
+    
+    expectation = [[XCTestExpectation alloc] init];
+    request = [[GetReportRequest alloc] initWithStartString:@"This is an invalid start date String." endString:@"This is an invalid end date String."];
+    [[Bucket shared] getReports:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+        XCTAssertFalse(success);
+        XCTAssertNil(response);
+        XCTAssertNotNil(error);
+        XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
+        
+        [expectation fulfill];
+    }];
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:1];
+}
+
 @end
