@@ -167,4 +167,40 @@ int eventId = -1;
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
 
+- (void) testRefundTransaction {
+    XCTestExpectation *expectation =[[XCTestExpectation alloc] init];
+    
+    [[Bucket shared] refundTransactionWithCustomerCode:customerCode completion:^(BOOL success, RefundTransactionResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
+- (void) testDeleteTransaction {
+    XCTestExpectation *expectation =[[XCTestExpectation alloc] init];
+    
+    [[Bucket shared] deleteTransactionWithCustomerCode:customerCode completion:^(BOOL success, DeleteTransactionResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNotNil(response);
+            XCTAssertNil(error);
+        } else {
+            XCTAssertNil(response);
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
+}
+
 @end
