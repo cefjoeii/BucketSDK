@@ -15,6 +15,10 @@
 
 @implementation ObjectiveCTests
 
+-(double) roundingDecimalPlaces:(double)value precision:(int)precision {
+    return [NSString stringWithFormat:@"%.*f", precision, value].doubleValue;
+}
+
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -26,7 +30,7 @@
 }
 
 - (void)testRegisterTerminal {
-    XCTestExpectation *expectation =  [[XCTestExpectation alloc] init];
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
     
     [[Bucket shared] registerTerminalWithRetailerCode:@"bckt-1" country:@"us" completion:^(BOOL success, NSError * _Nullable error) {
         if (success) {
@@ -42,7 +46,7 @@
 }
 
 - (void)testGetBillDenominations {
-    XCTestExpectation *expectation =  [[XCTestExpectation alloc] init];
+    XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
     
     [[Bucket shared] getBillDenominationsWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (success) {
@@ -58,14 +62,41 @@
 }
 
 - (void)testBucketAmount {
-    //    long bucketAmount = [[Bucket shared] bucketAmountFor:1000];
-    //    XCTAssertEqual(bucketAmount, 0, @"Bucket amount should be zero when the change due back is 1000.");
-    //
-    //    bucketAmount = [[Bucket shared] bucketAmountFor:1234];
-    //    XCTAssertEqual(bucketAmount, 34, @"Bucket amount should be 34 when the change due back is 1234.");
-    //
-    //    bucketAmount = [[Bucket shared] bucketAmountForDecimal:1.0];
-    //    XCTAssertEqual(bucketAmount, 100, @"Bucket amout should be 100, not 10, when the change due back is 1.0 or 1.00.");
+    // MARK: - Sane
+    double bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:0.55];
+    XCTAssertEqual(bucketAmount, 0.55);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:12.34];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.34);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:1.00];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.00);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:5.00];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.00);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:0.99];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.99);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:9.99];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.99);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:0.9];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.90);
+    
+    // MARK: - Dr. Strange
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:1.234];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.23);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:2.345];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.35);
+    
+    bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:3.456];
+    XCTAssertEqual([self roundingDecimalPlaces:bucketAmount precision:2], 0.46);
+    
+    // MARK: - Murphy's Law
+    // bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:9.999];
+    // XCTAssertEqual([self roundingDecimalPlaces:bucketAmount], 0.00, "$0.00 should be bucketed for a $9.999 change.");
 }
 
 - (void)testCreateTransaction {

@@ -9,7 +9,7 @@
 import XCTest
 import BucketSDK
 
-fileprivate extension Double {
+extension Double {
     func roundingDecimalPlaces(to precision: Int = 2) -> Double? {
         return Double(String(format: "%.\(precision)f", self))
     }
@@ -64,32 +64,32 @@ class SwiftTests: XCTestCase {
         XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.55)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 12.34)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.34, "$0.34 should be bucketed for a $12.34 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.34)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.00)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00, "$0.00 should be bucketed for a $1.00 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 5.00)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00, "$0.00 should be bucketed for a $5.00 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.00)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.99)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.99, "$0.99 should be bucketed for a $0.99 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.99)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.99)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.99, "$0.99 should be bucketed for a $9.99 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.99)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 0.9)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.90, "$0.90 should be bucketed for a $0.9 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.90)
         
         // MARK: - Dr. Strange
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 1.234)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.23, "$0.23 should be bucketed for a $1.234 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.23)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 2.345)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.35, "$0.35 should be bucketed for a $2.345 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.35)
         
         bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 3.456)
-        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.46, "$0.46 should be bucketed for a $3.456 change.")
+        XCTAssertEqual(bucketAmount.roundingDecimalPlaces(), 0.46)
         
         // MARK: - Murphy's Law
         // bucketAmount = Bucket.shared.bucketAmount(changeDueBack: 9.999)
