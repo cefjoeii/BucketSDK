@@ -107,6 +107,7 @@ class SwiftTests: XCTestCase {
                 XCTAssertNil(error)
                 
                 // Assert response attributes
+                XCTAssertNotNil(response)
                 XCTAssertNotNil(response?.customerCode)
                 XCTAssertNotNil(response?.qrCode)
                 XCTAssertNotEqual(response?.bucketTransactionId, -1)

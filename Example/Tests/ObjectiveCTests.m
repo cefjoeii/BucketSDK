@@ -15,6 +15,9 @@
 
 @implementation ObjectiveCTests
 
+NSString *customerCode = @"";
+int eventId = -1;
+
 -(double) roundingDecimalPlaces:(double)value precision:(int)precision {
     return [NSString stringWithFormat:@"%.*f", precision, value].doubleValue;
 }
@@ -99,38 +102,32 @@
     // XCTAssertEqual([self roundingDecimalPlaces:bucketAmount], 0.00, "$0.00 should be bucketed for a $9.999 change.");
 }
 
-- (void)testCreateTransaction {
-    XCTestExpectation *expectation =[[XCTestExpectation alloc] initWithDescription:@"Create a transaction."];
+- (void)testCreateSimpleTransaction {
+    XCTestExpectation *expectation =[[XCTestExpectation alloc] init];
     
-    // Make sure the retailer id, retailer secret, and terminal id are set.
-    // Credentials.retailerId = @"6644211a-c02a-4413-b307-04a11b16e6a4";
-    // Credentials.retailerSecret = @"9IlwMxfQLaOvC4R64GdX/xabpvAA4QBpqb1t8lJ7PTGeR4daLI/bxw==";
-    // Credentials.terminalId = @"qwerty1234";
+    double bucketAmount = [[Bucket shared] bucketAmountWithChangeDueBack:1.55];
+    CreateTransactionRequest *request = [[CreateTransactionRequest alloc] initWithAmount:bucketAmount];
     
-    long amount = 7834;
-    
-    //    Transaction *transaction = [[Transaction alloc] initWithAmount:amount clientTransactionId:@"test"];
-    //    [transaction create :^(CreateTransactionResponse * _Nullable response, BOOL success, NSError * _Nullable error) {
-    //        if (success == YES) {
-    //            XCTAssertNotNil(response);
-    //
-    //            if (response != NULL) {
-    //                XCTAssertEqual(response.amount, amount);
-    //                XCTAssertTrue([response.clientTransactionId isEqualToString:@"test"]);
-    //                XCTAssertNotEqual(response.customerCode, @"");
-    //                XCTAssertNotNil(response.qrCodeContent);
-    //            }
-    //
-    //            XCTAssertTrue(success == YES);
-    //            XCTAssertNil(error);
-    //        } else {
-    //            XCTAssertNil(response);
-    //            XCTAssertFalse(success == YES);
-    //            XCTAssertNotNil(error);
-    //        }
-    //
-    //        [expectation fulfill];
-    //    }];
+    [[Bucket shared] createTransaction:request completion:^(BOOL success, CreateTransactionResponse * _Nullable response, NSError * _Nullable error) {
+        if (success) {
+            XCTAssertNil(error);
+            
+            // Assert response attributes
+            XCTAssertNotNil(response);
+            XCTAssertNotNil(response.customerCode);
+            XCTAssertNotNil(response.qrCode);
+            XCTAssertNotEqual(response.bucketTransactionId, -1);
+            XCTAssertEqual(response.amount, [self roundingDecimalPlaces:bucketAmount precision:2]);
+            XCTAssertNil(response.locationId);
+            XCTAssertNil(response.clientTransactionId);
+            
+            customerCode = response.customerCode;
+        } else {
+            XCTAssertNotNil(error);
+        }
+        
+        [expectation fulfill];
+    }];
     
     [self waitForExpectations:[NSArray arrayWithObjects:expectation,nil] timeout:5];
 }
