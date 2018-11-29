@@ -173,6 +173,7 @@ extension BucketTests {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
             } else {
+                XCTAssertNil(response)
                 XCTAssertNotNil(error)
             }
             

@@ -10,11 +10,6 @@ import Foundation
 struct BucketErrorResponse: Decodable {
     let errorCode: String?
     let message: String?
-    
-    init(json: [String: Any]) {
-        errorCode = json["errorCode"] as? String
-        message = json["message"] as? String
-    }
 
     func asError(_ code: Int?) -> Error {
         return NSError(domain: "", code: code ?? 520, userInfo: [NSLocalizedDescriptionKey: message ?? BucketErrorResponse.unknown.localizedDescription])

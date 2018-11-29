@@ -11,8 +11,13 @@ import Foundation
     @objc public let id: Int
     @objc public let result: String?
     
-    init(json: [String: Any]) {
-        self.id = json["id"] as? Int ?? -1
-        self.result = json["result"] as? String
+    private enum CodingKeys: String, CodingKey {
+        case id, result
+    }
+    
+    required public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(Int.self, forKey: .id) ?? -1
+        self.result = try container.decodeIfPresent(String.self, forKey: .result)
     }
 }

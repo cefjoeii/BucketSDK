@@ -20,13 +20,18 @@ import Foundation
     @objc public let created: String?
     @objc public let modified: String?
     
-    init(json: [String: Any]) {
-        self.id = json["id"] as? Int ?? -1
-        self.eventName = json["eventName"] as? String
-        self.eventMessage = json["eventMessage"] as? String
-        self.startDate = json["startDate"] as? String
-        self.endDate = json["endDate"] as? String
-        self.created = json["created"] as? String
-        self.modified = json["modified"] as? String
+    private enum CodingKeys: String, CodingKey {
+        case id, eventName, eventMessage, startDate, endDate, created, modified
+    }
+    
+    required public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(Int.self, forKey: .id) ?? -1
+        self.eventName = try container.decodeIfPresent(String.self, forKey: .eventName)
+        self.eventMessage = try container.decodeIfPresent(String.self, forKey: .eventMessage)
+        self.startDate = try container.decodeIfPresent(String.self, forKey: .startDate)
+        self.endDate = try container.decodeIfPresent(String.self, forKey: .endDate)
+        self.created = try container.decodeIfPresent(String.self, forKey: .created)
+        self.modified = try container.decodeIfPresent(String.self, forKey: .modified)
     }
 }
