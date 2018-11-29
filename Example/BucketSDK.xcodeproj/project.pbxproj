@@ -140,7 +140,8 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6EEB6C2C2107466D004BDD73 /* ObjectiveCTests.m */,
+				6E91FDEC21AFEE23000DDFC9 /* Swift */,
+				6E91FDEB21AFEE15000DDFC9 /* Objective-C */,
 				607FACEB1AFB9204008FA782 /* SwiftTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -163,6 +164,21 @@
 				37CA21EB8BD51041BC4CB1B9 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		6E91FDEB21AFEE15000DDFC9 /* Objective-C */ = {
+			isa = PBXGroup;
+			children = (
+				6EEB6C2C2107466D004BDD73 /* ObjectiveCTests.m */,
+			);
+			name = "Objective-C";
+			sourceTree = "<group>";
+		};
+		6E91FDEC21AFEE23000DDFC9 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Swift;
 			sourceTree = "<group>";
 		};
 		6E9390FB2105CC0F00F8CE89 /* Swift */ = {

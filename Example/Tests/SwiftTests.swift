@@ -9,9 +9,43 @@
 import XCTest
 import BucketSDK
 
-extension Double {
+fileprivate extension Double {
     func roundingDecimalPlaces(to precision: Int = 2) -> Double? {
         return Double(String(format: "%.\(precision)f", self))
+    }
+}
+
+extension SwiftTests {
+    func dateNowString(format: String? = "yyyy-MM-dd HH:mm:ssZZZ", timeZone: TimeZone? = TimeZone.current) -> String {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        formatter.timeZone = timeZone // TimeZone.init(abbreviation: "UTC") // timeZone
+        
+        return formatter.string(from: date)
+    }
+    
+    func dateNowInt() -> Int {
+        return Int(NSDate().timeIntervalSince1970)
+    }
+    
+    func dateNowStartEndString(timeZone tz: TimeZone? = TimeZone.current) -> (start: String, end: String) {
+        let start = "\(dateNowString(format: "yyyy-MM-dd", timeZone: tz)) 00:00:00\(dateNowString(format: "ZZZ", timeZone: tz))"
+        let end = "\(dateNowString(format: "yyyy-MM-dd", timeZone: tz)) 23:59:59\(dateNowString(format: "ZZZ", timeZone: tz))"
+        return (start, end)
+    }
+    
+    func dateNowStartEndInt(timeZone tz: TimeZone? = TimeZone.current) -> (start: Int, end: Int) {
+        let startEndString = dateNowStartEndString(timeZone: tz)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ssZZZ"
+        formatter.timeZone = tz
+        
+        let start = Int(formatter.date(from: startEndString.start)!.timeIntervalSince1970)
+        let end = Int(formatter.date(from: startEndString.end)!.timeIntervalSince1970)
+
+        return (start, end)
     }
 }
 
@@ -226,7 +260,8 @@ class SwiftTests: XCTestCase {
     
     func testValidGetReports() {
         var expectation = XCTestExpectation()
-        var request = GetReportRequest(startString: "2018-09-01 00:00:00+0800", endString: "2018-11-20 00:00:00+0800")
+        let dateNowStartEndString = self.dateNowStartEndString(timeZone: TimeZone.init(abbreviation: "UTC"))
+        var request = GetReportRequest(startString: dateNowStartEndString.start, endString: dateNowStartEndString.end)
         Bucket.shared.getReports(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
@@ -241,7 +276,8 @@ class SwiftTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
         
         expectation = XCTestExpectation()
-        request = GetReportRequest(startInt: 1535760000, endInt: 1542672000)
+        let dateNowStartEndInt = self.dateNowStartEndInt(timeZone: TimeZone.init(abbreviation: "UTC"))
+        request = GetReportRequest(startInt: dateNowStartEndInt.start, endInt: dateNowStartEndInt.end)
         Bucket.shared.getReports(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
@@ -250,7 +286,7 @@ class SwiftTests: XCTestCase {
                 XCTAssertNil(response)
                 XCTAssertNotNil(error)
             }
-            
+
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 5)
@@ -272,7 +308,9 @@ class SwiftTests: XCTestCase {
     
     func testValidGetEvents() {
         var expectation = XCTestExpectation()
-        var request = GetEventsRequest(startString: "2018-11-27 00:00:00+0800", endString: "2018-11-27 23:59:59+0800")
+        let dateNowStartEndString = self.dateNowStartEndString()
+        var request = GetEventsRequest(startString: dateNowStartEndString.0, endString: dateNowStartEndString.1)
+        
         Bucket.shared.getEvents(request) { (success, response, error) in
             if success {
                 XCTAssertNotNil(response)
@@ -287,7 +325,8 @@ class SwiftTests: XCTestCase {
         wait(for: [expectation], timeout: 5)
         
         expectation = XCTestExpectation()
-        request = GetEventsRequest(startInt: 1543276800, endInt: 1543363199)
+        let dateStartEndInt = self.dateNowStartEndInt()
+        request = GetEventsRequest(startInt: dateStartEndInt.0, endInt: dateStartEndInt.1)
         Bucket.shared.getEvents(request) { (success, response, error) in
             if success {
                 XCTAssertNotNil(response)
