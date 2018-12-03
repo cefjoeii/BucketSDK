@@ -50,7 +50,7 @@ extension BucketTests {
         request.locationId = "locationId"
         request.clientTransactionId = "clientTransactionId"
         request.employeeCode = "1234"
-        request.eventId = nil
+        request.eventId = self.eventId
         
         Bucket.shared.createTransaction(request) { (success, response, error) in
             if success {

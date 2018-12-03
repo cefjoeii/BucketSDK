@@ -13,7 +13,7 @@ import Foundation
     @objc public dynamic var employeeCode: String?
     
     /// Please make sure to create an event and use that id here if you want to associate the transaction with an event.
-    @objc public dynamic var eventId: String?
+    @objc public dynamic var eventId: Int = -1
     
     // MARK: - Body
     /// The currency described in decimal. This is a required field.

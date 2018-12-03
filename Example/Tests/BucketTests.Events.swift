@@ -72,6 +72,54 @@ extension BucketTests {
         wait(for: [expectation], timeout: 5)
     }
     
+    func testValidGetEventsReport() {
+        var expectation = XCTestExpectation()
+        var request = GetEventsReportRequest(startString: self.dateNowStartEndString.start, endString: self.dateNowStartEndString.end)
+        
+        Bucket.shared.getEventsReport(request) { (success, response, error) in
+            if success {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNil(response)
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
+        
+        expectation = XCTestExpectation()
+        request = GetEventsReportRequest(startInt: self.dateNowStartEndInt.start, endInt: self.dateNowStartEndInt.end)
+        Bucket.shared.getEventsReport(request) { (success, response, error) in
+            if success {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNil(response)
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
+        
+        expectation = XCTestExpectation()
+        request = GetEventsReportRequest(id: 58)
+        Bucket.shared.getEventsReport(request) { (success, response, error) in
+            if success {
+                XCTAssertNotNil(response)
+                XCTAssertNil(error)
+            } else {
+                XCTAssertNil(response)
+                XCTAssertNotNil(error)
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5)
+    }
+    
     func testInvalidCreateEvent() {
         let expectation = XCTestExpectation()
         let request = CreateEventRequest(

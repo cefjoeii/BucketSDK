@@ -43,7 +43,7 @@ extension Bucket {
         request.addHeader("country", country)
         request.addHeader("x-functions-key", terminalSecret)
         if let employeeCode = createTransactionRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
-        if let eventId = createTransactionRequest.eventId { request.addHeader("eventId", eventId) }
+        if createTransactionRequest.eventId != -1 { request.addHeader("eventId", String(createTransactionRequest.eventId)) }
         request.setBody(createTransactionRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
