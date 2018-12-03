@@ -163,12 +163,12 @@
 		6EE65C8D21A2DF580063BB8F /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Credentials.swift; path = BucketSDK/Classes/Credentials.swift; sourceTree = "<group>"; };
 		6F6E64BB1F993A9FE358D0305D0AAC99 /* Pods-BucketSDK_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BucketSDK_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		789F319879E910A5DAEC595F4C1739D3 /* Strongbox.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Strongbox.modulemap; sourceTree = "<group>"; };
-		7A6EDB97520F2ABD56A220ADDBE05582 /* DeploymentEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeploymentEnvironment.swift; sourceTree = "<group>"; };
+		7A6EDB97520F2ABD56A220ADDBE05582 /* DeploymentEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DeploymentEnvironment.swift; path = BucketSDK/Classes/DeploymentEnvironment.swift; sourceTree = "<group>"; };
 		7DF7F37C3EC4BA6BB8F970D740361975 /* Pods-BucketSDK_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BucketSDK_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		83327AB58C4439D5C5B2E7D2C4F3226A /* Pods-BucketSDK_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BucketSDK_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		8342A0694944FD05EBC1C903A7F1EEE3 /* Pods-BucketSDK_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BucketSDK_Example-dummy.m"; sourceTree = "<group>"; };
 		8D335FD83AFE8A420B808A4628712A1F /* UIImageViewExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIImageViewExtension.swift; path = QRCode/UIImageViewExtension.swift; sourceTree = "<group>"; };
-		927C1FEB1C7F9F6FF07C3E0F4AE56CD1 /* RetailerInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RetailerInfo.swift; sourceTree = "<group>"; };
+		927C1FEB1C7F9F6FF07C3E0F4AE56CD1 /* RetailerInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RetailerInfo.swift; path = BucketSDK/Classes/RetailerInfo.swift; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		94CBAB763AFA819E363F0D7B5DC30480 /* BucketSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BucketSDK.modulemap; sourceTree = "<group>"; };
 		980DA4F2E553F33CCD4840155D78DAF8 /* Pods_BucketSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BucketSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -322,7 +322,8 @@
 				6E2164E421AD904600CAB966 /* DeleteTransactionResponse.swift */,
 				6E2164E621AD99B600CAB966 /* RefundTransactionResponse.swift */,
 			);
-			path = Transaction;
+			name = Transaction;
+			path = BucketSDK/Classes/Transaction;
 			sourceTree = "<group>";
 		};
 		6E2164DC21AD86D000CAB966 /* Terminal */ = {
@@ -331,7 +332,8 @@
 				6E2164E021AD8B9200CAB966 /* Bucket.Terminal.swift */,
 				3B06E5EC4635A50BC9F8CD995F2932CF /* RegisterTerminalResponse.swift */,
 			);
-			path = Terminal;
+			name = Terminal;
+			path = BucketSDK/Classes/Terminal;
 			sourceTree = "<group>";
 		};
 		6E2164DD21AD86D900CAB966 /* Bill Denominations */ = {
@@ -340,7 +342,8 @@
 				6E2164E221AD8BE600CAB966 /* Bucket.BillDenominations.swift */,
 				F7371BEABF4BD4EDA4640D575334FB94 /* GetBillDenominationsResponse.swift */,
 			);
-			path = "Bill Denominations";
+			name = "Bill Denominations";
+			path = "BucketSDK/Classes/Bill Denominations";
 			sourceTree = "<group>";
 		};
 		6E2164DE21AD86EA00CAB966 /* Reporting */ = {
@@ -350,7 +353,8 @@
 				6E9BC83821A8408C00AFAEE7 /* GetReportRequest.swift */,
 				6EC88B7621A42F0A008F156A /* GetReportsResponse.swift */,
 			);
-			path = Reporting;
+			name = Reporting;
+			path = BucketSDK/Classes/Reporting;
 			sourceTree = "<group>";
 		};
 		6E2164DF21AD86F900CAB966 /* Events */ = {
@@ -367,7 +371,8 @@
 				6E54AACC21AC3D2800116AC1 /* UpdateEventRequest.swift */,
 				6E2164D721AD2FEE00CAB966 /* UpdateEventResponse.swift */,
 			);
-			path = Events;
+			name = Events;
+			path = BucketSDK/Classes/Events;
 			sourceTree = "<group>";
 		};
 		6E9BC82C21A7FC4200AFAEE7 /* Bucket Error */ = {
@@ -375,7 +380,8 @@
 			children = (
 				F479495EAFB52C0DE9061E5650551207 /* BucketErrorResponse.swift */,
 			);
-			path = "Bucket Error";
+			name = "Bucket Error";
+			path = "BucketSDK/Classes/Bucket Error";
 			sourceTree = "<group>";
 		};
 		76D68E4A2B40CCA6BB4189E25E8B8E69 /* Products */ = {
