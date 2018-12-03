@@ -49,7 +49,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
@@ -125,7 +125,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
@@ -197,7 +197,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
@@ -266,7 +266,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
@@ -315,7 +315,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }

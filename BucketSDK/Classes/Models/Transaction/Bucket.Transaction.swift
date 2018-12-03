@@ -15,7 +15,7 @@ extension Bucket {
         ) {
         
         // Return and tell the developer that the employee code is required.
-        if Credentials.requireEmployeeCode && createTransactionRequest.employeeCode.isNil {
+        if Terminal.requireEmployeeCode && createTransactionRequest.employeeCode.isNil {
             completion(false, nil, BucketErrorResponse.invalidEmployeeCode)
             return
         }
@@ -30,7 +30,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
@@ -75,7 +75,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }
@@ -122,7 +122,7 @@ extension Bucket {
             return
         }
         
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion(false, nil, BucketErrorResponse.invalidCountryCode)
             return
         }

@@ -39,19 +39,19 @@ extension Bucket {
                     
                     // Save the apiKey as the terminalSecret.
                     Credentials.terminalSecret = response.apiKey
-                    Credentials.requireEmployeeCode = response.requireEmployeeCode ?? false
-                    Credentials.retailerInfo = RetailerInfo(
-                        response.retailerName,
-                        response.retailerPhone,
-                        response.address?.address1,
-                        response.address?.address2,
-                        response.address?.address3,
-                        response.address?.postalCode,
-                        response.address?.city,
-                        response.address?.state,
-                        country.lowercased()
-                    )
+                    Credentials.country = country.lowercased()
                     
+                    Terminal.requireEmployeeCode = response.requireEmployeeCode ?? false
+                    
+                    RetailerInfo.retailerName = response.retailerName
+                    RetailerInfo.retailerPhone = response.retailerPhone
+                    RetailerInfo.address1 = response.address?.address1
+                    RetailerInfo.address2 = response.address?.address2
+                    RetailerInfo.address3 = response.address?.address3
+                    RetailerInfo.postalCode = response.address?.postalCode
+                    RetailerInfo.city = response.address?.city
+                    RetailerInfo.state = response.address?.state
+
                     completion(true, nil)
                 } catch let error {
                     completion(false, error)

@@ -14,13 +14,16 @@ import Strongbox
     
     /// Sets the environment that defines which endpoint we will hit.
     @objc public dynamic var environment: DeploymentEnvironment = .development
+    
+    // Instantiate Keychain to store small sensitive information such as the retailerCode and terminalSecret.
+    var keychain = Strongbox()
 
     /// Returns the amount to be bucketed based on the change due back.
     @objc public func bucketAmount(changeDueBack: Double) -> Double {
         var bucketAmount = changeDueBack
         
-        var denoms = Credentials.denoms ?? []
-        let usesNaturalChangeFunction = Credentials.usesNaturalChangeFunction
+        var denoms = Terminal.denoms ?? []
+        let usesNaturalChangeFunction = Terminal.usesNaturalChangeFunction
         
         if usesNaturalChangeFunction {
             // Make sure this is ordered by the amount.

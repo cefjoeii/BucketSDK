@@ -11,15 +11,15 @@ extension Bucket {
     /// Gathers the bill denominations for the the retailers country,
     /// in order to calculate the change using our natural change function.
     @objc public func getBillDenominations(completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
-        guard let country = Credentials.retailerInfo?.country else {
+        guard let country = Credentials.country else {
             completion?(false, BucketErrorResponse.invalidCountryCode)
             return
         }
         
         // We will skip the API call for US.
         if country.lowercased() == "us" {
-            Credentials.usesNaturalChangeFunction = true
-            Credentials.denoms = [100.00, 50.00, 20.00, 10.00, 5.00, 2.00, 1.00]
+            Terminal.usesNaturalChangeFunction = true
+            Terminal.denoms = [100.00, 50.00, 20.00, 10.00, 5.00, 2.00, 1.00]
             completion?(true, nil)
             return
         }
@@ -37,8 +37,8 @@ extension Bucket {
                     // Map the json response to the model class.
                     let response = try JSONDecoder().decode(GetBillDenominationsResponse.self, from: data)
                     
-                    Credentials.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
-                    Credentials.denoms = response.denominations ?? nil
+                    Terminal.usesNaturalChangeFunction = response.usesNaturalChangeFunction ?? false
+                    Terminal.denoms = response.denominations ?? nil
                     
                     completion?(true, nil)
                 } catch let error {
