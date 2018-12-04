@@ -40,10 +40,10 @@ import Strongbox
     
     /// The **serial number** of the terminal or device creating the transaction.
     static var terminalCode: String? {
-        get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_ID") as? String }
+        get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_CODE") as? String }
         set {
-            if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_ID") }
-            else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_ID") }
+            if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_CODE") }
+            else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_CODE ") }
         }
     }
 }

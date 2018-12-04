@@ -38,6 +38,7 @@ extension Bucket {
                     let response = try JSONDecoder().decode(RegisterTerminalResponse.self, from: data)
                     
                     // Save the apiKey as the terminalSecret.
+                    Credentials.retailerCode = retailerCode
                     Credentials.terminalSecret = response.apiKey
                     Credentials.country = country.lowercased()
                     
