@@ -13,7 +13,7 @@ extension BucketTests {
     func testInvalidGetReports() {
         var expectation = XCTestExpectation()
         var request = GetReportRequest(day: "This is an invalid day date String.")
-        Bucket.shared.getReports(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, error) in
             XCTAssertFalse(success)
             XCTAssertNil(response)
             XCTAssertNotNil(error)
@@ -25,7 +25,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation(description: "Fetch invalid reports.")
         request = GetReportRequest(startString: "This is an invalid start date String.", endString: "This is an invalid end date String.")
-        Bucket.shared.getReports(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, error) in
             XCTAssertFalse(success)
             XCTAssertNil(response)
             XCTAssertNotNil(error)
@@ -39,7 +39,7 @@ extension BucketTests {
     func testValidGetReports() {
         var expectation = XCTestExpectation()
         var request = GetReportRequest(startString: self.dateNowStartEndString.start, endString: self.dateNowStartEndString.end)
-        Bucket.shared.getReports(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -54,7 +54,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation()
         request = GetReportRequest(startInt: self.dateNowStartEndInt.start, endInt: self.dateNowStartEndInt.end)
-        Bucket.shared.getReports(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, error) in
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)

@@ -9,7 +9,7 @@ import Foundation
 
 extension Bucket {
     /// Allows a POS integration developer to give a summed history of the transactions.
-    @objc public func getReports(
+    @objc public func getReport(
         _ getReportRequest: GetReportRequest,
         completion: @escaping ((_ success: Bool, _ response: GetReportsResponse?, _ error: Error?) -> Void)
         ) {
