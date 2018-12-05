@@ -43,7 +43,7 @@ import Strongbox
         get { return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_TERMINAL_CODE") as? String }
         set {
             if newValue.isNil { Bucket.shared.keychain.remove(key: "BUCKET_TERMINAL_CODE") }
-            else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_CODE ") }
+            else { _ = Bucket.shared.keychain.archive(newValue!, key: "BUCKET_TERMINAL_CODE") }
         }
     }
 }
