@@ -206,9 +206,10 @@ long eventId = -1;
 - (void) testInvalidGetReports {
     XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
     GetReportRequest *request = [[GetReportRequest alloc] initWithDay:@"This is an invalid day date String."];
-    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         XCTAssertFalse(success);
         XCTAssertNil(response);
+        XCTAssertTrue(canPage);
         XCTAssertNotNil(error);
         XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
         
@@ -218,9 +219,10 @@ long eventId = -1;
     
     expectation = [[XCTestExpectation alloc] init];
     request = [[GetReportRequest alloc] initWithStartString:@"This is an invalid start date String." endString:@"This is an invalid end date String."];
-    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         XCTAssertFalse(success);
         XCTAssertNil(response);
+        XCTAssertTrue(canPage);
         XCTAssertNotNil(error);
         XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
         
@@ -232,7 +234,7 @@ long eventId = -1;
 - (void) testValidGetReports {
     XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
     GetReportRequest *request = [[GetReportRequest alloc] initWithStartString:@"2018-09-01 00:00:00+0800" endString:@"2018-11-20 00:00:00+0800"];
-    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         if (success) {
             XCTAssertNotNil(response);
             XCTAssertNil(error);
@@ -247,7 +249,7 @@ long eventId = -1;
     
     expectation = [[XCTestExpectation alloc] init];
     request = [[GetReportRequest alloc] initWithStartInt:1535760000 endInt:1542672000];
-    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getReport:request completion:^(BOOL success, GetReportsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         if (success) {
             XCTAssertNotNil(response);
             XCTAssertNil(error);
@@ -267,9 +269,10 @@ long eventId = -1;
     GetEventsRequest *request = [[GetEventsRequest alloc] initWithStartString:@"This is an invalid start date String."
                                                                     endString:@"This is an invalid end date String."];
     
-    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         XCTAssertFalse(success);
         XCTAssertNil(response);
+        XCTAssertTrue(canPage);
         XCTAssertNotNil(error);
         XCTAssertTrue([error.localizedDescription isEqualToString:@"Please make sure that the date is valid."]);
         
@@ -282,7 +285,7 @@ long eventId = -1;
 - (void) testValidGetEvents {
     XCTestExpectation *expectation = [[XCTestExpectation alloc] init];
     GetEventsRequest *request = [[GetEventsRequest alloc] initWithStartString:@"2018-11-27 00:00:00+0800" endString: @"2018-11-27 23:59:59+0800"];
-    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         if (success) {
             XCTAssertNotNil(response);
             XCTAssertNil(error);
@@ -297,7 +300,7 @@ long eventId = -1;
     
     expectation = [[XCTestExpectation alloc] init];
     request = [[GetEventsRequest alloc] initWithStartInt:1543276800 endInt: 1543363199];
-    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, NSError * _Nullable error) {
+    [[Bucket shared] getEvents:request completion:^(BOOL success, GetEventsResponse * _Nullable response, BOOL canPage, NSError * _Nullable error) {
         if (success) {
             XCTAssertNotNil(response);
             XCTAssertNil(error);

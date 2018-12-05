@@ -13,9 +13,10 @@ extension BucketTests {
     func testInvalidGetReports() {
         var expectation = XCTestExpectation()
         var request = GetReportRequest(day: "This is an invalid day date String.")
-        Bucket.shared.getReport(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, canPage, error) in
             XCTAssertFalse(success)
             XCTAssertNil(response)
+            XCTAssertTrue(canPage)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
             
@@ -25,9 +26,10 @@ extension BucketTests {
         
         expectation = XCTestExpectation(description: "Fetch invalid reports.")
         request = GetReportRequest(startString: "This is an invalid start date String.", endString: "This is an invalid end date String.")
-        Bucket.shared.getReport(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, canPage, error) in
             XCTAssertFalse(success)
             XCTAssertNil(response)
+            XCTAssertTrue(canPage)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
             
@@ -39,7 +41,7 @@ extension BucketTests {
     func testValidGetReports() {
         var expectation = XCTestExpectation()
         var request = GetReportRequest(startString: self.dateNowStartEndString.start, endString: self.dateNowStartEndString.end)
-        Bucket.shared.getReport(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, canPage, error) in
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -54,7 +56,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation()
         request = GetReportRequest(startInt: self.dateNowStartEndInt.start, endInt: self.dateNowStartEndInt.end)
-        Bucket.shared.getReport(request) { (success, response, error) in
+        Bucket.shared.getReport(request) { (success, response, canPage, error) in
             if (success) {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)

@@ -13,9 +13,10 @@ extension BucketTests {
     func testInvalidGetEvents() {
         let expectation = XCTestExpectation()
         let request = GetEventsRequest(startString: "This is an invalid start date String.", endString: "This is an invalid end date String.")
-        Bucket.shared.getEvents(request) { (success, response, error) in
+        Bucket.shared.getEvents(request) { (success, response, canPage, error) in
             XCTAssertFalse(success)
             XCTAssertNil(response)
+            XCTAssertTrue(canPage)
             XCTAssertNotNil(error)
             XCTAssertEqual(error!.localizedDescription, "Please make sure that the date is valid.")
             
@@ -28,7 +29,7 @@ extension BucketTests {
         var expectation = XCTestExpectation()
         var request = GetEventsRequest(startString: self.dateNowStartEndString.start, endString: self.dateNowStartEndString.end)
         
-        Bucket.shared.getEvents(request) { (success, response, error) in
+        Bucket.shared.getEvents(request) { (success, response, canPage, error) in
             if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -43,7 +44,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation()
         request = GetEventsRequest(startInt: self.dateNowStartEndInt.start, endInt: self.dateNowStartEndInt.end)
-        Bucket.shared.getEvents(request) { (success, response, error) in
+        Bucket.shared.getEvents(request) { (success, response, canPage, error) in
             if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -58,7 +59,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation()
         request = GetEventsRequest(id: 7)
-        Bucket.shared.getEvents(request) { (success, response, error) in
+        Bucket.shared.getEvents(request) { (success, response, canPage, error) in
             if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -76,7 +77,7 @@ extension BucketTests {
         var expectation = XCTestExpectation()
         var request = GetEventsReportRequest(startString: self.dateNowStartEndString.start, endString: self.dateNowStartEndString.end)
         
-        Bucket.shared.getEventsReport(request) { (success, response, error) in
+        Bucket.shared.getEventsReport(request) { (success, response, canPage, error) in
             if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -91,7 +92,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation()
         request = GetEventsReportRequest(startInt: self.dateNowStartEndInt.start, endInt: self.dateNowStartEndInt.end)
-        Bucket.shared.getEventsReport(request) { (success, response, error) in
+        Bucket.shared.getEventsReport(request) { (success, response, canPage, error) in
             if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
@@ -106,7 +107,7 @@ extension BucketTests {
         
         expectation = XCTestExpectation()
         request = GetEventsReportRequest(id: 58)
-        Bucket.shared.getEventsReport(request) { (success, response, error) in
+        Bucket.shared.getEventsReport(request) { (success, response, canPage, error) in
             if success {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
