@@ -41,9 +41,14 @@ import Foundation
     
     @objc public let transactions: [ReportTransaction]?
     
+    @objc public let created: String?
+    
+    @objc public let modified: String?
+    
     private enum CodingKeys: String, CodingKey {
         case id, eventName, eventMessage, startDate, endDate, bucketTotal,
-        bucketSales, refundedBucketTotal, refundedBucketSales, transactions
+        bucketSales, refundedBucketTotal, refundedBucketSales, transactions,
+        created, modified
     }
     
     required public init(from decoder: Decoder) throws {
@@ -58,5 +63,7 @@ import Foundation
         self.refundedBucketTotal = try container.decodeIfPresent(Double.self, forKey: .refundedBucketTotal) ?? 0
         self.refundedBucketSales = try container.decodeIfPresent(Double.self, forKey: .refundedBucketSales) ?? 0
         self.transactions = try container.decodeIfPresent([ReportTransaction].self, forKey: .transactions)
+        self.created = try container.decodeIfPresent(String.self, forKey: .created)
+        self.modified = try container.decodeIfPresent(String.self, forKey: .modified)
     }
 }
