@@ -141,7 +141,7 @@ long eventId = -1;
     request.locationId = @"locationId";
     request.clientTransactionId = @"clientTransactionId";
     request.employeeCode = @"1234";
-    request.eventId = nil;
+    request.eventId = -1;
     
     [[Bucket shared] createTransaction:request completion:^(BOOL success, CreateTransactionResponse * _Nullable response, NSError * _Nullable error) {
         if (success) {
