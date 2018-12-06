@@ -46,31 +46,25 @@ extension Bucket {
             return
         }
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, true, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, true, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, true, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         var url = Bucket.shared.environment.url
         url.appendPathComponent("report")
         url.appendQueriesComponent(["offset": getReportRequest.offset, "limit": getReportRequest.limit])
         
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, true, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.post)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         if let employeeCode = getReportRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
         if let eventId = getReportRequest.eventId { request.addHeader("eventId", eventId) }
         

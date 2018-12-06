@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Manages the attributes regarding the terminal.
 @objc public class Terminal: NSObject {
     static var isApproved: Bool {
         get {

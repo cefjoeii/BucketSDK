@@ -12,7 +12,7 @@ import Strongbox
     /// A singleton for the shared `Bucket` object.
     @objc public static let shared = Bucket()
     
-    /// Sets the environment that defines which endpoint we will hit.
+    /// The environment that defines which endpoint we will hit.
     @objc public dynamic var environment: DeploymentEnvironment = .development
     
     // Instantiate Keychain to store small sensitive information such as the retailerCode and terminalSecret.

@@ -8,6 +8,7 @@
 import Foundation
 import Strongbox
 
+/// Manages the credentials for making the API calls.
 @objc public class Credentials: NSObject {
     // MARK: - Public(get) Internal(set)
     /// The **retailer code** creating the transaction.

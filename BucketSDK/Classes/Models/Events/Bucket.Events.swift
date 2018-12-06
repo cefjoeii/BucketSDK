@@ -39,31 +39,25 @@ extension Bucket {
             return
         }
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, true, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, true, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, true, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url
             .appendingPathComponent("events")
             .apendingQueriesComponent(["offset": getEventsRequest.offset, "limit": getEventsRequest.limit])
         
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, true, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.post)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         request.setBody(getEventsRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -121,32 +115,26 @@ extension Bucket {
             return
         }
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, true, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, true, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, true, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url
             .appendingPathComponent("report")
             .appendingPathComponent("events")
             .apendingQueriesComponent(["offset": getEventsReportRequest.offset, "limit": getEventsReportRequest.limit])
         
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, true, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.post)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         request.setBody(getEventsReportRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -199,29 +187,23 @@ extension Bucket {
             return
         }
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url.appendingPathComponent("event")
         
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.put)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         request.setBody(createEventRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -268,29 +250,23 @@ extension Bucket {
             return
         }
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url.appendingPathComponent("event")
         
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.put)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         request.setBody(updateEventRequest.body)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -317,28 +293,22 @@ extension Bucket {
         completion: @escaping ((_ success: Bool, _ response: DeleteEventResponse?, _ error: Error?) -> Void)
         ) {
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url.appendingPathComponent("event").appendingPathComponent(String(id))
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.delete)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { completion(false, nil, error); return }

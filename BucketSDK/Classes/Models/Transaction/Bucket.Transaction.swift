@@ -20,28 +20,22 @@ extension Bucket {
             return
         }
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url.appendingPathComponent("transaction")
         var request = URLRequest(url: url)
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.post)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
+
         if let employeeCode = createTransactionRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
         if createTransactionRequest.eventId != -1 { request.addHeader("eventId", String(createTransactionRequest.eventId)) }
         request.setBody(createTransactionRequest.body)
@@ -65,28 +59,22 @@ extension Bucket {
         completion: @escaping (_ success: Bool, _ response: RefundTransactionResponse?, _ error: Error?) -> Void
         ) {
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url.appendingPathComponent("transaction").appendingPathComponent(customerCode)
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.patch)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { completion(false, nil, error); return }
@@ -112,28 +100,22 @@ extension Bucket {
         completion: @escaping (_ success: Bool, _ response: DeleteTransactionResponse?, _ error: Error?) -> Void
         ) {
         
-        guard let retailerCode = Credentials.retailerCode, let terminalSecret = Credentials.terminalSecret else {
-            completion(false, nil, BucketErrorResponse.invalidRetailer)
-            return
-        }
-        
-        guard let terminalCode = Credentials.terminalCode else {
-            completion(false, nil, BucketErrorResponse.noTerminalId)
-            return
-        }
-        
-        guard let country = Credentials.country else {
-            completion(false, nil, BucketErrorResponse.invalidCountryCode)
-            return
-        }
-        
         let url = Bucket.shared.environment.url.appendingPathComponent("transaction").appendingPathComponent(customerCode)
         var request = URLRequest(url: url)
+        
+        let authenticationResult = request.authenticate(
+            Credentials.retailerCode,
+            Credentials.terminalCode,
+            Credentials.country,
+            Credentials.terminalSecret
+        )
+        
+        guard authenticationResult.success else {
+            completion(false, nil, authenticationResult.error)
+            return
+        }
+        
         request.setMethod(.delete)
-        request.addHeader("retailerCode", retailerCode)
-        request.addHeader("terminalCode", terminalCode)
-        request.addHeader("country", country)
-        request.addHeader("x-functions-key", terminalSecret)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else { completion(false, nil, error); return }
