@@ -18,6 +18,7 @@ import Foundation
         }
     }
     
+    /// This indicates whether or not you need to send in the employeeCode for transaction requests.
     static var requireEmployeeCode: Bool {
         get {
             return Bucket.shared.keychain.unarchive(objectForKey: "BUCKET_REQUIRE_EMPLOYEE_CODE") as? Bool ?? false

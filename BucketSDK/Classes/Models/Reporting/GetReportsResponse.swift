@@ -1,11 +1,11 @@
 //
-//  GetReportsResponse.swift
+//  GetReportResponse.swift
 //  BucketSDK
 //
 //  Created by Ceferino Jose II on 11/20/18.
 //
 
-@objc public class GetReportsResponse: NSObject, Decodable {
+@objc public class GetReportResponse: NSObject, Decodable {
     /// The count of the transactions against the entire query.
     /// This would give you a good indication if you need to page the transactions.
     @objc public let totalTransactionCount: Int
@@ -45,15 +45,17 @@
 }
 
 @objc public class ReportTransaction: NSObject, Decodable {
-    /// This is the id for the bucket transaction.
+    /// This is the id for the Bucket transaction.
     @objc public let bucketTransactionId: Int
     
+    /// This is UTC date format of 'yyyy-MM-dd HH:mm:ss'
     @objc public let created: String?
     
     /// The currency described in decimal. This is a required field.
     @objc public let amount: Double
     
-    /// The entire amount with tax, for the items purchased at the point of the sale. Represented in decimal.
+    /// The entire amount with tax, for the items purchased at the point of the sale.
+    /// Represented in decimal.
     @objc public let totalTransactionAmount: Double
     
     @objc public let customerCode: String?
@@ -70,6 +72,12 @@
     /// The id of the user that refunded the transaction.
     @objc public let refundedBy: String?
     
+    /// This is the date at which a user claimed the QR Code for this transaction.
+    @objc public let redeemed: String?
+    
+    /// This is the id of the user that redeemed the transaction.
+    @objc public let redeemedBy: String?
+    
     /// Retailer-defined unique identifier for the location of the device.
     @objc public let locationId: String?
     
@@ -79,14 +87,17 @@
     
     /// The terminal that created the transaction.
     @objc public let terminalCode: String?
-    
-    /// The id of the employee.
+
     @objc public let employeeId: Int
+    
+    @objc public let eventName: String?
+    
+    @objc public let eventId: Int
     
     private enum CodingKeys: String, CodingKey {
         case bucketTransactionId, created, amount, totalTransactionAmount, customerCode,
-        disputed, disputedBy, refunded, refundedBy, locationId, clientTransactionid,
-        terminalCode, employeeId
+        disputed, disputedBy, refunded, refundedBy, redeemed, redeemedBy, locationId,
+        clientTransactionid, terminalCode, employeeId, eventName, eventId
     }
     
     required public init(from decoder: Decoder) throws {
@@ -100,9 +111,13 @@
         self.disputedBy = try container.decodeIfPresent(String.self, forKey: .disputed)
         self.refunded = try container.decodeIfPresent(String.self, forKey: .refunded)
         self.refundedBy = try container.decodeIfPresent(String.self, forKey: .refundedBy)
+        self.redeemed = try container.decodeIfPresent(String.self, forKey: .redeemed)
+        self.redeemedBy = try container.decodeIfPresent(String.self, forKey: .redeemedBy)
         self.locationId = try container.decodeIfPresent(String.self, forKey: .locationId)
         self.clientTransactionid = try container.decodeIfPresent(String.self, forKey: .clientTransactionid)
         self.terminalCode = try container.decodeIfPresent(String.self, forKey: .terminalCode)
         self.employeeId = try container.decodeIfPresent(Int.self, forKey: .employeeId) ?? -1
+        self.eventName = try container.decodeIfPresent(String.self, forKey: .eventName)
+        self.eventId = try container.decodeIfPresent(Int.self, forKey: .eventId) ?? -1
     }
 }

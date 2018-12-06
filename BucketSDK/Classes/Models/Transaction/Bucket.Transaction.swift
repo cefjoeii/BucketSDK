@@ -14,14 +14,15 @@ extension Bucket {
         completion: @escaping (_ success: Bool, _ response: CreateTransactionResponse?, _ error: Error?) -> Void
         ) {
         
-        // Return and tell the developer that the employee code is required.
         if Terminal.requireEmployeeCode && createTransactionRequest.employeeCode.isNil {
+            // Return and tell the developer that the employee code is required.
             completion(false, nil, BucketErrorResponse.invalidEmployeeCode)
             return
         }
         
         let url = Bucket.shared.environment.url.appendingPathComponent("transaction")
         var request = URLRequest(url: url)
+        
         let authenticationResult = request.authenticate(
             Credentials.retailerCode,
             Credentials.terminalCode,
@@ -29,10 +30,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, authenticationResult.error); return }
         
         request.setMethod(.post)
 
@@ -44,8 +42,8 @@ extension Bucket {
             guard let data = data else {completion(false, nil, error); return }
             
             if response.isSuccess {
-                let createTransactionResponse = CreateTransactionResponse(json: data.asJSON)
-                completion(true, createTransactionResponse, nil)
+                let response = CreateTransactionResponse(json: data.asJSON)
+                completion(true, response, nil)
             } else {
                 let bucketErrorResponse = try? JSONDecoder().decode(BucketErrorResponse.self, from: data)
                 completion(false, nil, bucketErrorResponse?.asError(response?.code) ?? BucketErrorResponse.unknown)
@@ -69,10 +67,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, authenticationResult.error); return }
         
         request.setMethod(.patch)
         
@@ -81,9 +76,8 @@ extension Bucket {
             
             if response.isSuccess {
                 do {
-                    let refundTransactionResponse = try JSONDecoder().decode(RefundTransactionResponse.self, from: data)
-                    
-                    completion(true, refundTransactionResponse, nil)
+                    let response = try JSONDecoder().decode(RefundTransactionResponse.self, from: data)
+                    completion(true, response, nil)
                 } catch let error {
                     completion(true, nil, error)
                 }
@@ -110,10 +104,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, authenticationResult.error); return }
         
         request.setMethod(.delete)
         
@@ -122,9 +113,8 @@ extension Bucket {
             
             if response.isSuccess {
                 do {
-                    let deleteTransactionResponse = try JSONDecoder().decode(DeleteTransactionResponse.self, from: data)
-                    
-                    completion(true, deleteTransactionResponse, nil)
+                    let response = try JSONDecoder().decode(DeleteTransactionResponse.self, from: data)
+                    completion(true, response, nil)
                 } catch let error {
                     completion(true, nil, error)
                 }

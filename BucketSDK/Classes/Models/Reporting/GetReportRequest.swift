@@ -14,10 +14,6 @@ import Foundation
     /// send the employeeCode in JSON.
     @objc public dynamic var employeeCode: String?
     
-    /// If this is included in the report, it will include only the transactions
-    /// that have been created under this event.
-    @objc public dynamic var eventId: String?
-    
     /// This will **position** the array of transactions for the request.
     @objc public dynamic var offset: Int = 0
     
@@ -39,6 +35,10 @@ import Foundation
     /// This would be to filter the results based on a report that is given for all employees.
     /// Since you wouldn't know their employeeCode, you can filter the report by their id.
     @objc public dynamic var reportEmployeeId: Int = -1
+    
+    /// If this is included in the report, it will include only the transactions
+    /// that have been created under this event.
+    @objc public dynamic var eventId: Int = -1
     
     /// - Parameter startString: This date is formatted as 'yyyy-MM-dd HH:m:ssZZZ'
     /// - Parameter endString: This date is formatted as 'yyyy-MM-dd HH:m:ssZZZ'
@@ -63,6 +63,7 @@ import Foundation
         if let reportTerminalCode = self.reportTerminalCode { json["reportTerminalCode"] = reportTerminalCode }
         if let reportEmployeeCode = self.reportEmployeeCode { json["employeeCode"] = reportEmployeeCode }
         if self.reportEmployeeId != -1 { json["employeeId"] = self.reportEmployeeId }
+        if self.eventId != -1 { json["eventId"] = self.eventId }
         
         return json
     }

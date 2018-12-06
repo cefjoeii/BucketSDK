@@ -8,7 +8,7 @@
 import Foundation
 
 extension Bucket {
-    /// Gathers the bill denominations for the the retailers country,
+    /// Gathers the bill denominations for the the retailers' country,
     /// in order to calculate the change using our natural change function.
     @objc public func getBillDenominations(completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
         guard let country = Credentials.country else {

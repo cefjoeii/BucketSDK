@@ -376,10 +376,10 @@
 			isa = PBXGroup;
 			children = (
 				6E2164DB21AD86C000CAB966 /* Transaction */,
-				6E2164DD21AD86D900CAB966 /* Bill Denominations */,
 				6E2164DC21AD86D000CAB966 /* Terminal */,
-				6E2164DF21AD86F900CAB966 /* Events */,
+				6E2164DD21AD86D900CAB966 /* Bill Denominations */,
 				6E2164DE21AD86EA00CAB966 /* Reporting */,
+				6E2164DF21AD86F900CAB966 /* Events */,
 				6E9BC82C21A7FC4200AFAEE7 /* Bucket Error */,
 			);
 			name = Models;

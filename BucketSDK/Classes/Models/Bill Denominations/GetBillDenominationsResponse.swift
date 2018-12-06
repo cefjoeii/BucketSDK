@@ -9,5 +9,6 @@ import Foundation
 
 struct GetBillDenominationsResponse: Decodable {
     let usesNaturalChangeFunction: Bool?
+    let currencyDecimals: Int?
     let denominations: [Double]?
 }

@@ -11,7 +11,7 @@ extension Bucket {
     /// Allows a POS integration developer to give a summed history of the transactions.
     @objc public func getReport(
         _ getReportRequest: GetReportRequest,
-        completion: @escaping ((_ success: Bool, _ response: GetReportsResponse?, _ canPage: Bool, _ error: Error?) -> Void)
+        completion: @escaping ((_ success: Bool, _ response: GetReportResponse?, _ canPage: Bool, _ error: Error?) -> Void)
         ) {
         
         // Some of these pitfalls should never occur unless the SDK is manually modified.
@@ -66,7 +66,7 @@ extension Bucket {
         
         request.setMethod(.post)
         if let employeeCode = getReportRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
-        if let eventId = getReportRequest.eventId { request.addHeader("eventId", eventId) }
+        if getReportRequest.eventId != -1 { request.addHeader("eventId", String(getReportRequest.eventId)) }
         
         request.setBody(getReportRequest.body)
         
@@ -76,7 +76,7 @@ extension Bucket {
             if response.isSuccess {
                 do {
                     // Map the json response to the model class.
-                    let response = try JSONDecoder().decode(GetReportsResponse.self, from: data)
+                    let response = try JSONDecoder().decode(GetReportResponse.self, from: data)
                     
                     var canPage = true
                     

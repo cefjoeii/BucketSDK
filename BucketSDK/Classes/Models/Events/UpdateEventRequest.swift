@@ -21,6 +21,7 @@ import Foundation
     /// The message of the event.
     @objc public dynamic var eventMessage: String?
     
+    /// - Parameter id: The id of the event.
     /// - Parameter eventName: The name of the event.
     /// - Parameter eventMessage: The message of the event.
     /// - Parameter start: The date format is yyyy-MM-dd HH:mm:ssZZZ.
@@ -33,6 +34,7 @@ import Foundation
         if let end = end { self.range["end"] = end }
     }
     
+    /// - Parameter id: The id of the event.
     /// - Parameter eventName: The name of the event.
     /// - Parameter eventMessage: The message of the event.
     /// - Parameter startInt: The starting epoch integer in SECONDS that is UTC based.
