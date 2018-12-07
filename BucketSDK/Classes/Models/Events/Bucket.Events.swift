@@ -52,10 +52,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, true, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, true, authenticationResult.error); return }
         
         request.setMethod(.post)
         request.setBody(getEventsRequest.body)
@@ -129,10 +126,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, true, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, true, authenticationResult.error); return }
         
         request.setMethod(.post)
         request.setBody(getEventsReportRequest.body)
@@ -198,10 +192,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, authenticationResult.error); return }
         
         request.setMethod(.put)
         request.setBody(createEventRequest.body)
@@ -261,10 +252,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, authenticationResult.error); return }
         
         request.setMethod(.put)
         request.setBody(updateEventRequest.body)
@@ -303,10 +291,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, authenticationResult.error); return }
         
         request.setMethod(.delete)
         

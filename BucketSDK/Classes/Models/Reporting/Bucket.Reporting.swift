@@ -59,10 +59,7 @@ extension Bucket {
             Credentials.terminalSecret
         )
         
-        guard authenticationResult.success else {
-            completion(false, nil, true, authenticationResult.error)
-            return
-        }
+        guard authenticationResult.success else { completion(false, nil, true, authenticationResult.error); return }
         
         request.setMethod(.post)
         if let employeeCode = getReportRequest.employeeCode { request.addHeader("employeeCode", employeeCode) }
