@@ -22,6 +22,9 @@
 		5D5A3E467D0A8A78F0C08AD326B3FAAA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BE1B3A489956134FE5CA8B8082F88D /* Foundation.framework */; };
 		5D7A470C931B7C98FC8C6052F241B554 /* Pods-BucketSDK_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C755907E364A1AA0140A31D482D5F31 /* Pods-BucketSDK_Tests-dummy.m */; };
 		6BE9FDB01EB268A05D5F0643E92B3866 /* Pods-BucketSDK_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDF39681404A738FA64B7DDB99982C3 /* Pods-BucketSDK_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E05883021B975EF00BEB254 /* Bucket.Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05882F21B975EF00BEB254 /* Bucket.Export.swift */; };
+		6E05883221B977DF00BEB254 /* ExportEventsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05883121B977DF00BEB254 /* ExportEventsRequest.swift */; };
+		6E05883421B9780400BEB254 /* ExportEventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E05883321B9780400BEB254 /* ExportEventsResponse.swift */; };
 		6E2164D621AD2FC000CAB966 /* CreateEventResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164D521AD2FC000CAB966 /* CreateEventResponse.swift */; };
 		6E2164D821AD2FEE00CAB966 /* UpdateEventResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164D721AD2FEE00CAB966 /* UpdateEventResponse.swift */; };
 		6E2164DA21AD5E7500CAB966 /* DeleteEventResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2164D921AD5E7500CAB966 /* DeleteEventResponse.swift */; };
@@ -140,6 +143,9 @@
 		669FD83DB53596B4942E86C13A75DD25 /* Strongbox-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Strongbox-umbrella.h"; sourceTree = "<group>"; };
 		687EFF8C4C6FE8BC768B0BEB8B19AB63 /* Pods-BucketSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BucketSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		6CDF39681404A738FA64B7DDB99982C3 /* Pods-BucketSDK_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BucketSDK_Example-umbrella.h"; sourceTree = "<group>"; };
+		6E05882F21B975EF00BEB254 /* Bucket.Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.Export.swift; sourceTree = "<group>"; };
+		6E05883121B977DF00BEB254 /* ExportEventsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportEventsRequest.swift; sourceTree = "<group>"; };
+		6E05883321B9780400BEB254 /* ExportEventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportEventsResponse.swift; sourceTree = "<group>"; };
 		6E2164D521AD2FC000CAB966 /* CreateEventResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventResponse.swift; sourceTree = "<group>"; };
 		6E2164D721AD2FEE00CAB966 /* UpdateEventResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEventResponse.swift; sourceTree = "<group>"; };
 		6E2164D921AD5E7500CAB966 /* DeleteEventResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteEventResponse.swift; sourceTree = "<group>"; };
@@ -315,6 +321,16 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
+		6E05882E21B9754E00BEB254 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				6E05882F21B975EF00BEB254 /* Bucket.Export.swift */,
+				6E05883121B977DF00BEB254 /* ExportEventsRequest.swift */,
+				6E05883321B9780400BEB254 /* ExportEventsResponse.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
 		6E2164DB21AD86C000CAB966 /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,6 +396,7 @@
 				6E2164DD21AD86D900CAB966 /* Bill Denominations */,
 				6E2164DE21AD86EA00CAB966 /* Reporting */,
 				6E2164DF21AD86F900CAB966 /* Events */,
+				6E05882E21B9754E00BEB254 /* Export */,
 				6E9BC82C21A7FC4200AFAEE7 /* Bucket Error */,
 			);
 			name = Models;
@@ -720,6 +737,7 @@
 				6EB84235219F0BBA00DF060A /* CreateTransactionRequest.swift in Sources */,
 				6E2164D821AD2FEE00CAB966 /* UpdateEventResponse.swift in Sources */,
 				6E54AACD21AC3D2800116AC1 /* UpdateEventRequest.swift in Sources */,
+				6E05883421B9780400BEB254 /* ExportEventsResponse.swift in Sources */,
 				DFE7C59ACE5D486DC4D4F45AAEAF38AD /* Bucket.swift in Sources */,
 				6EE65C8C21A2B01D0063BB8F /* UIImageExtension.swift in Sources */,
 				6E9BC83021A8092500AFAEE7 /* Bucket.Reporting.swift in Sources */,
@@ -729,6 +747,7 @@
 				6E9BC83921A8408C00AFAEE7 /* GetReportRequest.swift in Sources */,
 				6E2164DA21AD5E7500CAB966 /* DeleteEventResponse.swift in Sources */,
 				AC74AE1E37E891F44536462359303600 /* BucketErrorResponse.swift in Sources */,
+				6E05883221B977DF00BEB254 /* ExportEventsRequest.swift in Sources */,
 				6EB2E72521A58BEA006DC1D3 /* GetEventsResponse.swift in Sources */,
 				23235456118982770704C98C5394F39C /* BucketSDK-dummy.m in Sources */,
 				6E54AAC921ABE59E00116AC1 /* GetEventsRequest.swift in Sources */,
@@ -749,6 +768,7 @@
 				1DDC689D71EF65CB33C591D2B23C418F /* OptionalExtension.swift in Sources */,
 				6E2164E121AD8B9200CAB966 /* Bucket.Terminal.swift in Sources */,
 				F7FF2FAF6C305F298C2F6F342FD97487 /* RegisterTerminalResponse.swift in Sources */,
+				6E05883021B975EF00BEB254 /* Bucket.Export.swift in Sources */,
 				02EBEBBFC88E675B8A10F6BB2EFC344D /* RetailerInfo.swift in Sources */,
 				6E2164D621AD2FC000CAB966 /* CreateEventResponse.swift in Sources */,
 				4F1130320002723D3ED51223D74CEF92 /* URLExtension.swift in Sources */,
